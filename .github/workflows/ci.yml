@@ -11,53 +11,54 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-test:
+  discover-packages:
     runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.discover.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Essential for Turbo git-based filtering
+
+      - name: Discover packages
+        id: discover
+        run: |
+          pkgs=$(ls -d packages/* | xargs -n1 basename | jq -R . | jq -s .)
+          echo "matrix=$pkgs" >> "$GITHUB_OUTPUT"
+
+  build-test-and-upload:
+    needs: discover-packages
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        pkg: ${{ fromJSON(needs.discover-packages.outputs.packages) }}
+
+    steps:
+      - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build & Test
-        # Use turbo to run both in a single pipeline for optimal caching
-        # Filter is applied here to only run affected packages on PRs
-        run: pnpm build && ls packages/cli-kit/dist/ && pnpm test
+        run: pnpm build && pnpm test
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
-      - name: Upload coverage reports to Codecov
+      - name: Upload coverage (${{ matrix.pkg }})
         continue-on-error: true
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: coverage/packages/
+          files: coverage/packages/${{ matrix.pkg }}.lcov
+          flags: ${{ matrix.pkg }}
+          fail_ci_if_error: false
 
-      - name: Upload per-package coverage
-        run: |
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          chmod +x codecov
-
-          for file in coverage/packages/*.lcov; do
-            pkg=$(basename "$file" .lcov)
-            ./codecov \
-              -f "$file" \
-              -F "$pkg" \
-              --root "./packages/$pkg" \
-              -t "$CODECOV_TOKEN" \
-              -Z
-          done
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   check-changeset:
     # Strictly for PRs to main. Quick pushes to main (hotfixes/meta) bypass this.
