@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import { promises as fs } from "node:fs";
+import { access, promises as fs } from "node:fs";
 import path from "node:path";
 import pLimit from "p-limit";
 
@@ -65,6 +65,26 @@ for (const pkgName of packageDirs) {
     path.join(pkgPath, "README.md"),
     path.join(outDir, "..", "index.mdx"),
   );
+
+  const metaFilePath = path.join(DOCS_ROOT, pkgName, "meta.json");
+  try {
+    await fs.access(metaFilePath);
+  } catch {
+    fs.writeFile(
+      metaFilePath,
+      JSON.stringify(
+        {
+          title: pkgJson.name,
+          description: pkgJson.description,
+          lastModified: new Date().toISOString(),
+          root: true,
+          icon: pkgJson.bin ? "Terminal" : "FileCode",
+        },
+        null,
+        2,
+      ),
+    );
+  }
 }
 
 /* ---------------------------------- */
@@ -122,13 +142,14 @@ const createMeta = async (file: string) => {
   const src = await fs.readFile(file, "utf8");
 
   // Extract title safely
-  const title =
-    src
-      .match(/^#\s+(.+)$/m)?.[1]
-      ?.replace(/^(Function|Interface|Type alias|Variable):\s*/i, "")
-      .replace(/\\+/, "")
-      .split("<img")[0]
-      .trim() ?? path.basename(file, ".mdx");
+  const title = file.endsWith("api/index.mdx")
+    ? "API Docs"
+    : (src
+        .match(/^#\s+(.+)$/m)?.[1]
+        ?.replace(/^(Function|Interface|Type alias|Variable):\s*/i, "")
+        .replace(/\\+/, "")
+        .split("<img")[0]
+        .trim() ?? path.basename(file, ".mdx"));
 
   const editURL = src.match(DEFINED_IN_REGEXP)?.[1];
   const metaPath = file

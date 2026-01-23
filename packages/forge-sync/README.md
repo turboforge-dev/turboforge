@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=forge-sync)](https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/forge-sync) 
-<img alt="npm version" src="https://img.shields.io/npm/v/forge-sync">
-<img alt="npm downloads" src="https://img.shields.io/npm/d18m/forge-sync">
-<img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/forge-sync">
+<img alt="npm version" src="https://img.shields.io/npm/v/forge-sync" />
+<img alt="npm downloads" src="https://img.shields.io/npm/d18m/forge-sync" />
+<img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/forge-sync" />
 
 > **The authoritative synchronization engine for Turbo-Forge monorepos.**  
 > Keep your monorepo's tooling, configurations, and core dependencies in perfect sync with the upstream template.
@@ -123,4 +123,4 @@ forge-sync --init
 MIT © [Mayank Kumar Chaudhari](https://mayankchaudhari.com)
 <hr />
 
-<p align="center" style="text-align:center">with 💖 by <a href="https://mayankchaudhari.com" target="_blank">Mayank Kumar Chaudhari</a></p>
+<p align="center">with 💖 by <a href="https://mayankchaudhari.com" target="_blank">Mayank Kumar Chaudhari</a></p>
