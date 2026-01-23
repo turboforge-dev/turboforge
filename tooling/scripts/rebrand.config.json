@@ -1,0 +1,8 @@
+{
+  "packageName": "turbo-forge",
+  "owner": "react18-tools",
+  "repo": "turbo-forge",
+  "title": "Turbo Forge",
+  "removedPackages": ["examples/express", "packages/logger"],
+  "removedFeatures": ["Docs", "LiteMode"]
+}

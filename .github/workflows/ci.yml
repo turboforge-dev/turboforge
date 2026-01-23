@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Essential for Turbo git-based filtering
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build & Test
+        # Use turbo to run both in a single pipeline for optimal caching
+        # Filter is applied here to only run affected packages on PRs
+        run: |
+          FILTER=""
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            FILTER="--filter=[...origin/${{ github.base_ref }}]"
+          fi
+          pnpm turbo run build test $FILTER
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
+      - name: Upload per-package coverage
+        run: |
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+
+          for file in coverage/packages/*.lcov; do
+            pkg=$(basename "$file" .lcov)
+            ./codecov \
+              -f "$file" \
+              -F "$pkg" \
+              --root "./packages/$pkg" \
+              -t "$CODECOV_TOKEN" \
+              -Z
+          done
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  check-changeset:
+    # Strictly for PRs to main. Quick pushes to main (hotfixes/meta) bypass this.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check for Changeset
+        run: pnpm exec changeset status --since=origin/${{ github.base_ref }}

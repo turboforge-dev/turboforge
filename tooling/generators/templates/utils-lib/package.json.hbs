@@ -1,0 +1,60 @@
+{
+  "name": "{{kebabPath name}}",
+  "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
+  "private": false,
+  "version": "0.0.0",
+  "description": "{{description}}",
+  "license": "{{license}}",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/{{owner}}/{{repo}}",
+    "directory": "packages/{{kebabCase fileName}}"
+  },
+  "bugs": "https://github.com/{{owner}}/{{repo}}/issues",
+  "homepage": "https://github.com/{{owner}}/{{repo}}/blob/main/packages/{{kebabCase fileName}}/README.md",
+  "sideEffects": false,
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsup && gzip -c dist/index.js | wc -c",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "tsup": "latest",
+    "typescript": "latest"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/{{owner}}"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/mayank1513"
+    }
+  ],
+  "keywords": [
+    "{{name}}",
+    "turbo-forge"
+  ]
+}

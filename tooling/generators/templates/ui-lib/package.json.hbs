@@ -1,0 +1,25 @@
+{
+  "name": "{{kebabPath name}}",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@tool/tsconfig": "workspace:*",
+    "tsup": "^8.0.0",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,24 @@
+[**@turbo-forge/cli-kit**](../index.md)
+
+***
+
+[@turbo-forge/cli-kit](../index.md) / findProjectRoot
+
+# Function: findProjectRoot()
+
+> **findProjectRoot**(`cwd`): `string`
+
+Defined in: [packages/cli-kit/src/root.ts:8](https://github.com/react18-tools/turbo-forge/blob/main/packages/cli-kit/src/root.ts#L8)
+
+Finds the project root directory based on common markers.
+Priority: .git > .changeset > pnpm-workspace.yaml > package.json (with workspaces)
+
+## Parameters
+
+### cwd
+
+`string` = `...`
+
+## Returns
+
+`string`

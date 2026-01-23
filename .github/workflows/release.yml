@@ -1,0 +1,59 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+      - "v[0-9]*.x" # Matches v1.x, v2.x, etc.
+      - "v[0-9]*.[0-9]*.x" # Matches v1.2.x if you need granular LTS
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write # Needed for NPM provenance
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create Release PR or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
+          commit: "chore: update versions"
+          title: "chore: update versions"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
+      # New: Create GitHub Releases for each published package
+      - name: Create GitHub Releases
+        if: steps.changesets.outputs.published == 'true'
+        run: pnpm release:github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Aliases
+        if: steps.changesets.outputs.published == 'true'
+        run: pnpm tsx tooling/scripts/publish-aliases.ts --published-packages '${{ steps.changesets.outputs.publishedPackages }}'
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+

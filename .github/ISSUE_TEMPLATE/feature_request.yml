@@ -1,0 +1,65 @@
+name: 🚀 Feature Request
+description: Suggest an architectural improvement or a new capability.
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 🏗️ Turbo-Forge Architect: Feature Proposal
+        Proposals should align with our core principles: **Performance**, **Type-Safety**, and **Minimalism**.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: |
+        What is the current friction? Describe the use case that is currently difficult or impossible to achieve.
+      placeholder: "e.g., The current Vitest config doesn't support easy integration with..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: |
+        A clear description of what you want to see implemented. 
+        Include technical details, API signatures, or structural changes to `packages/` or `tooling/`.
+      placeholder: "We should add a shared Vite plugin in tooling/ to handle..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Architectural Impact
+      description: |
+        How does this change affect the monorepo? Will it increase build times, change the CLI surface, or introduce new dependencies?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: List any alternative solutions or features you've considered to solve this problem.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: implementation
+    attributes:
+      label: Contribution Intent
+      description: Are you willing to submit a Pull Request for this feature?
+      options:
+        - "Yes, I can lead the implementation."
+        - "Yes, but I need architectural guidance."
+        - "No, I am just reporting the need."
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or RFC-style notes here.

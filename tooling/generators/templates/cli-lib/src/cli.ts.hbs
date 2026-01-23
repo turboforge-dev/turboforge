@@ -1,0 +1,87 @@
+#!/usr/bin/env node
+
+import { resolveConfig } from "@turbo-forge/cli-kit";
+import { 
+  {{camelCase fileName}}, 
+  DEFAULT_CONFIG, 
+  type {{camelCase fileName}}Options 
+} from "./{{kebabCase fileName}}";
+
+export interface CliOptions extends {{camelCase fileName}}Options {
+  help?: boolean;
+  init?: boolean;
+  config?: string;
+}
+
+export const parseArgs = (args: string[]): Partial<CliOptions> => {
+  const options: Partial<CliOptions> = {};
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+
+    switch (arg) {
+      case "--help":
+      case "-h":
+        options.help = true;
+        break;
+      case "--init":
+      case "-i":
+        options.init = true;
+        // Check if next arg is a filename (not starting with --)
+        if (args[i + 1] && !args[i + 1].startsWith("--")) {
+          options.config = args[++i];
+        }
+        break;
+      case "--config":
+      case "-c":
+        options.config = args[++i];
+        break;
+    }
+  }
+
+  return options;
+};
+
+export const showHelp = () => {
+  console.log(`
+Usage: {{kebabCase fileName}} [options]
+
+Options:
+  -h, --help              Show this help message
+  -i, --init [file]       Create default config file (optionally specify filename)
+  -c, --config <file>     Use custom config file
+`);
+};
+
+export const main = async (args: string[] = process.argv.slice(2)) => {
+  const { help, init, config: configFile, ...cliArgs } = parseArgs(args);
+
+  if (help) {
+    showHelp();
+    return;
+  }
+
+  if (init) {
+    await writeFile(
+      resolve(findProjectRoot(), configFile || "{{kebabCase fileName}}.config.json"),
+      JSON.stringify(DEFAULT_CONFIG, null, 2),
+    );
+    console.log(
+      `Created default config file at ${configFile || "{{kebabCase fileName}}.config.json"}`,
+    );
+    return;
+  }
+
+  const config = await resolveConfig<CliOptions>({
+    name: "{{kebabCase fileName}}",
+    defaults: DEFAULT_CONFIG,
+    cliArgs,
+    configFile,
+  });
+
+  await {{camelCase fileName}}(config);
+};
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch(console.error);
+}

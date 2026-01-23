@@ -1,11 +1,16 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
-  "commit": ["@changesets/cli/commit", { "skipCI": false }],
+  "changelog": [
+    "@changesets/changelog-github",
+    {
+      "repo": "react18-tools/turbo-forge"
+    }
+  ],
+  "commit": false,
   "fixed": [],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@example/*", "@repo/*"]
+  "ignore": ["@app/*", "@repo/*", "@tool/*"]
 }

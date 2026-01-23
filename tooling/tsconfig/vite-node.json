@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Turbo-Forge Vite Node",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["node"],
+    "noEmit": false,
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": false
+  }
+}

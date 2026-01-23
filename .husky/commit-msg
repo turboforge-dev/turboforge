@@ -1,0 +1,40 @@
+#!/bin/sh
+
+MAX_BODY_LINE_LENGTH=100
+COMMIT_MSG_FILE="$1"
+
+# Split header and body safely
+HEADER="$(sed -n '1p' "$COMMIT_MSG_FILE")"
+BODY="$(sed '1d' "$COMMIT_MSG_FILE")"
+
+# Only process if body exists
+if [ -n "$BODY" ]; then
+  WRAPPED_BODY="$(printf "%s\n" "$BODY" | fold -s -w "$MAX_BODY_LINE_LENGTH")"
+
+  {
+    printf "%s\n" "$HEADER"
+    printf "%s\n" "$WRAPPED_BODY"
+  } > "$COMMIT_MSG_FILE"
+fi
+
+# Run commitlint
+if ! pnpm commitlint --edit "$COMMIT_MSG_FILE"; then
+  echo ""
+  echo "💡 Forge Tip: Your commit message didn't match the required format."
+  echo "------------------------------------------------------------------"
+  echo "We recommend the VS Code extension:"
+  echo "👉 Conventional Commits (vivaxy.vscode-conventional-commits)"
+  echo ""
+  echo "Workflow:"
+  echo "1. Press Cmd+Shift+P (Mac) or Ctrl+Shift+P (Windows)"
+  echo "2. Type 'Conventional Commits'"
+  echo "3. Follow the prompts for Type, Scope, and Message"
+  echo "Tip: Keep header short (≤ 72 chars)"
+  echo ""
+  echo "Manual Workflow:"
+  echo "1. Keep header short (≤ 72 chars)"
+  echo "2. Press Enter twice"
+  echo "3. Put details in the body"
+  echo "------------------------------------------------------------------"
+  exit 1
+fi

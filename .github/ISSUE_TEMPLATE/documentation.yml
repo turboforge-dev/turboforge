@@ -1,0 +1,57 @@
+name: 📖 Documentation Issue
+description: Report missing, outdated, or incorrect documentation.
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 📚 Turbo-Forge: Docs Audit
+        Quality documentation is a first-class citizen. Please help us identify where our technical guides or API references are falling short.
+
+  - type: input
+    id: location
+    attributes:
+      label: Affected Page/URL
+      description: Provide a link to the page or the file path in `apps/docs` or `packages/`.
+      placeholder: "https://docs.turbo-forge.com/api/core-library"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What type of documentation issue is this?
+      options:
+        - "API Reference (TypeDoc)"
+        - "Conceptual Guide (Fumadocs)"
+        - "Getting Started / Setup"
+        - "Typo / Broken Link"
+        - "Example / Code Snippet Error"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the Issue
+      description: What is missing or incorrect?
+      placeholder: "The documentation for the `useForge` hook is missing the 'options' parameter details..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-fix
+    attributes:
+      label: Suggested Improvement
+      description: If you know how to fix it, please describe the correction here.
+      placeholder: "Update the TSDoc comments in packages/core/src/hooks.ts to include..."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Pull Request
+      options:
+        - label: I am willing to submit a PR to fix this documentation issue.

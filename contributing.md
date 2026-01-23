@@ -22,7 +22,7 @@ This TurboRepo comprises the following packages/examples, all written in [TypeSc
 
 - `@example/nextjs`: a [Next.js](https://nextjs.org/) app
 - `@example/vite`: a [Vite.js](https://vitest.dev) app
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `@tool/tsconfig`: `tsconfig.json`s used throughout the monorepo
 - `@repo/logger`: A configurable shared logger utility
 - `@repo/shared`: An internal library of components utilized by the examples
 - `react18-loaders`: a React component library (The core package published to NPM)

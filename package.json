@@ -1,48 +1,59 @@
 {
-  "name": "turborepo-template",
+  "name": "turbo-forge",
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "build:diff": "turbo run build --filter=[...origin/main]",
     "clean": "turbo clean",
     "dev": "turbo dev",
-    "doc": "tsx scripts/doc.ts && typedoc && cp _config.yml docs && tsx scripts/add-frontmatter.ts",
+    "debug:info": "tsx ./tooling/scripts/debug-info.ts",
     "format": "biome check . --write",
+    "gen": "tsx ./node_modules/plop/bin/plop.js --plopfile tooling/generators/src/index.ts",
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
-    "preinstall": "tsx scripts/update-pm.ts",
+    "postinstall": "tsx ./tooling/scripts/postinstall.ts",
     "prepare": "husky",
-    "rebrand": "tsx scripts/rebrand.ts",
-    "release": "tsx ./scripts/publish.ts",
+    "rebrand": "echo coming soon...",
+    "release": "pnpm build && changeset publish",
+    "release:aliases": "tsx ./tooling/scripts/publish-aliases.ts",
+    "release:github": "tsx ./tooling/scripts/create-github-releases.ts",
     "sync": "turborepo-template-upgrade",
-    "test": "turbo test",
+    "test": "vitest run --coverage",
     "typecheck": "turbo typecheck",
-    "upgrade": "tsx ./scripts/upgrade.ts"
+    "docs:api": "tsx ./tooling/scripts/generate-api-docs.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.8",
+    "@biomejs/biome": "2.3.11",
+    "@changesets/changelog-github": "^0.5.2",
     "@changesets/cli": "^2.29.8",
-    "@repo/typescript-config": "workspace:*",
-    "@types/node": "^25.0.3",
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
+    "@tool/tsconfig": "workspace:*",
+    "@types/envinfo": "^7.8.4",
+    "@types/node": "^25.0.10",
+    "@vitest/coverage-v8": "^4.0.17",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
     "enquirer": "^2.4.1",
+    "envinfo": "^7.21.0",
+    "happy-dom": "^20.3.4",
     "husky": "^9.1.7",
-    "plop": "^4.0.4",
+    "p-limit": "^7.2.0",
+    "plop": "^4.0.5",
     "tsx": "^4.21.0",
-    "turbo": "^2.7.2",
+    "turbo": "^2.7.5",
     "turborepo-template-upgrade": "^0.8.0",
-    "typedoc": "^0.28.15",
+    "typedoc": "^0.28.16",
     "typedoc-plugin-markdown": "^4.9.0",
-    "typedoc-plugin-mdn-links": "^5.0.10",
-    "typedoc-plugin-missing-exports": "^4.1.2",
-    "typedoc-plugin-rename-defaults": "^0.7.3"
+    "vite-tsconfig-paths": "^6.0.4",
+    "vitest": "^4.0.17"
   },
   "packageManager": "pnpm@10.27.0",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "engines": {
     "node": ">=20"
-  },
-  "pnpm": {
-    "overrides": {
-      "cross-spawn@<6.0.6": ">=6.0.6",
-      "next@>=15.0.0 <15.2.3": ">=15.2.3"
-    }
   }
 }

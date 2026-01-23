@@ -1,0 +1,145 @@
+[**forge-sync**](../index.md)
+
+***
+
+[forge-sync](../index.md) / ForgeSyncOptions
+
+# Interface: ForgeSyncOptions
+
+Defined in: [forge-sync.ts:18](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L18)
+
+## Properties
+
+### backupDir?
+
+> `optional` **backupDir**: `string`
+
+Defined in: [forge-sync.ts:33](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L33)
+
+Custom backup directory
+
+***
+
+### baseRef
+
+> **baseRef**: `string`
+
+Defined in: [forge-sync.ts:41](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L41)
+
+Base commit hash, tag, or branch
+
+#### Default
+
+```ts
+"main"
+```
+
+***
+
+### dryRun?
+
+> `optional` **dryRun**: `boolean`
+
+Defined in: [forge-sync.ts:21](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L21)
+
+Show what would be changed without applying
+
+***
+
+### excludePaths?
+
+> `optional` **excludePaths**: `string`[]
+
+Defined in: [forge-sync.ts:25](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L25)
+
+Additional paths to exclude from upgrade
+
+***
+
+### logLevel?
+
+> `optional` **logLevel**: `LogLevel`
+
+Defined in: [forge-sync.ts:19](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L19)
+
+***
+
+### maxPatchRetries?
+
+> `optional` **maxPatchRetries**: `number`
+
+Defined in: [forge-sync.ts:31](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L31)
+
+Maximum patch recursion attempts
+
+***
+
+### metaFile?
+
+> `optional` **metaFile**: `string`
+
+Defined in: [forge-sync.ts:39](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L39)
+
+Meta file to store template commit hash, etc.
+
+***
+
+### postSync?
+
+> `optional` **postSync**: `string`[]
+
+Defined in: [forge-sync.ts:27](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L27)
+
+Commands to run after upgrade
+
+***
+
+### remoteName?
+
+> `optional` **remoteName**: `string`
+
+Defined in: [forge-sync.ts:29](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L29)
+
+Remote name for template
+
+#### Default
+
+```ts
+"template"
+```
+
+***
+
+### skipCleanCheck?
+
+> `optional` **skipCleanCheck**: `boolean`
+
+Defined in: [forge-sync.ts:35](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L35)
+
+Skip git tree clean check
+
+***
+
+### targetRef?
+
+> `optional` **targetRef**: `string`
+
+Defined in: [forge-sync.ts:37](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L37)
+
+Specific commit hash, tag, or branch
+
+#### Default
+
+```ts
+"main"
+```
+
+***
+
+### templateUrl?
+
+> `optional` **templateUrl**: `string`
+
+Defined in: [forge-sync.ts:23](https://github.com/react18-tools/turbo-forge/blob/main/packages/forge-sync/src/forge-sync.ts#L23)
+
+Custom template repository URL

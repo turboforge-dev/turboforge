@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "../../",
+    "paths": {
+      "@tool/*": ["tooling/*/src"],
+      "@turbo-forge/cli-kit": ["packages/cli-kit/src"],
+      "forge-sync": ["packages/forge-sync/src"],
+      "forge-upgrade": ["packages/forge-upgrade/src"],
+      "remark-typedoc-mdx": ["packages/remark-typedoc-mdx/src"]
+    }
+  }
+}
