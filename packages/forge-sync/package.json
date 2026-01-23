@@ -3,7 +3,6 @@
   "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
   "private": false,
   "version": "0.0.0",
-  "type": "module",
   "description": "The authoritative synchronization engine for Turbo-Forge monorepos. Align tooling, configurations, and dependencies with the upstream template.",
   "license": "MIT",
   "main": "./dist/index.js",

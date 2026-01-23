@@ -2,7 +2,6 @@
   "name": "@turbo-forge/cli-kit",
   "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
   "private": false,
-  "type": "module",
   "version": "0.0.0",
   "description": "Essential utilities for building powerful CLIs and tools in Turbo Forge monorepos.",
   "license": "MIT",
