@@ -4,9 +4,10 @@ Essential utilities for building powerful CLIs and tools in Turbo Forge monorepo
 
 [![CI](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=turbo-forge-cli-kit)](https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/turbo-forge-cli-kit) 
-[![Version](https://img.shields.io/npm/v/@turbo-forge/cli-kit.svg?colorB=green)](https://www.npmjs.com/package/@turbo-forge/cli-kit) 
-[![Downloads](https://img.shields.io/npm/d18m/@turbo-forge/cli-kit.svg)](https://www.npmjs.com/package/@turbo-forge/cli-kit) 
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/@turbo-forge/cli-kit)
+<img alt="npm version" src="https://img.shields.io/npm/v/@turbo-forge/cli-kit">
+<img alt="npm downloads" src="https://img.shields.io/npm/d18m/@turbo-forge/cli-kit">
+<img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/@turbo-forge/cli-kit">
+
 
 > **Note:** This package is part of the Turbo Forge ecosystem.
 

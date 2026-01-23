@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=forge-sync)](https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/forge-sync) 
-[![Version](https://img.shields.io/npm/v/forge-sync.svg?colorB=green)](https://www.npmjs.com/package/forge-sync) 
-[![Downloads](https://img.jsdelivr.net/img.shields.io/npm/d18m/forge-sync.svg)](https://www.npmjs.com/package/forge-sync) 
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/forge-sync)
+<img alt="npm version" src="https://img.shields.io/npm/v/forge-sync">
+<img alt="npm downloads" src="https://img.shields.io/npm/d18m/forge-sync">
+<img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/forge-sync">
 
 > **The authoritative synchronization engine for Turbo-Forge monorepos.**  
 > Keep your monorepo's tooling, configurations, and core dependencies in perfect sync with the upstream template.

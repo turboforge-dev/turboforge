@@ -9,7 +9,7 @@ const PACKAGES_DIR = "packages";
 const DOCS_ROOT = "apps/web/content/docs";
 
 /* ---------------------------------- */
-/* 1. Generate docs (SEQUENTIAL)       */
+/* 1. Generate docs (SEQUENTIAL)      */
 /* ---------------------------------- */
 
 const packageDirs = (await fs.readdir(PACKAGES_DIR, { withFileTypes: true }))
@@ -59,6 +59,11 @@ for (const pkgName of packageDirs) {
       `--out ${outDir}`,
     ].join(" "),
     { stdio: "inherit" },
+  );
+
+  fs.copyFile(
+    path.join(pkgPath, "README.md"),
+    path.join(outDir, "..", "index.mdx"),
   );
 }
 
@@ -121,11 +126,13 @@ const createMeta = async (file: string) => {
     src
       .match(/^#\s+(.+)$/m)?.[1]
       ?.replace(/^(Function|Interface|Type alias|Variable):\s*/i, "")
-      .replace(/\\+/, "") ?? path.basename(file, ".mdx");
+      .replace(/\\+/, "")
+      .split("<img")[0]
+      .trim() ?? path.basename(file, ".mdx");
 
   const editURL = src.match(DEFINED_IN_REGEXP)?.[1];
   const metaPath = file
-    .replace("/content/docs", "/content/docs/.meta")
+    .replace("/api/", "/api/.meta/")
     .replace(/\.mdx$/, ".json");
 
   await fs.mkdir(path.dirname(metaPath), { recursive: true });
