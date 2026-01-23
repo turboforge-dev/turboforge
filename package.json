@@ -14,7 +14,7 @@
     "postinstall": "tsx ./tooling/scripts/postinstall.ts",
     "prepare": "husky",
     "rebrand": "echo coming soon...",
-    "release": "pnpm build && changeset publish",
+    "release": "pnpm build && changeset publish --provenance --access public",
     "release:aliases": "tsx ./tooling/scripts/publish-aliases.ts",
     "release:github": "tsx ./tooling/scripts/create-github-releases.ts",
     "sync": "forge-sync",
