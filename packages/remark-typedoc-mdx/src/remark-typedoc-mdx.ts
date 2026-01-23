@@ -1,6 +1,7 @@
 import type { Blockquote, Heading, Link, Paragraph, Parent } from "mdast";
 import type { Plugin } from "unified";
 import { visit } from "unist-util-visit";
+import { convertToTable } from "./table-utils";
 import { extractText } from "./utils";
 
 export interface RemarkTypedocMdxOptions {
@@ -12,6 +13,15 @@ export interface RemarkTypedocMdxOptions {
   parametersAsTable?: boolean;
 }
 
+// type ModuleType =
+//   | ""
+//   | "class"
+//   | "function"
+//   | "interface"
+//   | "type"
+//   | "type alias"
+//   | "variable";
+
 export const remarkTypedocMdx: Plugin<[RemarkTypedocMdxOptions?]> = (
   options = {},
 ) => {
@@ -20,15 +30,25 @@ export const remarkTypedocMdx: Plugin<[RemarkTypedocMdxOptions?]> = (
     removeBreadcrumbs = true,
     normalizeSignatures = true,
     rewriteLinks = true,
+    parametersAsTable = true,
   } = options;
   return (tree) => {
+    // let moduleType = "" as ModuleType;
     visit(tree, (node, index, parent: Parent) => {
       if (!parent || index === undefined) return;
       switch (node.type) {
         case "heading":
-          if (removeTitle && (node as Heading).depth === 1) {
-            parent.children.splice(index, 1);
-            return index;
+          if ((node as Heading).depth === 1) {
+            // moduleType = extractText(node as Heading)
+            //   .split(":")[0]
+            //   .toLowerCase()
+            //   .trim() as ModuleType;
+            if (removeTitle) {
+              parent.children.splice(index, 1);
+              return index;
+            }
+          } else if ((node as Heading).depth === 2 && parametersAsTable) {
+            convertToTable(node as Heading, index, parent);
           }
           break;
         case "paragraph":

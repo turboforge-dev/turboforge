@@ -10,8 +10,10 @@ const colors = {
   // reset: (msg: string) => `${ESC}0m${msg}`,
 };
 
+/** Available log levels in order of severity */
 export type LogLevel = "debug" | "info" | "warn" | "error";
 
+/** Numeric mapping of log levels for filtering */
 const LEVELS: Record<LogLevel, number> = {
   debug: 0,
   info: 1,
@@ -19,9 +21,21 @@ const LEVELS: Record<LogLevel, number> = {
   error: 3,
 };
 
+/**
+ * Creates a logger instance with configurable level and optional file output
+ * @param config - Logger configuration
+ * @param config.level - Minimum log level to output
+ * @param config.logFile - Optional file path to write logs to
+ * @returns Logger instance with debug, info, warn, and error methods
+ */
 export const createLogger = (config: { level: LogLevel; logFile?: string }) => {
   const currentLevel = LEVELS[config.level];
 
+  /**
+   * Internal log function that handles level filtering, formatting, and output
+   * @param level - Log level for this message
+   * @param message - Message to log
+   */
   const log = (level: LogLevel, message: string) => {
     if (LEVELS[level] < currentLevel) return;
 
@@ -48,11 +62,12 @@ export const createLogger = (config: { level: LogLevel; logFile?: string }) => {
   };
 
   return {
-    debug: (m: string) => log("debug", m),
-    info: (m: string) => log("info", m),
-    warn: (m: string) => log("warn", m),
-    error: (m: string) => log("error", m),
+    debug: (message: string) => log("debug", message),
+    info: (message: string) => log("info", message),
+    warn: (message: string) => log("warn", message),
+    error: (message: string) => log("error", message),
   };
 };
 
+/** Logger instance type with debug, info, warn, and error methods */
 export type Logger = ReturnType<typeof createLogger>;

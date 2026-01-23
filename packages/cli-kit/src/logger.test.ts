@@ -10,8 +10,7 @@ vi.mock("node:fs", () => ({
 
 describe("Logger (Zero-Dep)", () => {
   // Visual checks
-  // Visual checks
-  process.env.FORCE_COLOR = "1";
+  process.env["FORCE_COLOR"] = "1";
   const logger = createLogger({ level: "debug" });
   logger.debug("debug message");
   logger.info("info message");
