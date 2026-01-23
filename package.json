@@ -18,7 +18,7 @@
     "release:aliases": "tsx ./tooling/scripts/publish-aliases.ts",
     "release:github": "tsx ./tooling/scripts/create-github-releases.ts",
     "sync": "forge-sync",
-    "test": "vitest run --coverage",
+    "test": "vitest run --coverage && tsx ./tooling/scripts/split-lcov.ts",
     "typecheck": "turbo typecheck",
     "docs:api": "tsx ./tooling/scripts/generate-api-docs.ts"
   },
