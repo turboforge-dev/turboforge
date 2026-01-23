@@ -17,8 +17,6 @@
     "cli-kit",
     "forge-sync",
     "remark-typedoc-mdx",
-    "@app/nextjs",
-    "@app/shared",
     "@app/web"
   ],
   "[typescript]": {
