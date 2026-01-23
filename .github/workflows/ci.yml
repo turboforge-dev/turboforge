@@ -20,9 +20,7 @@ jobs:
 
       - name: Discover packages
         id: discover
-        run: |
-          pkgs=$(ls -d packages/* | xargs -n1 basename | jq -R . | jq -s .)
-          echo "matrix=$pkgs" >> "$GITHUB_OUTPUT"
+        run: echo "matrix=$(ls -d packages/* | xargs -n1 basename | jq -Rc '[inputs]')" >> "$GITHUB_OUTPUT"
 
   build-test-and-upload:
     needs: discover-packages
