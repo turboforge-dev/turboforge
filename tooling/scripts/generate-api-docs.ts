@@ -6,7 +6,7 @@ import pLimit from "p-limit";
 const limit = pLimit(4);
 
 const PACKAGES_DIR = "packages";
-const DOCS_ROOT = "apps/web/content/docs/api";
+const DOCS_ROOT = "apps/web/content/docs";
 
 /* ---------------------------------- */
 /* 1. Generate docs (SEQUENTIAL)       */
@@ -30,25 +30,25 @@ for (const pkgName of packageDirs) {
 
   const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, "utf8"));
   const major = pkgJson.version.split(".")[0];
-  const outDir = path.join(DOCS_ROOT, pkgName, `v${major}`);
+  const outDir = path.join(DOCS_ROOT, pkgName, `v${major}`, "api");
 
   // Create package redirect/index if not exists
-  const pkgIndex = path.join(DOCS_ROOT, pkgName, "index.mdx");
+  // const pkgIndex = path.join(DOCS_ROOT, pkgName, "index.mdx");
 
   // Default to redirecting to the version we are building
   // In a real scenario, we might want 'latest' or 'v0' hardcoded
-  await fs.mkdir(path.dirname(pkgIndex), { recursive: true });
-  await fs.writeFile(
-    pkgIndex,
-    `import { redirect } from 'next/navigation';
+  //   await fs.mkdir(path.dirname(pkgIndex), { recursive: true });
+  //   await fs.writeFile(
+  //     pkgIndex,
+  //     `import { redirect } from 'next/navigation';
 
-# ${pkgJson.name} (${pkgJson.version})
+  // # ${pkgJson.name} (${pkgJson.version})
 
-export default function Page() {
-    redirect('/docs/api/${pkgName}/v${major}');
-}
-`,
-  );
+  // export default function Page() {
+  //     redirect('/docs/${pkgName}/v${major}/api');
+  // }
+  // `,
+  //   );
 
   execSync(
     [
@@ -77,7 +77,7 @@ const walk = async (
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
         await walk(fullPath, action);
-      } else if (fullPath.endsWith(".md")) {
+      } else {
         await action(fullPath);
       }
     }),
@@ -99,7 +99,7 @@ const commitHash = execSync("git rev-parse HEAD", {
 }).trim();
 
 const changedDocs = execSync(
-  "git add . && git status --porcelain -- apps/web/content/docs/api",
+  "git add . && git status --porcelain -- apps/web/content/docs",
   { encoding: "utf8" },
 )
   .split("\n")
@@ -125,7 +125,7 @@ const createMeta = async (file: string) => {
 
   const editURL = src.match(DEFINED_IN_REGEXP)?.[1];
   const metaPath = file
-    .replace("/content/docs/api", "/content/docs/api/.meta")
+    .replace("/content/docs", "/content/docs/.meta")
     .replace(/\.mdx$/, ".json");
 
   await fs.mkdir(path.dirname(metaPath), { recursive: true });
