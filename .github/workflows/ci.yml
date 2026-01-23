@@ -30,12 +30,7 @@ jobs:
       - name: Build & Test
         # Use turbo to run both in a single pipeline for optimal caching
         # Filter is applied here to only run affected packages on PRs
-        run: |
-          FILTER=""
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            FILTER="--filter=[...origin/${{ github.base_ref }}]"
-          fi
-          pnpm turbo run build test $FILTER
+        run: pnpm build && pnpm test
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
