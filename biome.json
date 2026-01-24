@@ -27,6 +27,9 @@
       "recommended": true,
       "suspicious": {
         "noUnknownAtRules": "off"
+      },
+      "complexity": {
+        "useLiteralKeys": "off"
       }
     },
     "domains": {

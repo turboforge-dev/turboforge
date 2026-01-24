@@ -204,8 +204,8 @@ const createTableFromGroups = (groups: HeadingGroup[]): Table => {
           // or just take the first description paragraph
           const desc = validContent.slice(1);
           desc.forEach((d) => {
-            if ((d as any).children)
-              descNodes.push(...(d as any).children, {
+            if ((d as Parent).children)
+              descNodes.push(...((d as Parent).children as PhrasingContent[]), {
                 type: "text",
                 value: " ",
               });

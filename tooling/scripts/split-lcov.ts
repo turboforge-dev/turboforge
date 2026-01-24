@@ -42,7 +42,7 @@ for (let record of records) {
   record = `${lines.join("\n")}\n`;
 
   if (!byPackage.has(pkg)) byPackage.set(pkg, []);
-  byPackage.get(pkg)!.push(record);
+  byPackage.get(pkg)?.push(record);
 }
 
 for (const [pkg, recs] of byPackage.entries()) {

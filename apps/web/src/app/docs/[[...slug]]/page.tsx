@@ -77,6 +77,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
                 />
               );
             },
+            // biome-ignore lint/complexity/noUselessFragments: Required to suppress default icon
             blockquote: (props) => <Callout {...props} icon={<></>} />,
           })}
         />
