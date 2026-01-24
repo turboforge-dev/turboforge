@@ -1,13 +1,25 @@
-# @turbo-forge/cli-kit <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px" />
+# TurboForge CLI Kit <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px" />
 
 Essential utilities for building powerful CLIs and tools in Turbo Forge monorepos.
 
-[![CI](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=turbo-forge-cli-kit)](https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/turbo-forge-cli-kit) 
-<img alt="npm version" src="https://img.shields.io/npm/v/@turbo-forge/cli-kit" />
-<img alt="npm downloads" src="https://img.shields.io/npm/d18m/@turbo-forge/cli-kit" />
-<img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/@turbo-forge/cli-kit" />
-
+<p className="flex gap-2">
+  <a href="https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml" rel="noopener noreferrer">
+    <img alt="CI" src="https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg" />
+  </a>
+  <a href="https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/@turbo-forge/cli-kit" rel="noopener noreferrer">
+    <img alt="codecov" src="https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=@turbo-forge/cli-kit" />
+  </a> 
+  <a href="https://npmjs.com/package/@turbo-forge/cli-kit" rel="noopener noreferrer">
+    <img alt="npm version" src="https://img.shields.io/npm/v/@turbo-forge/cli-kit" />
+  </a>
+  <a href="https://npmjs.com/package/@turbo-forge/cli-kit" rel="noopener noreferrer">
+    <img alt="npm downloads" src="https://img.shields.io/npm/d18m/@turbo-forge/cli-kit" />
+  </a>
+  <a href="https://npmjs.com/package/@turbo-forge/cli-kit" rel="noopener noreferrer">
+    <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/@turbo-forge/cli-kit" />
+  </a>
+  <img alt="license" src="https://img.shields.io/npm/l/@turbo-forge/cli-kit" />
+</p>
 
 > **Note:** This package is part of the Turbo Forge ecosystem.
 

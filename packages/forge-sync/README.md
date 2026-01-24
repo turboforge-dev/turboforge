@@ -1,10 +1,23 @@
-# forge-sync <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px"/>
+# Forge Sync <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px"/>
 
-[![CI](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=forge-sync)](https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/forge-sync) 
-<img alt="npm version" src="https://img.shields.io/npm/v/forge-sync" />
-<img alt="npm downloads" src="https://img.shields.io/npm/d18m/forge-sync" />
-<img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/forge-sync" />
+<p className="flex gap-2">
+  <a href="https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml" rel="noopener noreferrer">
+    <img alt="CI" src="https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg" />
+  </a>
+  <a href="https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/forge-sync" rel="noopener noreferrer">
+    <img alt="codecov" src="https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=forge-sync" />
+  </a> 
+  <a href="https://npmjs.com/package/forge-sync" rel="noopener noreferrer">
+    <img alt="npm version" src="https://img.shields.io/npm/v/forge-sync" />
+  </a>
+  <a href="https://npmjs.com/package/forge-sync" rel="noopener noreferrer">
+    <img alt="npm downloads" src="https://img.shields.io/npm/d18m/forge-sync" />
+  </a>
+  <a href="https://npmjs.com/package/forge-sync" rel="noopener noreferrer">
+    <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/forge-sync" />
+  </a>
+  <img alt="license" src="https://img.shields.io/npm/l/forge-sync" />
+</p>
 
 > **The authoritative synchronization engine for Turbo-Forge monorepos.**  
 > Keep your monorepo's tooling, configurations, and core dependencies in perfect sync with the upstream template.

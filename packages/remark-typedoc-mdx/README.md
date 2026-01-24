@@ -1,10 +1,23 @@
-# remark-typedoc-mdx <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px"/>
+# Remark TypeDoc to MDX <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px"/>
 
-[![CI](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=remark-typedoc-mdx)](https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/remark-typedoc-mdx) 
-<img alt="npm version" src="https://img.shields.io/npm/v/remark-typedoc-mdx" />
-<img alt="npm downloads" src="https://img.shields.io/npm/d18m/remark-typedoc-mdx" />
-<img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/remark-typedoc-mdx" />
+<p className="flex gap-2">
+  <a href="https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml" rel="noopener noreferrer">
+    <img alt="CI" src="https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg" />
+  </a>
+  <a href="https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/remark-typedoc-mdx" rel="noopener noreferrer">
+    <img alt="codecov" src="https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=remark-typedoc-mdx" />
+  </a> 
+  <a href="https://npmjs.com/package/remark-typedoc-mdx" rel="noopener noreferrer">
+    <img alt="npm version" src="https://img.shields.io/npm/v/remark-typedoc-mdx" />
+  </a>
+  <a href="https://npmjs.com/package/remark-typedoc-mdx" rel="noopener noreferrer">
+    <img alt="npm downloads" src="https://img.shields.io/npm/d18m/remark-typedoc-mdx" />
+  </a>
+  <a href="https://npmjs.com/package/remark-typedoc-mdx" rel="noopener noreferrer">
+    <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/remark-typedoc-mdx" />
+  </a>
+  <img alt="license" src="https://img.shields.io/npm/l/remark-typedoc-mdx" />
+</p>
 
 > remark-typedoc-mdx: 
 

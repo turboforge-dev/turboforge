@@ -13,6 +13,7 @@ const getDirs = (dir: string) =>
 const scopes = [
   "root",
   "tooling",
+  "docs",
   "deps",
   "changeset",
   ...getDirs("./packages"),

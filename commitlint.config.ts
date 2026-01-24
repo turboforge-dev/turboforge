@@ -16,6 +16,7 @@ export default {
       [
         "root",
         "tooling",
+        "docs",
         "deps",
         "changeset",
         ...getDirectories("./packages"),

@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import { access, promises as fs } from "node:fs";
+import { promises as fs } from "node:fs";
 import path from "node:path";
 import pLimit from "p-limit";
 
@@ -28,27 +28,25 @@ for (const pkgName of packageDirs) {
     continue;
   }
 
+  try {
+    for (const versionDir of await fs.readdir(path.join(DOCS_ROOT, pkgName))) {
+      if (/^\(.*\)$/.test(versionDir)) {
+        await fs.rename(
+          path.join(DOCS_ROOT, pkgName, versionDir),
+          path.join(DOCS_ROOT, pkgName, versionDir.replace(/^\(|\)$/g, "")),
+        );
+      }
+    }
+    execSync(
+      `git add ${DOCS_ROOT} && git commit -m 'chore(docs): remove brackets for proper git diff'`,
+    );
+  } catch {
+    // ignore
+  }
+
   const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, "utf8"));
   const major = pkgJson.version.split(".")[0];
   const outDir = path.join(DOCS_ROOT, pkgName, `v${major}`, "api");
-
-  // Create package redirect/index if not exists
-  // const pkgIndex = path.join(DOCS_ROOT, pkgName, "index.mdx");
-
-  // Default to redirecting to the version we are building
-  // In a real scenario, we might want 'latest' or 'v0' hardcoded
-  //   await fs.mkdir(path.dirname(pkgIndex), { recursive: true });
-  //   await fs.writeFile(
-  //     pkgIndex,
-  //     `import { redirect } from 'next/navigation';
-
-  // # ${pkgJson.name} (${pkgJson.version})
-
-  // export default function Page() {
-  //     redirect('/docs/${pkgName}/v${major}/api');
-  // }
-  // `,
-  //   );
 
   execSync(
     [
@@ -63,28 +61,40 @@ for (const pkgName of packageDirs) {
 
   fs.copyFile(
     path.join(pkgPath, "README.md"),
-    path.join(outDir, "..", "index.mdx"),
+    path.join(outDir, "..", "README.mdx"),
   );
 
-  const metaFilePath = path.join(DOCS_ROOT, pkgName, "meta.json");
+  const rootMetaFilePath = path.join(DOCS_ROOT, pkgName, "meta.json");
   try {
-    await fs.access(metaFilePath);
+    await fs.access(rootMetaFilePath);
   } catch {
     fs.writeFile(
-      metaFilePath,
+      rootMetaFilePath,
       JSON.stringify(
         {
           title: pkgJson.name,
           description: pkgJson.description,
           lastModified: new Date().toISOString(),
+          version: pkgJson.version,
           root: true,
-          icon: pkgJson.bin ? "Terminal" : "FileCode",
+          icon: pkgJson.forge?.icon || (pkgJson.bin ? "Terminal" : "FileCode"),
         },
         null,
         2,
       ),
     );
   }
+
+  const versionDirs = (await fs.readdir(path.join(DOCS_ROOT, pkgName))).filter(
+    (dir) => /^v\d+$/.test(dir),
+  );
+  const maxVersion = Math.max(
+    ...versionDirs.map((v) => Number(v.replace("v", ""))),
+  );
+  await fs.rename(
+    path.join(DOCS_ROOT, pkgName, `v${maxVersion}`),
+    path.join(DOCS_ROOT, pkgName, `(v${maxVersion})`),
+  );
 }
 
 /* ---------------------------------- */
@@ -96,7 +106,6 @@ const walk = async (
   action: (file: string) => Promise<void>,
 ): Promise<void> => {
   const entries = await fs.readdir(dir, { withFileTypes: true });
-
   await Promise.all(
     entries.map(async (entry) => {
       const fullPath = path.join(dir, entry.name);
@@ -124,7 +133,7 @@ const commitHash = execSync("git rev-parse HEAD", {
 }).trim();
 
 const changedDocs = execSync(
-  "git add . && git status --porcelain -- apps/web/content/docs",
+  `git add ${DOCS_ROOT} && git status --porcelain -- ${DOCS_ROOT}`,
   { encoding: "utf8" },
 )
   .split("\n")
@@ -139,17 +148,22 @@ console.log(changedDocs);
 const DEFINED_IN_REGEXP = /Defined in.*?\((https:\/\/github\.com\/[^)]+)\)/;
 
 const createMeta = async (file: string) => {
+  if (!file.endsWith(".mdx")) {
+    return;
+  }
   const src = await fs.readFile(file, "utf8");
 
   // Extract title safely
   const title = file.endsWith("api/index.mdx")
     ? "API Docs"
-    : (src
-        .match(/^#\s+(.+)$/m)?.[1]
-        ?.replace(/^(Function|Interface|Type alias|Variable):\s*/i, "")
-        .replace(/\\+/, "")
-        .split("<img")[0]
-        .trim() ?? path.basename(file, ".mdx"));
+    : file.endsWith("README.mdx")
+      ? "README"
+      : (src
+          .match(/^#\s+(.+)$/m)?.[1]
+          ?.replace(/^(Function|Interface|Type alias|Variable):\s*/i, "")
+          .replace(/\\+/, "")
+          .split("<img")[0]
+          .trim() ?? path.basename(file, ".mdx"));
 
   const editURL = src.match(DEFINED_IN_REGEXP)?.[1];
   const metaPath = file

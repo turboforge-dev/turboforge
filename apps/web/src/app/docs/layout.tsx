@@ -1,39 +1,50 @@
+import type { Folder } from "fumadocs-core/page-tree";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
-import { VersionSelect } from "@/components/VersionSelect";
 import { baseOptions } from "@/lib/layout.shared";
 import { source } from "@/lib/source";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  // Compute package versions map
-  const pages = source.getPages();
-  const versions: Record<string, Set<string>> = {};
-
-  for (const page of pages) {
-    if (page.url.startsWith("/docs/api/")) {
-      // /docs/api/[pkg]/[ver]/...
-      const parts = page.url.split("/");
-      const pkg = parts[3];
-      const ver = parts[4];
-      if (pkg && ver && ver.startsWith("v")) {
-        if (!versions[pkg]) versions[pkg] = new Set();
-        versions[pkg].add(ver);
-      }
+const cleanUpSourceTree = (node: Folder) => {
+  if (
+    node.children[0]?.type === "folder" &&
+    /^v\d+$/i.test(String(node.children[0]?.name))
+  ) {
+    node.children.sort((a, b) => {
+      const aNum = Number(
+        a.$id
+          ?.split(/\/\(?v/)
+          .pop()
+          ?.replace(/\)$/, "") ?? 0,
+      );
+      const bNum = Number(
+        b.$id
+          ?.split(/\/\(?v/)
+          .pop()
+          ?.replace(/\)$/, "") ?? 0,
+      );
+      return bNum - aNum;
+    });
+    const defaultVersionInd = node.children.findIndex((child) =>
+      /\/\(v\d+\)$/i.test(child.$id ?? ""),
+    );
+    if (defaultVersionInd !== -1) {
+      const defaultVersion = node.children.splice(defaultVersionInd, 1)[0];
+      node.children.unshift(...(defaultVersion as Folder).children);
     }
+  } else {
+    node.children.forEach((child) => {
+      if (child.type === "folder") {
+        cleanUpSourceTree(child as Folder);
+      }
+    });
   }
+};
 
-  const versionsMap: Record<string, string[]> = {};
-  Object.entries(versions).forEach(([pkg, set]) => {
-    versionsMap[pkg] = Array.from(set);
-  });
+const sourceTree = source.getPageTree();
+cleanUpSourceTree(sourceTree as Folder);
 
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <DocsLayout
-      tree={source.getPageTree()}
-      {...baseOptions()}
-      sidebar={{
-        banner: <VersionSelect versions={versionsMap} />,
-      }}
-    >
+    <DocsLayout tree={sourceTree} {...baseOptions()}>
       {children}
     </DocsLayout>
   );

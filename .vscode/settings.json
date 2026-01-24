@@ -12,6 +12,7 @@
   "conventionalCommits.scopes": [
     "root",
     "tooling",
+    "docs",
     "deps",
     "changeset",
     "cli-kit",
@@ -27,5 +28,8 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
   }
 }
