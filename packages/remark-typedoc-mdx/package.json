@@ -2,7 +2,7 @@
   "name": "remark-typedoc-mdx",
   "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
   "private": false,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "",
   "license": "MIT",
   "main": "./dist/index.js",
