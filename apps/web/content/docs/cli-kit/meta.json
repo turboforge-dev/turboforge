@@ -1,0 +1,8 @@
+{
+  "title": "@turbo-forge/cli-kit",
+  "description": "Essential utilities for building powerful CLIs and tools in Turbo Forge monorepos.",
+  "lastModified": "2026-01-24T10:44:46.495Z",
+  "version": "0.0.0",
+  "root": true,
+  "icon": "Terminal"
+}
