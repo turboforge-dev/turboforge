@@ -60,6 +60,6 @@
     "turbo-forge"
   ],
   "dependencies": {
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.1.0"
   }
 }
