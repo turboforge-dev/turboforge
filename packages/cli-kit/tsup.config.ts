@@ -4,7 +4,7 @@ export default defineConfig(
   (options: Options) =>
     ({
       format: ["cjs", "esm"],
-      target: "es2019",
+      target: "es2022",
       tsconfig: "../../tsconfig.build.json",
       dts: true,
       entry: ["./src/index.ts"],

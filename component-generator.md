@@ -5,7 +5,7 @@ This generator helps you scaffold components consistently.
 ### Usage
 
 ```bash
-pnpm plop rc
+pnpm gen rc
 ```
 
 ### Prompts Explained

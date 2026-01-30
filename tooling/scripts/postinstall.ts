@@ -1,13 +1,23 @@
+import { execSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import pkgJson from "../../package.json";
 
-const getDirs = (dir: string) =>
+const getEntries = (dir: string) =>
   existsSync(dir)
     ? readdirSync(dir, { withFileTypes: true })
         .filter((d) => d.isDirectory())
-        .map((d) => d.name)
+        .map((d) => ({
+          dir: d.name,
+          name: JSON.parse(
+            readFileSync(path.join(dir, d.name, "package.json"), "utf-8"),
+          ).name,
+        }))
     : [];
+
+const packages = getEntries("./packages");
+
+packages.sort((a, b) => a.name.localeCompare(b.name));
 
 // 1. Collect all scopes
 const scopes = [
@@ -16,9 +26,9 @@ const scopes = [
   "docs",
   "deps",
   "changeset",
-  ...getDirs("./packages"),
-  ...getDirs("./apps").map((app) => `@app/${app}`),
-  ...getDirs("./examples").map((example) => `@example/${example}`),
+  ...packages.map(({ name }) => name),
+  ...getEntries("./apps").map(({ name }) => name),
+  ...getEntries("./examples").map(({ name }) => name),
 ];
 
 // 2. Path to VS Code settings
@@ -45,9 +55,37 @@ try {
     `schemas/${pkgJson.devDependencies["@biomejs/biome"]}/schema.json`,
   );
   writeFileSync(biomeFilePath, biomeConfig);
-} catch (e) {
-  console.error(
-    "❌ Failed to sync VS Code settings. Ensure .vscode/settings.json exists.",
-    e,
+
+  console.log("✅ Biome schema version synced with package.json!");
+
+  const tsconfig = readFileSync("./tsconfig.json", "utf-8");
+  const paths = packages.reduce(
+    (acc: Record<string, string[]>, { name, dir }) => {
+      acc[name] = [`./packages/${dir}/src`];
+      return acc;
+    },
+    {},
   );
+  writeFileSync(
+    "./tsconfig.json",
+    tsconfig.replace(
+      /"paths":\s*\{([\s\S]*?)\}/,
+      () => `"paths": ${JSON.stringify(paths)}`,
+    ),
+  );
+
+  const tsconfigBuild = readFileSync("./tsconfig.build.json", "utf-8");
+  writeFileSync(
+    "./tsconfig.build.json",
+    tsconfigBuild.replace(
+      /"paths":\s*\{([\s\S]*?)\}/,
+      () => `"paths": ${JSON.stringify(paths)}`,
+    ),
+  );
+
+  console.log("✅ TS Config paths synced with workspace packages!");
+
+  execSync("pnpm format");
+} catch (e) {
+  console.error(e);
 }

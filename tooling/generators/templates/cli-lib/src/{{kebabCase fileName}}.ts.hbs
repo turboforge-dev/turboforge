@@ -11,5 +11,5 @@ export const DEFAULT_CONFIG: Required<{{pascalCase fileName}}Options> = {
 export const {{camelCase fileName}} = async (options: {{pascalCase fileName}}Options) => {
   const config = deepMerge(DEFAULT_CONFIG, options) as Required<{{pascalCase fileName}}Options>;
   const logger = createLogger({ level: config.logLevel });
-
+  logger.info("Hello from {{ camelCase fileName }}!")
 };

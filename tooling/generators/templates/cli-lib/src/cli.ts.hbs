@@ -1,13 +1,16 @@
 #!/usr/bin/env node
 
-import { resolveConfig } from "@turbo-forge/cli-kit";
+import { findProjectRoot, resolveConfig } from "@turbo-forge/cli-kit";
 import { 
   {{camelCase fileName}}, 
   DEFAULT_CONFIG, 
-  type {{camelCase fileName}}Options 
+  type {{pascalCase fileName}}Options 
 } from "./{{kebabCase fileName}}";
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
-export interface CliOptions extends {{camelCase fileName}}Options {
+export interface CliOptions extends {{pascalCase fileName}}Options {
   help?: boolean;
   init?: boolean;
   config?: string;
@@ -82,6 +85,11 @@ export const main = async (args: string[] = process.argv.slice(2)) => {
   await {{camelCase fileName}}(config);
 };
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+const isCLI =
+  typeof require !== "undefined"
+    ? require.main === module
+    : fileURLToPath(import.meta.url) === process.argv[1];
+
+if (isCLI) {
   main().catch(console.error);
 }

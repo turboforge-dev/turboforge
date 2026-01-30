@@ -13,27 +13,6 @@ interface InquirerDataType {
   repo: string;
 }
 
-const transformTsConfig = (template: string, data: InquirerDataType) => {
-  const pkgName = data.name;
-  const pkgPath = [`packages/${data.fileName}/src`];
-
-  return template.replace(/"paths":\s*\{([\s\S]*?)\}/, (match) => {
-    const pathsStr = match.replace('"paths": ', "").replace(/,[\s\n]*}/, "}");
-    const paths = JSON.parse(pathsStr);
-    paths[pkgName] = pkgPath;
-    return `"paths": ${JSON.stringify(
-      Object.keys(paths)
-        .sort()
-        .reduce((acc: Record<string, string[]>, key) => {
-          acc[key] = paths[key];
-          return acc;
-        }, {}),
-      null,
-      2,
-    )}`;
-  });
-};
-
 const getActions = (data: InquirerDataType) => {
   data.fileName = data.name.split("/")[1]?.trim() || data.name;
   const [owner, repo] = data.repo.split("/");
@@ -58,16 +37,6 @@ const getActions = (data: InquirerDataType) => {
       destination: path.resolve(cwd, "packages/{{kebabCase fileName}}"),
       base: `${TEMPLATE_DIR}${pkgTemplateDir}`,
       templateFiles: [`${TEMPLATE_DIR}${pkgTemplateDir}/**`],
-    },
-    {
-      type: "modify",
-      path: path.resolve(cwd, "tsconfig.json"),
-      transform: transformTsConfig,
-    },
-    {
-      type: "modify",
-      path: path.resolve(cwd, "tsconfig.build.json"),
-      transform: transformTsConfig,
     },
   ];
 
