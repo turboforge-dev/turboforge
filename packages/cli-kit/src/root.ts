@@ -1,22 +1,28 @@
 import path from "node:path";
 import { findUp, readJson } from "./utils";
 
+const rootCache = new Map<string, string>();
+
 /**
  * Finds the project root directory based on common markers.
  * Priority: .git > .changeset > pnpm-workspace.yaml > package.json (with workspaces)
  */
-export const findProjectRoot = (cwd: string = process.cwd()): string => {
-  // 1. Check for .git (Highest priority for monorepo root)
-  const gitRoot = findUp(cwd, [".git"]);
-  if (gitRoot) return gitRoot;
+export const findProjectRoot = async (
+  cwd: string = process.cwd(),
+): Promise<string> => {
+  const resolvedCwd = path.resolve(cwd);
+  if (rootCache.has(resolvedCwd)) return rootCache.get(resolvedCwd) as string;
 
-  // 2. Check for .changeset
-  const changesetRoot = findUp(cwd, [".changeset"]);
-  if (changesetRoot) return changesetRoot;
-
-  // 3. Check for workspace definitions
-  const workspaceRoot = findUp(cwd, ["pnpm-workspace.yaml"]);
-  if (workspaceRoot) return workspaceRoot;
+  // High-priority markers: Check for .git, .changeset, or pnpm-workspace.yaml
+  const rootDir = await findUp(resolvedCwd, [
+    ".git",
+    ".changeset",
+    "pnpm-workspace.yaml",
+  ]);
+  if (rootDir) {
+    rootCache.set(resolvedCwd, rootDir);
+    return rootDir;
+  }
 
   // 4. Check for package.json with workspaces
   // This requires a custom check because we need to read the file content
@@ -25,9 +31,10 @@ export const findProjectRoot = (cwd: string = process.cwd()): string => {
 
   while (true) {
     const pkgPath = path.join(currentDir, "package.json");
-    const pkg = readJson<{ workspaces?: string[] }>(pkgPath);
+    const pkg = await readJson<{ workspaces?: string[] }>(pkgPath);
 
     if (pkg?.workspaces && Array.isArray(pkg.workspaces)) {
+      rootCache.set(resolvedCwd, currentDir);
       return currentDir;
     }
 
@@ -36,5 +43,6 @@ export const findProjectRoot = (cwd: string = process.cwd()): string => {
   }
 
   // Fallback to cwd if nothing found
-  return cwd;
+  rootCache.set(resolvedCwd, resolvedCwd);
+  return resolvedCwd;
 };

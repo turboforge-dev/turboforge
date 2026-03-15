@@ -1,73 +1,252 @@
-import { appendFileSync } from "node:fs";
+import { createWriteStream, type WriteStream } from "node:fs";
+import os from "node:os";
 
-// ANSI Escape Codes
+/**
+ * ANSI escape prefix used for terminal coloring.
+ */
 const ESC = "\x1b[";
-const colors = {
+
+/**
+ * Color helpers for terminal output.
+ * Applied only when stdout is a TTY and colors are not disabled.
+ */
+const COLORS = {
   gray: (msg: string) => `${ESC}90m${msg}${ESC}39m`,
   blue: (msg: string) => `${ESC}34m${msg}${ESC}39m`,
   yellow: (msg: string) => `${ESC}33m${msg}${ESC}39m`,
   red: (msg: string) => `${ESC}31m${msg}${ESC}39m`,
-  // reset: (msg: string) => `${ESC}0m${msg}`,
-};
-
-/** Available log levels in order of severity */
-export type LogLevel = "debug" | "info" | "warn" | "error";
-
-/** Numeric mapping of log levels for filtering */
-const LEVELS: Record<LogLevel, number> = {
-  debug: 0,
-  info: 1,
-  warn: 2,
-  error: 3,
 };
 
 /**
- * Creates a logger instance with configurable level and optional file output
- * @param config - Logger configuration
- * @param config.level - Minimum log level to output
- * @param config.logFile - Optional file path to write logs to
- * @returns Logger instance with debug, info, warn, and error methods
+ * Log severity levels.
+ *
+ * Ordered from lowest → highest severity.
+ * This ordering allows efficient numeric filtering.
  */
-export const createLogger = (config: { level: LogLevel; logFile?: string }) => {
-  const currentLevel = LEVELS[config.level];
+export type LogLevel = "debug" | "info" | "warn" | "error";
+
+/**
+ * Numeric mapping for log levels.
+ *
+ * Higher number = higher severity.
+ * Used for fast runtime filtering.
+ *
+ * Aligns with common conventions used by tools like pino/bunyan.
+ */
+const LEVELS: Record<LogLevel, number> = {
+  debug: 20,
+  info: 30,
+  warn: 40,
+  error: 50,
+} as const;
+
+/**
+ * Mapping between log level and terminal color formatter.
+ */
+const COLOR_MAP: Record<LogLevel, (msg: string) => string> = {
+  debug: COLORS.gray,
+  info: COLORS.blue,
+  warn: COLORS.yellow,
+  error: COLORS.red,
+};
+
+/**
+ * Logger configuration.
+ */
+export interface LoggerConfig {
+  /**
+   * Minimum severity level to output.
+   *
+   * Logs below this level will be ignored.
+   */
+  level: LogLevel;
 
   /**
-   * Internal log function that handles level filtering, formatting, and output
-   * @param level - Log level for this message
-   * @param message - Message to log
+   * Optional file path to append logs to.
+   *
+   * If provided, logs will be written to both terminal and file.
    */
-  const log = (level: LogLevel, message: string) => {
+  logFile?: string;
+
+  /**
+   * Log format.
+   *
+   * `text` - Human-readable format
+   * `json` - JSON format for machine parsing
+   *
+   * @default "text"
+   */
+  logFormat?: "text" | "json";
+
+  /**
+   * Optional name to prepend to all log messages.
+   * Useful for identifying the source of logs in multi-process environments.
+   */
+  name?: string;
+}
+
+/**
+ * Logger interface.
+ */
+export interface Logger {
+  debug: (...args: unknown[]) => void;
+  info: (...args: unknown[]) => void;
+  warn: (...args: unknown[]) => void;
+  error: (...args: unknown[]) => void;
+
+  /**
+   * Flushes and closes the file stream if active.
+   *
+   * Safe to call multiple times.
+   */
+  close: () => void;
+}
+
+/**
+ * Creates a minimal structured logger.
+ *
+ * Features:
+ * - Level-based filtering
+ * - Colored terminal output
+ * - Optional file logging
+ * - Automatic stream cleanup on process exit
+ *
+ * Designed for:
+ * - CLI tools
+ * - developer utilities
+ * - small Node services
+ *
+ * Example:
+ *
+ * ```ts
+ * const logger = createLogger({ level: "info", logFile: "./app.log" })
+ *
+ * logger.info("Server started", port)
+ * logger.warn("Cache miss")
+ * logger.error("Unhandled error", err)
+ * ```
+ */
+export const createLogger = (config: LoggerConfig): Logger => {
+  const currentLevel = LEVELS[config.level];
+  const logFormat = config.logFormat ?? "text";
+  const name = config.name;
+
+  const logLevelLabels = name
+    ? {
+        debug: `${name}:DEBUG`,
+        info: `${name}:INFO`,
+        warn: `${name}:WARN`,
+        error: `${config.name}:ERROR`,
+      }
+    : {
+        debug: "DEBUG",
+        info: "INFO",
+        warn: "WARN",
+        error: "ERROR",
+      };
+
+  let stream: WriteStream | null = null;
+  let closed = false;
+
+  /**
+   * Detect whether colored output should be used.
+   */
+  const isTTY =
+    (process.stdout.isTTY && !process.env["NO_COLOR"]) ||
+    !!process.env["FORCE_COLOR"];
+
+  /**
+   * Initialize file stream if requested.
+   */
+  if (config.logFile) {
+    try {
+      stream = createWriteStream(config.logFile, { flags: "a" });
+
+      /**
+       * If the stream errors (disk full, permission change, etc),
+       * disable file logging but continue console logging.
+       */
+      stream.on("error", () => {
+        stream = null;
+      });
+    } catch {
+      stream = null;
+    }
+  }
+
+  /**
+   * Safely closes the file stream.
+   */
+  const close = () => {
+    if (closed) return;
+    closed = true;
+
+    if (stream) {
+      try {
+        stream.end();
+      } catch {
+        // ignore
+      }
+      stream = null;
+    }
+  };
+
+  /**
+   * Ensure logs are flushed during normal process shutdown.
+   *
+   * This protects against lost logs when the consumer forgets
+   * to explicitly call `logger.close()`.
+   */
+  process.once("exit", close);
+
+  process.once("SIGINT", () => {
+    close();
+    process.exit(0);
+  });
+
+  process.once("SIGTERM", () => {
+    close();
+    process.exit(0);
+  });
+
+  const pid = process.pid;
+  const hostname = os.hostname();
+
+  /**
+   * Core logging implementation.
+   */
+  const log = (level: LogLevel, ...args: unknown[]) => {
     if (LEVELS[level] < currentLevel) return;
 
     const ts = new Date().toISOString();
-    const raw = `[${ts}] [${level.toUpperCase()}] ${message}`;
+    const message = args.map(String).join(" ");
 
-    // Terminal logic
-    const colorMap = {
-      debug: colors.gray,
-      info: colors.blue,
-      warn: colors.yellow,
-      error: colors.red,
-    };
+    const raw =
+      logFormat === "json"
+        ? JSON.stringify({ ts, level, message, pid, hostname, name })
+        : `[${ts}] [${logLevelLabels[level]}] ${message}`;
 
-    // Only apply color if it's a TTY (standard terminal) or explicitly forced
-    const isTTY =
-      (process.stdout.isTTY && !process.env["NO_COLOR"]) ||
-      !!process.env["FORCE_COLOR"];
-    console.log(isTTY ? colorMap[level](raw) : raw);
+    const output = isTTY && COLOR_MAP[level] ? COLOR_MAP[level](raw) : raw;
 
-    if (config.logFile) {
-      appendFileSync(config.logFile, `${raw}\n`);
+    const out =
+      level === "warn" || level === "error" ? process.stderr : process.stdout;
+
+    out.write(`${output}\n`);
+
+    if (stream) {
+      try {
+        stream.write(`${raw}\n`);
+      } catch {
+        stream = null;
+      }
     }
   };
 
   return {
-    debug: (message: string) => log("debug", message),
-    info: (message: string) => log("info", message),
-    warn: (message: string) => log("warn", message),
-    error: (message: string) => log("error", message),
+    debug: (...args) => log("debug", ...args),
+    info: (...args) => log("info", ...args),
+    warn: (...args) => log("warn", ...args),
+    error: (...args) => log("error", ...args),
+    close,
   };
 };
-
-/** Logger instance type with debug, info, warn, and error methods */
-export type Logger = ReturnType<typeof createLogger>;

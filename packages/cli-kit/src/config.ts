@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import { readdir } from "node:fs/promises";
 import path from "node:path";
 import { findProjectRoot } from "./root";
 import { deepMerge, readJson, tryImport } from "./utils";
@@ -10,6 +10,8 @@ export interface ResolveConfigOptions<T> {
   envVars?: Partial<T>;
   cliArgs?: Partial<T>;
   configFile?: string;
+  /** If true, throws on configuration parsing errors. */
+  strict?: boolean;
 }
 
 /**
@@ -22,8 +24,9 @@ export const resolveConfig = async <T>({
   envVars = {},
   cliArgs = {},
   configFile,
+  strict = false,
 }: ResolveConfigOptions<T>): Promise<T> => {
-  const root = findProjectRoot(cwd);
+  const root = await findProjectRoot(cwd);
   const configFiles: string[] = [];
 
   if (configFile) {
@@ -36,7 +39,7 @@ export const resolveConfig = async <T>({
 
     while (true) {
       try {
-        const files = fs.readdirSync(currentDir);
+        const files = await readdir(currentDir);
         const match = files.find((f) => configRegex.test(f));
         if (match) {
           configFiles.push(path.join(currentDir, match));
@@ -55,10 +58,10 @@ export const resolveConfig = async <T>({
 
   for (const filePath of configFiles.reverse()) {
     if (filePath.endsWith(".json")) {
-      const content = readJson<T>(filePath);
+      const content = await readJson<T>(filePath, { strict });
       if (content) loadedConfigs.push(content);
     } else {
-      const content = await tryImport<T>(filePath);
+      const content = await tryImport<T>(filePath, { strict });
       if (content) loadedConfigs.push(content);
     }
   }
