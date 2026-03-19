@@ -7,23 +7,28 @@ import { defaultPkgDir } from "@/meta.json";
 
 const limiter = createLimiter(10);
 
-const PKG_MAX_VERSION = await readdir("content/docs").then((dirs) =>
-  Promise.all(
-    dirs.toSorted().map((dir) =>
-      limiter(async () => {
-        const version = await readdir(`content/docs/${dir}`).then(
-          (vDirs) =>
-            vDirs
-              .filter((vDir) => /^v\d+$/.test(vDir))
-              .toSorted(
-                (a, b) => parseInt(a.slice(1), 10) - parseInt(b.slice(1), 10),
-              )[0],
-        );
-        return { dir, version };
-      }),
+const PKG_MAX_VERSION = await readdir("content/docs")
+  .then((dirs) =>
+    Promise.all(
+      dirs.toSorted().map((dir) =>
+        limiter(async () => {
+          const version = await readdir(`content/docs/${dir}`).then(
+            (vDirs) =>
+              vDirs
+                .filter((vDir) => /^v\d+$/.test(vDir))
+                .toSorted(
+                  (a, b) => parseInt(a.slice(1), 10) - parseInt(b.slice(1), 10),
+                )[0],
+          );
+          return { dir, version };
+        }),
+      ),
     ),
-  ),
-);
+  )
+  .catch((err) => {
+    console.error(err);
+    return [];
+  });
 
 const DEFAULT_PKG_DIR = defaultPkgDir || PKG_MAX_VERSION[0]?.dir;
 
