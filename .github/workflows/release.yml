@@ -57,7 +57,7 @@ jobs:
 
       - name: Publish Aliases
         if: steps.changesets.outputs.published == 'true'
-        run: pnpm tsx tooling/scripts/publish-aliases.ts --published-packages '${{ steps.changesets.outputs.publishedPackages }}'
+        run: pnpm node --experimental-strip-types tooling/scripts/publish-aliases.ts --published-packages '${{ steps.changesets.outputs.publishedPackages }}'
         env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
