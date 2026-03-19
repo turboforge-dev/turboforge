@@ -2,7 +2,7 @@
   "name": "@turboforge/cli-kit",
   "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
   "private": false,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Low-level utilities and configuration resolution for building high-performance CLI tools in monorepos.",
   "license": "MIT",
   "main": "./dist/index.js",
