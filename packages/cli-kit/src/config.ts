@@ -69,7 +69,7 @@ export const resolveConfig = async <T>({
   // 3. Prepare Merge Function (Try defu, fallback to deepMerge)
   let merger = deepMerge;
   try {
-    const defuMod = await import("defu");
+    const defuMod = await import("defu" as string);
     // defu(object, defaults) -> we want to merge multiple.
     // defu(left, right) -> left is priority?
     // defu(source, defaults). Source overrides defaults.

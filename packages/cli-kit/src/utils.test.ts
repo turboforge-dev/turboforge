@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: unit tests ok */
 import { access, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import {
@@ -42,7 +43,7 @@ describe("utils", () => {
       const target = {};
       const source = JSON.parse('{"__proto__": {"polluted": true}}');
       deepMerge(target, source);
-      expect((target as Record<string, any>).polluted).toBeUndefined();
+      expect((target as Record<string, any>)["polluted"]).toBeUndefined();
     });
   });
 
