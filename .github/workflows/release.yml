@@ -32,6 +32,7 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm turbo telemetry disable
+          pnpm typecheck
           cd apps/web && pnpm next telemetry disable && cd ../..
 
       - name: Create Release PR or Publish
