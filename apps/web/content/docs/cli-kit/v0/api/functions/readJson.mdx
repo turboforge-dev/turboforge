@@ -1,0 +1,38 @@
+[**@turboforge/cli-kit**](../index.md)
+
+***
+
+[@turboforge/cli-kit](../index.md) / readJson
+
+# Function: readJson()
+
+> **readJson**\<`T`\>(`p`, `options?`): `Promise`\<`T` \| `null`\>
+
+Defined in: [packages/cli-kit/src/utils.ts:117](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/utils.ts#L117)
+
+Reads and parses a JSON file safely.
+
+Returns `null` if the file does not exist or parsing fails
+(unless `strict` mode is enabled).
+
+## Type Parameters
+
+### T
+
+`T` = `unknown`
+
+## Parameters
+
+### p
+
+`string`
+
+JSON file path.
+
+### options?
+
+[`ParsingOptions`](../interfaces/ParsingOptions.md) = `{}`
+
+## Returns
+
+`Promise`\<`T` \| `null`\>

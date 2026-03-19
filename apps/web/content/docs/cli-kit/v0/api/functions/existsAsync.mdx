@@ -1,0 +1,30 @@
+[**@turboforge/cli-kit**](../index.md)
+
+***
+
+[@turboforge/cli-kit](../index.md) / existsAsync
+
+# Function: existsAsync()
+
+> **existsAsync**(`p`): `Promise`\<`boolean`\>
+
+Defined in: [packages/cli-kit/src/utils.ts:38](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/utils.ts#L38)
+
+Checks if a file or directory exists.
+
+Uses `fs.promises.access` for non-blocking I/O.
+
+Only `ENOENT` is interpreted as "does not exist".
+Other filesystem errors are rethrown.
+
+## Parameters
+
+### p
+
+`string`
+
+File system path to check.
+
+## Returns
+
+`Promise`\<`boolean`\>

@@ -1,0 +1,54 @@
+[**@turboforge/cli-kit**](../index.md)
+
+***
+
+[@turboforge/cli-kit](../index.md) / atomicWrite
+
+# Function: atomicWrite()
+
+> **atomicWrite**(`path`, `data`): `Promise`\<`void`\>
+
+Defined in: [packages/cli-kit/src/utils.ts:238](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/utils.ts#L238)
+
+Atomically writes a file using a temp-file + rename strategy.
+
+Guarantees readers never observe partially written files.
+
+Strategy:
+1. Write data to a temporary file in the same directory.
+2. Rename temp file to target (atomic on same filesystem).
+
+Why this matters:
+- Prevents partially written files.
+- Ensures readers never observe truncated JSON.
+- Safe under concurrent writers (last-writer-wins).
+
+Concurrency Model:
+- Each invocation uses a `randomUUID()` temp filename
+  to avoid cross-process collisions.
+- Rename is atomic on the same filesystem.
+- No locking is performed here.
+
+Limitations:
+- Does not prevent logical race conditions.
+- If two processes write simultaneously, the last rename wins.
+- Both temp and target must reside on the same filesystem
+  for atomic guarantees.
+
+## Parameters
+
+### path
+
+`string`
+
+Target file path.
+
+### data
+
+`string`
+
+UTF-8 string content.
+
+## Returns
+
+`Promise`\<`void`\>

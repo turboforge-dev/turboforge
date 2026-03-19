@@ -13,7 +13,7 @@ const config = {
     unoptimized: true,
   },
   ...(isGitHubActions && {
-    // basePath: "/turboforge", // we are publishing to https://turboforge.js.org/ -- so remove basePath
+    basePath: "/turboforge", // we are publishing to https://turboforge.js.org/ -- so remove basePath
     output: "export",
   }),
 };

@@ -9,7 +9,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { LLMCopyButton, ViewOptions } from "@/components/ai/page-actions";
-import { getPageImage, source } from "@/lib/source";
+import {
+  DEFAULT_PKG_DIR,
+  getPageImage,
+  PKG_MAX_VERSION,
+  source,
+} from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
 const GIT_CONFIG = {
@@ -22,7 +27,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
   const params = await props.params;
   const page = source.getPage(params.slug);
   if (!page) {
-    if (!params.slug?.length) {
+    if (!params.slug?.length || params.slug[0] === DEFAULT_PKG_DIR) {
       redirect(`/docs/overview`);
     } else if (params.slug?.length === 1 && params.slug[0] !== "overview") {
       redirect(`/docs/${params.slug[0]}/overview`);
@@ -99,8 +104,8 @@ export async function generateStaticParams() {
   return [
     ...source.generateParams(),
     { slug: [] },
-    ...["cli-kit", "forge-sync"].map((pkg) => ({
-      slug: [pkg],
+    ...PKG_MAX_VERSION.map((pkg) => ({
+      slug: [pkg.dir],
     })),
   ];
 }

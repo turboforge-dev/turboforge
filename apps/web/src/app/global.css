@@ -2,26 +2,39 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme {
-  --color-ps-bg: var(--ps-bg);
-  --color-ps-fg: var(--ps-fg);
-  --color-ps-primary: var(--ps-primary);
-  --color-ps-secondary: var(--ps-secondary);
-  --color-ps-border: var(--ps-border);
-  --color-ps-card: var(--ps-card);
-  --color-ps-card-fg: var(--ps-card-fg);
-  --color-ps-muted: var(--ps-muted);
-  --color-ps-muted-fg: var(--ps-muted-fg);
-  --color-ps-accent: var(--ps-accent);
-  --color-ps-accent-fg: var(--ps-accent-fg);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 
   --animate-fade-in-up: fade-in-up 0.7s ease-out forwards;
   --animate-fade-in: fade-in 1s ease-out forwards;
   --animate-pulse-slow: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-
-  --spacing-18: 4.5rem;
-  --spacing-112: 28rem;
-  --spacing-128: 32rem;
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
 
   @keyframes fade-in-up {
     0% {
@@ -33,7 +46,6 @@
       transform: translateY(0);
     }
   }
-
   @keyframes fade-in {
     0% {
       opacity: 0;
@@ -42,7 +54,6 @@
       opacity: 1;
     }
   }
-
   @keyframes pulse-slow {
     0%,
     100% {
@@ -52,21 +63,55 @@
       opacity: 0.7;
     }
   }
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
 }
 
 @layer base {
   :root {
-    --ps-bg: #fafafa;
-    --ps-fg: #09090b;
-    --ps-primary: #18181b;
-    --ps-secondary: #f4f4f5;
-    --ps-border: #e4e4e7;
-    --ps-card: #ffffff;
-    --ps-card-fg: #09090b;
-    --ps-muted: #f4f4f5;
-    --ps-muted-fg: #71717a;
-    --ps-accent: #2563eb;
-    --ps-accent-fg: #ffffff;
+    --background: #ffffff;
+    --foreground: #09090b;
+
+    --card: #ffffff;
+    --card-foreground: #09090b;
+
+    --popover: #ffffff;
+    --popover-foreground: #09090b;
+
+    --primary: #18181b;
+    --primary-foreground: #fafafa;
+
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+
+    --accent: #f4f4f5;
+    --accent-foreground: #18181b;
+
+    --destructive: #ef4444;
+    --destructive-foreground: #fafafa;
+
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #18181b;
+
+    --radius: 0.5rem;
 
     /* Code highlight suger-high */
     --sh-class: #2d5e9d;
@@ -81,17 +126,33 @@
   }
 
   .dark {
-    --ps-bg: #09090b;
-    --ps-fg: #fafafa;
-    --ps-primary: #fafafa;
-    --ps-secondary: #27272a;
-    --ps-border: #27272a;
-    --ps-card: #18181b;
-    --ps-card-fg: #fafafa;
-    --ps-muted: #27272a;
-    --ps-muted-fg: #a1a1aa;
-    --ps-accent: #3b82f6;
-    --ps-accent-fg: #ffffff;
+    --background: #09090b;
+    --foreground: #fafafa;
+
+    --card: #09090b;
+    --card-foreground: #fafafa;
+
+    --popover: #09090b;
+    --popover-foreground: #fafafa;
+
+    --primary: #fafafa;
+    --primary-foreground: #18181b;
+
+    --secondary: #27272a;
+    --secondary-foreground: #fafafa;
+
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+
+    --accent: #27272a;
+    --accent-foreground: #fafafa;
+
+    --destructive: #7f1d1d;
+    --destructive-foreground: #fafafa;
+
+    --border: #27272a;
+    --input: #27272a;
+    --ring: #d4d4d8;
 
     /* Code highlight sugar-high dark mode */
     --sh-class: #fef08a;
@@ -105,11 +166,11 @@
     --sh-jsxliterals: #c084fc;
   }
 
+  * {
+    @apply border-border;
+  }
+
   body {
-    background-color: var(--ps-bg);
-    color: var(--ps-fg);
-    transition:
-      background-color 0.3s ease,
-      color 0.3s ease;
+    @apply bg-background text-foreground;
   }
 }

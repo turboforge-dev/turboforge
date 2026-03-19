@@ -1,0 +1,39 @@
+[**@turboforge/cli-kit**](../index.md)
+
+***
+
+[@turboforge/cli-kit](../index.md) / tryImport
+
+# Function: tryImport()
+
+> **tryImport**\<`T`\>(`p`, `options?`): `Promise`\<`T` \| `null`\>
+
+Defined in: [packages/cli-kit/src/utils.ts:141](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/utils.ts#L141)
+
+Attempts to import a module.
+
+Supports:
+- Native dynamic `import()`
+- TypeScript configs via `jiti` (if available)
+
+## Type Parameters
+
+### T
+
+`T` = `unknown`
+
+## Parameters
+
+### p
+
+`string`
+
+Module
+
+### options?
+
+[`ParsingOptions`](../interfaces/ParsingOptions.md) = `{}`
+
+## Returns
+
+`Promise`\<`T` \| `null`\>

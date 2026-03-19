@@ -7,7 +7,7 @@ import { defaultPkgDir } from "@/meta.json";
 
 const limiter = createLimiter(10);
 
-const PKG_MAX_VERSION = await readdir("content/docs")
+export const PKG_MAX_VERSION = await readdir("content/docs")
   .then((dirs) =>
     Promise.all(
       dirs.toSorted().map((dir) =>
@@ -30,7 +30,7 @@ const PKG_MAX_VERSION = await readdir("content/docs")
     return [];
   });
 
-const DEFAULT_PKG_DIR = defaultPkgDir || PKG_MAX_VERSION[0]?.dir;
+export const DEFAULT_PKG_DIR = defaultPkgDir || PKG_MAX_VERSION[0]?.dir;
 
 console.debug({ DEFAULT_PKG_DIR, PKG_MAX_VERSION });
 

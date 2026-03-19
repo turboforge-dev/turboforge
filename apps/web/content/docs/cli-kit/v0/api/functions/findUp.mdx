@@ -1,0 +1,36 @@
+[**@turboforge/cli-kit**](../index.md)
+
+***
+
+[@turboforge/cli-kit](../index.md) / findUp
+
+# Function: findUp()
+
+> **findUp**(`startDir`, `markers`): `Promise`\<`string` \| `null`\>
+
+Defined in: [packages/cli-kit/src/utils.ts:63](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/utils.ts#L63)
+
+Recursively walks up the directory tree from `startDir`
+searching for a directory containing any of the `markers`.
+
+Results are cached to avoid redundant filesystem traversal.
+
+## Parameters
+
+### startDir
+
+`string`
+
+Directory to begin searching from.
+
+### markers
+
+`string`[]
+
+File or directory names to detect.
+
+## Returns
+
+`Promise`\<`string` \| `null`\>
+
+Directory containing the marker, or `null`.

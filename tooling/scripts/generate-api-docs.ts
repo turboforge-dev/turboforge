@@ -70,6 +70,7 @@ for (const pkgDir of PKG_DOC_DIRS) {
 
   const rootMetaFilePath = path.join(DOCS_ROOT, pkgDir, "meta.json");
   const description = pkgJson.forge?.description || pkgJson.description;
+  const tagLine = pkgJson.forge?.tagLine || pkgJson.description;
   const icon = pkgJson.forge?.icon || (pkgJson.bin ? "Terminal" : "FileCode");
   try {
     const meta = JSON.parse(await fs.readFile(rootMetaFilePath, "utf8"));
@@ -77,7 +78,8 @@ for (const pkgDir of PKG_DOC_DIRS) {
       meta.version !== pkgJson.version ||
       meta.description !== description ||
       meta.icon !== icon ||
-      meta.title !== pkgJson.name
+      meta.title !== pkgJson.name ||
+      meta.tagLine !== tagLine
     ) {
       throw new Error("Meta file is outdated");
     }
@@ -88,6 +90,7 @@ for (const pkgDir of PKG_DOC_DIRS) {
         {
           title: pkgJson.name,
           description,
+          tagLine,
           lastModified: new Date().toISOString(),
           version: pkgJson.version,
           root: true,

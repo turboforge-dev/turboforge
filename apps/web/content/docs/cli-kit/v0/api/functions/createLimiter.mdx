@@ -1,0 +1,28 @@
+[**@turboforge/cli-kit**](../index.md)
+
+***
+
+[@turboforge/cli-kit](../index.md) / createLimiter
+
+# Function: createLimiter()
+
+> **createLimiter**(`concurrency`): \<`T`\>(`task`) => `Promise`\<`T`\>
+
+Defined in: [packages/cli-kit/src/utils.ts:288](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/utils.ts#L288)
+
+Creates a minimal promise concurrency limiter.
+
+Ensures no more than `concurrency` async tasks run simultaneously.
+Additional tasks are queued FIFO.
+
+## Parameters
+
+### concurrency
+
+`number`
+
+Maximum concurrent tasks (must be ≥1).
+
+## Returns
+
+\<`T`\>(`task`) => `Promise`\<`T`\>
