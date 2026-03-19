@@ -62,13 +62,17 @@
   ],
   "peerDependencies": {
     "defu": "^6.0.0",
-    "jiti": "^2.0.0"
+    "jiti": "^2.0.0",
+    "yaml": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "defu": {
       "optional": true
     },
     "jiti": {
+      "optional": true
+    },
+    "yaml": {
       "optional": true
     }
   },

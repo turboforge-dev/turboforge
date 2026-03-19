@@ -1,6 +1,6 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import { createLimiter, existsAsync, readJson } from "./utils";
+import { createLimiter, existsAsync, parseYaml, readJson } from "./utils";
 
 /**
  * Detects workspace packages in a monorepo.
@@ -29,19 +29,9 @@ export const getWorkspacePackages = async (root: string): Promise<string[]> => {
   if (await existsAsync(pnpmPath)) {
     try {
       const content = await readFile(pnpmPath, "utf-8");
-      // Remove comments and find the packages section
-      const cleanContent = content.replace(/#.*$/gm, "");
-      const packagesMatch = cleanContent.match(
-        /packages:\s*\n((?:\s*-\s*.*\n?)*)/,
-      );
-
-      if (packagesMatch?.[1]) {
-        const itemRegex = /^\s*-\s*["']?([^"'\s]+)["']?/gm;
-        let match: RegExpExecArray | null;
-        // biome-ignore lint/suspicious/noAssignInExpressions: standard regex iteration
-        while ((match = itemRegex.exec(packagesMatch[1])) !== null) {
-          patterns.push(match[1]);
-        }
+      const pnpm = await parseYaml<{ packages?: string[] }>(content);
+      if (pnpm?.packages) {
+        patterns.push(...pnpm.packages);
       }
     } catch {}
   }

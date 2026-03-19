@@ -4,6 +4,8 @@ import { access, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, parse, resolve } from "node:path";
 import { promisify } from "node:util";
 
+export { parseYaml } from "./yaml";
+
 /**
  * Promisified version of `child_process.exec`.
  * Executes a command in a shell and buffers the output.
