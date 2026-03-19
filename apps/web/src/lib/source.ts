@@ -25,7 +25,7 @@ const PKG_MAX_VERSION = await readdir("content/docs").then((dirs) =>
   ),
 );
 
-const DEFAULT_PKG_DIR = defaultPkgDir || PKG_MAX_VERSION[0].dir;
+const DEFAULT_PKG_DIR = defaultPkgDir || PKG_MAX_VERSION[0]?.dir;
 
 console.debug({ DEFAULT_PKG_DIR, PKG_MAX_VERSION });
 

@@ -1,9 +1,9 @@
 {
-  "name": "remark-typedoc-mdx",
+  "name": "@turboforge/remark-typedoc-mdx",
   "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
   "private": false,
   "version": "0.1.0",
-  "description": "",
+  "description": "Remark plugin to transform and sanitize TypeDoc generated markdown for seamless MDX integration.",
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -44,6 +44,13 @@
     "typescript": "latest",
     "unified": "^11.0.5"
   },
+  "forge": {
+    "aliases": [
+      "remark-typedoc-mdx"
+    ],
+    "icon": "Terminal",
+    "description": "TypeDoc to MDX Plugin"
+  },
   "funding": [
     {
       "type": "github",
@@ -55,8 +62,15 @@
     }
   ],
   "keywords": [
-    "remark-typedoc-mdx",
-    "turboforge"
+    "remark",
+    "typedoc",
+    "mdx",
+    "ast",
+    "mdast",
+    "documentation",
+    "unified",
+    "markdown-plugin",
+    "typescript"
   ],
   "dependencies": {
     "unist-util-visit": "^5.1.0"

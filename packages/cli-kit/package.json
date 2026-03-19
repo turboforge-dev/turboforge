@@ -3,7 +3,7 @@
   "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
   "private": false,
   "version": "0.0.0",
-  "description": "Essential utilities for building powerful CLIs and tools in Turbo Forge monorepos.",
+  "description": "Low-level utilities and configuration resolution for building high-performance CLI tools in monorepos.",
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -23,6 +23,7 @@
   },
   "forge": {
     "icon": "Terminal",
+    "description": "CLI & Config Utilities",
     "aliases": [
       "@turbo-forge/cli-kit"
     ]
@@ -77,14 +78,14 @@
     }
   },
   "keywords": [
-    "@turboforge/cli-kit",
-    "Turboforge",
+    "turboforge",
     "cli",
     "monorepo",
-    "utility",
-    "configuration",
-    "workspace",
-    "tooling",
-    "typescript"
+    "config-loader",
+    "workspace-detection",
+    "logger",
+    "typescript",
+    "node-js",
+    "tooling"
   ]
 }

@@ -1,9 +1,9 @@
 {
-  "name": "forge-sync",
+  "name": "@turboforge/sync",
   "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
   "private": false,
   "version": "0.0.0",
-  "description": "The authoritative synchronization engine for turboforge monorepos. Align tooling, configurations, and dependencies with the upstream template.",
+  "description": "The authoritative synchronization engine for Turboforge monorepos to align tooling, configurations, and dependencies with upstream templates.",
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -33,7 +33,9 @@
     "dist/**"
   ],
   "bin": {
-    "forge-sync": "./dist/cli.mjs"
+    "forge-sync": "./dist/cli.mjs",
+    "sync": "./dist/cli.mjs",
+    "turboforge": "./dist/cli.mjs"
   },
   "scripts": {
     "build": "tsup",
@@ -46,6 +48,13 @@
     "tsup": "latest",
     "typescript": "latest"
   },
+  "forge": {
+    "aliases": [
+      "forge-sync"
+    ],
+    "icon": "Terminal",
+    "description": "Monorepo Sync Engine"
+  },
   "funding": [
     {
       "type": "github",
@@ -57,14 +66,15 @@
     }
   ],
   "keywords": [
-    "forge-sync",
     "turboforge",
     "monorepo",
+    "sync",
     "template-sync",
     "codemod",
-    "typescript-tooling",
-    "oss-maintenance",
-    "Turboforge"
+    "git-patch",
+    "package-json-merge",
+    "typescript",
+    "tooling"
   ],
   "dependencies": {
     "git-json-resolver": "^1.3.7",

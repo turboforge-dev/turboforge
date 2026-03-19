@@ -58,7 +58,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
           components={getMDXComponents({
             // this allows you to link to other pages with relative file paths
             a: ({ href, ...props }) => {
-              if (href.startsWith("http")) {
+              if (href?.startsWith("http")) {
                 return (
                   <a
                     {...props}
@@ -71,9 +71,8 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
                   />
                 );
               }
-              const cleanedHref = href
-                .replace(/index\.mdx?/, "")
-                .replace(/\.mdx?$/, "");
+              const cleanedHref =
+                href?.replace(/index\.mdx?/, "")?.replace(/\.mdx?$/, "") ?? "";
               return (
                 <Link
                   {...props}
@@ -86,6 +85,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
                 />
               );
             },
+            // @ts-expect-error -- ok
             // biome-ignore lint/complexity/noUselessFragments: Required to suppress default icon
             blockquote: (props) => <Callout {...props} icon={<></>} />,
           })}
