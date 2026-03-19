@@ -24,16 +24,13 @@ ALL_SCOPES=()
 while IFS= read -r pkg_json; do
     dir=$(dirname "$pkg_json" | sed 's|^\./||')
     # Extract package name and strip @org/ prefix
-    name=$(jq -r '.name' "$pkg_json" 2>/dev/null | sed 's/^@[^/]*\///')
+    name=$(jq -r '.name' "$pkg_json" 2>/dev/null)
     
     if [[ -n "$name" && "$name" != "null" ]]; then
         SCOPE_MAP["$dir"]="$name"
         ALL_SCOPES+=("$name")
     fi
 done < <(find . -name "package.json" -not -path "*/node_modules/*")
-
-# Add logical defaults
-ALL_SCOPES+=("tooling" "deps")
 
 # 3. Analyze Staged Files
 STAGED_FILES=$(git diff --cached --name-only)
