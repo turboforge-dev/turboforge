@@ -1,4 +1,4 @@
-import { readdir, readFile, stat } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { createLimiter, existsAsync, parseYaml, readJson } from "./utils";
 
@@ -51,7 +51,12 @@ export const getWorkspacePackages = async (root: string): Promise<string[]> => {
             try {
               const subs = await readdir(parentDir, { withFileTypes: true });
               for (const sub of subs) {
-                if (sub.isDirectory()) {
+                if (
+                  sub.isDirectory() &&
+                  (await existsAsync(
+                    path.join(parentDir, sub.name, "package.json"),
+                  ))
+                ) {
                   results.push(path.join(parentDir, sub.name));
                 }
               }
@@ -60,10 +65,7 @@ export const getWorkspacePackages = async (root: string): Promise<string[]> => {
         } else {
           // Direct path
           const directPath = path.join(root, pattern);
-          if (
-            (await existsAsync(directPath)) &&
-            (await stat(directPath)).isDirectory()
-          ) {
+          if (await existsAsync(path.join(directPath, "package.json"))) {
             results.push(directPath);
           }
         }
