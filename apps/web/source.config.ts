@@ -1,12 +1,12 @@
 import { existsSync, readFileSync } from "node:fs";
 import { sep } from "node:path";
+import { remarkTypedocMdx } from "@turboforge/remark-typedoc-mdx";
 import {
   defineConfig,
   defineDocs,
   frontmatterSchema,
   metaSchema,
 } from "fumadocs-mdx/config";
-import { remarkTypedocMdx } from "remark-typedoc-mdx";
 import { z } from "zod";
 
 // You can customise Zod schemas for frontmatter and `meta.json` here
