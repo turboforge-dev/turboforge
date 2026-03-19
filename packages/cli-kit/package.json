@@ -1,5 +1,5 @@
 {
-  "name": "@turbo-forge/cli-kit",
+  "name": "@turboforge/cli-kit",
   "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
   "private": false,
   "version": "0.0.0",
@@ -22,15 +22,18 @@
     "./package.json": "./package.json"
   },
   "forge": {
-    "icon": "Terminal"
+    "icon": "Terminal",
+    "aliases": [
+      "@turbo-forge/cli-kit"
+    ]
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/react18-tools/turbo-forge",
+    "url": "https://github.com/turboforge-dev/turboforge",
     "directory": "packages/cli-kit"
   },
-  "bugs": "https://github.com/react18-tools/turbo-forge/issues",
-  "homepage": "https://github.com/react18-tools/turbo-forge/blob/main/packages/cli-kit/README.md",
+  "bugs": "https://github.com/turboforge-dev/turboforge/issues",
+  "homepage": "https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/README.md",
   "sideEffects": false,
   "files": [
     "dist/**"
@@ -38,8 +41,7 @@
   "scripts": {
     "build": "tsup && gzip -c dist/index.js | wc -c",
     "clean": "rm -rf dist",
-    "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "dev": "tsup --watch"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
@@ -51,7 +53,7 @@
   "funding": [
     {
       "type": "github",
-      "url": "https://github.com/sponsors/react18-tools"
+      "url": "https://github.com/sponsors/turboforge-dev"
     },
     {
       "type": "github",
@@ -71,8 +73,8 @@
     }
   },
   "keywords": [
-    "@turbo-forge/cli-kit",
-    "TurboForge",
+    "@turboforge/cli-kit",
+    "Turboforge",
     "cli",
     "monorepo",
     "utility",

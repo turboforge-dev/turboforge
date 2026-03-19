@@ -3,7 +3,7 @@
   "changelog": [
     "@changesets/changelog-github",
     {
-      "repo": "react18-tools/turbo-forge"
+      "repo": "turboforge-dev/turboforge"
     }
   ],
   "commit": false,

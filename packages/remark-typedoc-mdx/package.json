@@ -23,11 +23,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/react18-tools/turbo-forge",
+    "url": "https://github.com/turboforge-dev/turboforge",
     "directory": "packages/remark-typedoc-mdx"
   },
-  "bugs": "https://github.com/react18-tools/turbo-forge/issues",
-  "homepage": "https://github.com/react18-tools/turbo-forge/blob/main/packages/remark-typedoc-mdx/README.md",
+  "bugs": "https://github.com/turboforge-dev/turboforge/issues",
+  "homepage": "https://github.com/turboforge-dev/turboforge/blob/main/packages/remark-typedoc-mdx/README.md",
   "sideEffects": false,
   "files": [
     "dist/**"
@@ -35,8 +35,7 @@
   "scripts": {
     "build": "tsup && gzip -c dist/index.js | wc -c",
     "clean": "rm -rf dist",
-    "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "dev": "tsup --watch"
   },
   "devDependencies": {
     "@types/mdast": "^4.0.4",
@@ -48,7 +47,7 @@
   "funding": [
     {
       "type": "github",
-      "url": "https://github.com/sponsors/react18-tools"
+      "url": "https://github.com/sponsors/turboforge-dev"
     },
     {
       "type": "github",
@@ -57,7 +56,7 @@
   ],
   "keywords": [
     "remark-typedoc-mdx",
-    "turbo-forge"
+    "turboforge"
   ],
   "dependencies": {
     "unist-util-visit": "^5.1.0"

@@ -1,100 +1,114 @@
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import pLimit from "p-limit";
+import { safeRename } from "./utilts";
 
 const limit = pLimit(4);
 
 const PACKAGES_DIR = "packages";
 const DOCS_ROOT = "apps/web/content/docs";
 
-/* ---------------------------------- */
-/* 1. Generate docs (SEQUENTIAL)      */
-/* ---------------------------------- */
+await fs.mkdir(DOCS_ROOT, { recursive: true });
 
-const packageDirs = (await fs.readdir(PACKAGES_DIR, { withFileTypes: true }))
+const PKG_DOC_DIRS = (await fs.readdir(PACKAGES_DIR, { withFileTypes: true }))
   .filter((d) => d.isDirectory())
   .map((d) => d.name);
 
-for (const pkgName of packageDirs) {
-  const pkgPath = path.join(PACKAGES_DIR, pkgName);
+console.log("dirs------------", PKG_DOC_DIRS);
+
+// Generate new docs
+for (const pkgDir of PKG_DOC_DIRS) {
+  const pkgPath = path.join(PACKAGES_DIR, pkgDir);
   const pkgJsonPath = path.join(pkgPath, "package.json");
   const entry = path.join(pkgPath, "src/index.ts").replaceAll("\\", "/");
-
   try {
     await fs.access(pkgJsonPath);
     await fs.access(entry);
   } catch {
     continue;
   }
-
-  try {
-    for (const versionDir of await fs.readdir(path.join(DOCS_ROOT, pkgName))) {
-      if (/^\(.*\)$/.test(versionDir)) {
-        await fs.rename(
-          path.join(DOCS_ROOT, pkgName, versionDir),
-          path.join(DOCS_ROOT, pkgName, versionDir.replace(/^\(|\)$/g, "")),
-        );
-      }
-    }
-    execSync(
-      `git add ${DOCS_ROOT} && git commit -m 'chore(docs): remove brackets for proper git diff'`,
-    );
-  } catch {
-    // ignore
-  }
-
   const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, "utf8"));
   const major = pkgJson.version.split(".")[0];
-  const outDir = path.join(DOCS_ROOT, pkgName, `v${major}`, "api");
+  const outDir = path.join(DOCS_ROOT, pkgDir, `v${major}`, "api");
 
-  execSync(
+  console.log(
+    `Generating docs for ${pkgJson.name}@${pkgJson.version} in ${outDir}`,
+  );
+
+  execFileSync(
+    process.execPath,
     [
-      "pnpm typedoc",
-      "--options typedoc.base.config.ts",
-      "--tsconfig tsconfig.docs.json",
-      `--entryPoints ${entry}`,
-      `--out ${outDir}`,
-    ].join(" "),
+      "node_modules/typedoc/bin/typedoc",
+      "--options",
+      "typedoc.base.config.ts",
+      "--tsconfig",
+      "tsconfig.docs.json",
+      "--entryPoints",
+      entry,
+      "--out",
+      outDir,
+    ],
     { stdio: "inherit" },
   );
 
-  fs.copyFile(
+  await fs.copyFile(
     path.join(pkgPath, "README.md"),
-    path.join(outDir, "..", "README.mdx"),
+    path.join(outDir, "..", "overview.mdx"),
   );
 
-  const rootMetaFilePath = path.join(DOCS_ROOT, pkgName, "meta.json");
+  // Copy reference docs
   try {
-    await fs.access(rootMetaFilePath);
+    const cutomDocsDir = path.join(pkgPath, "docs");
+    if ((await fs.stat(cutomDocsDir)).isDirectory()) {
+      await fs.cp(path.join(pkgPath, "docs"), path.resolve(outDir, ".."), {
+        recursive: true,
+      });
+    }
   } catch {
-    fs.writeFile(
+    // Ignore
+  }
+
+  const rootMetaFilePath = path.join(DOCS_ROOT, pkgDir, "meta.json");
+  const description = pkgJson.forge?.description || pkgJson.description;
+  const icon = pkgJson.forge?.icon || (pkgJson.bin ? "Terminal" : "FileCode");
+  try {
+    const meta = JSON.parse(await fs.readFile(rootMetaFilePath, "utf8"));
+    if (
+      meta.version !== pkgJson.version ||
+      meta.description !== description ||
+      meta.icon !== icon ||
+      meta.title !== pkgJson.name
+    ) {
+      throw new Error("Meta file is outdated");
+    }
+  } catch {
+    await fs.writeFile(
       rootMetaFilePath,
       JSON.stringify(
         {
           title: pkgJson.name,
-          description: pkgJson.description,
+          description,
           lastModified: new Date().toISOString(),
           version: pkgJson.version,
           root: true,
-          icon: pkgJson.forge?.icon || (pkgJson.bin ? "Terminal" : "FileCode"),
+          icon,
         },
         null,
         2,
       ),
     );
   }
+}
 
-  const versionDirs = (await fs.readdir(path.join(DOCS_ROOT, pkgName))).filter(
-    (dir) => /^v\d+$/.test(dir),
+// copy banner image
+try {
+  await fs.copyFile(
+    path.join(process.cwd(), "banner.jpg"),
+    path.join(DOCS_ROOT, "banner.jpg"),
   );
-  const maxVersion = Math.max(
-    ...versionDirs.map((v) => Number(v.replace("v", ""))),
-  );
-  await fs.rename(
-    path.join(DOCS_ROOT, pkgName, `v${maxVersion}`),
-    path.join(DOCS_ROOT, pkgName, `(v${maxVersion})`),
-  );
+} catch {
+  // ignore
 }
 
 /* ---------------------------------- */
@@ -120,7 +134,7 @@ const walk = async (
 
 await walk(DOCS_ROOT, async (file) => {
   if (file.endsWith(".md")) {
-    await fs.rename(file, file.replace(/.md$/, ".mdx"));
+    await safeRename(file, file.replace(/.md$/, ".mdx"));
   }
 });
 
@@ -128,12 +142,14 @@ await walk(DOCS_ROOT, async (file) => {
 /* 3. Inject frontmatter (ASYNC)       */
 /* ---------------------------------- */
 
-const commitHash = execSync("git rev-parse HEAD", {
+const commitHash = execFileSync("git", ["rev-parse", "HEAD"], {
   encoding: "utf8",
 }).trim();
 
-const changedDocs = execSync(
-  `git add ${DOCS_ROOT} && git status --porcelain -- ${DOCS_ROOT}`,
+execFileSync("git", ["add", DOCS_ROOT]);
+const changedDocs = execFileSync(
+  "git",
+  ["status", "--porcelain", "--", DOCS_ROOT],
   { encoding: "utf8" },
 )
   .split("\n")
@@ -156,8 +172,8 @@ const createMeta = async (file: string) => {
   // Extract title safely
   const title = file.endsWith("api/index.mdx")
     ? "API Docs"
-    : file.endsWith("README.mdx")
-      ? "README"
+    : file.endsWith("overview.mdx")
+      ? "Overview"
       : (src
           .match(/^#\s+(.+)$/m)?.[1]
           ?.replace(/^(Function|Interface|Type alias|Variable):\s*/i, "")
@@ -166,9 +182,7 @@ const createMeta = async (file: string) => {
           .trim() ?? path.basename(file, ".mdx"));
 
   const editURL = src.match(DEFINED_IN_REGEXP)?.[1];
-  const metaPath = file
-    .replace("/api/", "/api/.meta/")
-    .replace(/\.mdx$/, ".json");
+  const metaPath = file.replace("/api/", "/.meta/").replace(/\.mdx$/, ".json");
 
   await fs.mkdir(path.dirname(metaPath), { recursive: true });
 

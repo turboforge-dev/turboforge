@@ -6,7 +6,7 @@ import {
   findProjectRoot,
   type LogLevel,
   resolveConfig,
-} from "@turbo-forge/cli-kit";
+} from "@turboforge/cli-kit";
 import { DEFAULT_CONFIG, type ForgeSyncOptions, forgeSync } from "./forge-sync";
 import { getBaseCommit } from "./utils";
 
@@ -125,7 +125,7 @@ export const main = async (args: string[] = process.argv.slice(2)) => {
 
   if (init) {
     await writeFile(
-      resolve(findProjectRoot(), configFile || "forge-sync.config.json"),
+      resolve(await findProjectRoot(), configFile || "forge-sync.config.json"),
       JSON.stringify(DEFAULT_CONFIG, null, 2),
     );
     console.log(

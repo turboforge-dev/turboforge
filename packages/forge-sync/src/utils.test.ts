@@ -1,5 +1,5 @@
 import * as fs from "node:fs/promises";
-import * as cliKit from "@turbo-forge/cli-kit";
+import * as cliKit from "@turboforge/cli-kit";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   checkFileExists,
@@ -11,7 +11,7 @@ import {
   sanitizeRemoteName,
 } from "./utils";
 
-vi.mock("@turbo-forge/cli-kit", () => ({
+vi.mock("@turboforge/cli-kit", () => ({
   execAsync: vi.fn(),
   execFileAsync: vi.fn(),
   createLogger: vi.fn(),

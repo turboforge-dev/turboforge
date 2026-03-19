@@ -10,15 +10,12 @@
   "mayank1513.trello-kanban.Workspace.filePath": ".tkb",
   "cSpell.words": ["noscss"],
   "conventionalCommits.scopes": [
-    "root",
-    "tooling",
-    "docs",
-    "deps",
-    "changeset",
-    "cli-kit",
+    "@app/web",
+    "@tool/scripts",
+    "@tool/tsconfig",
+    "@turboforge/cli-kit",
     "forge-sync",
-    "remark-typedoc-mdx",
-    "@app/web"
+    "remark-typedoc-mdx"
   ],
   "[typescript]": {
     "editor.defaultFormatter": "biomejs.biome"
@@ -30,6 +27,6 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
+    "editor.defaultFormatter": "biomejs.biome"
   }
 }

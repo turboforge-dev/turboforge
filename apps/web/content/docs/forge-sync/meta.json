@@ -1,8 +1,0 @@
-{
-  "title": "forge-sync",
-  "description": "The authoritative synchronization engine for Turbo-Forge monorepos. Align tooling, configurations, and dependencies with the upstream template.",
-  "lastModified": "2026-01-24T10:44:51.076Z",
-  "version": "0.0.0",
-  "root": true,
-  "icon": "Terminal"
-}

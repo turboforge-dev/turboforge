@@ -5,7 +5,7 @@ if [ "$GITHUB_ACTIONS" = "true" ] || git log -1 --pretty=%B | grep -q "\[skip ci
   exit 0
 fi
 
-FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|mts|tsx|js|mjs|json|css|scss|sass)$' || true)
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|mts|tsx|js|mjs|json|css|scss|sass)$' | grep -v 'content/docs' || true)
 [ -z "$FILES" ] && exit 0
 
 # Block manual version bumps in package.json files
@@ -13,7 +13,7 @@ FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|mts|tsx
 if git diff --cached -S '"version":' -- "**/package.json" \
   | grep '^+.*"version":' \
   | grep -vq '"version": *"0\.0\.0"'; then
-  echo "❌ Error: Manual version bumps are forbidden in Turbo-Forge."
+  echo "❌ Error: Manual version bumps are forbidden in Turboforge."
   echo "Allowed exception: \"version\": \"0.0.0\" only."
   echo "Please use 'pnpm changeset' to document your changes."
   echo "The CI/CD pipeline will handle versioning automatically."
@@ -21,14 +21,15 @@ if git diff --cached -S '"version":' -- "**/package.json" \
 fi
 
 # Run Biome (Lint/Format)
-pnpm biome check --write --no-errors-on-unmatched $FILES
+echo "$FILES" | xargs -n 50 pnpm biome check --write --no-errors-on-unmatched
+echo "$FILES" | xargs -n 50 pnpx @promptshield/cli --check
 
 git add $FILES
 
 # Update .forge-meta.json to keep track of last synced commit (behind by one commit)
 REMOTE_URL=$(git remote get-url --push origin)
 
-if [ "$REMOTE_URL" = "https://github.com/react18-tools/turbo-forge.git" ]; then
+if [ "$REMOTE_URL" = "https://github.com/turboforge-dev/turboforge.git" ]; then
   TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
   COMMIT_HASH=$(git rev-parse HEAD)
   echo "{

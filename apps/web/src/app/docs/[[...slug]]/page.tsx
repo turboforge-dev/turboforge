@@ -7,13 +7,13 @@ import {
 } from "fumadocs-ui/layouts/docs/page";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { LLMCopyButton, ViewOptions } from "@/components/ai/page-actions";
 import { getPageImage, source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
 const GIT_CONFIG = {
-  user: "react18-tools",
+  user: "turboforge-dev",
   repo: "turbo-forge",
   branch: "main",
 };
@@ -21,12 +21,21 @@ const GIT_CONFIG = {
 export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
   const params = await props.params;
   const page = source.getPage(params.slug);
-  if (!page) notFound();
+  if (!page) {
+    if (!params.slug?.length) {
+      redirect(`/docs/overview`);
+    } else if (params.slug?.length === 1 && params.slug[0] !== "overview") {
+      redirect(`/docs/${params.slug[0]}/overview`);
+    } else {
+      notFound();
+    }
+  }
 
   const lastSegment = params.slug?.pop() ?? "";
 
   const MDX = page.data.body;
 
+  const markdownUrl = `/llms.mdx${page.url}.mdx`;
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
       <DocsTitle>{page.data.title}</DocsTitle>
@@ -34,9 +43,9 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
         {page.data.description}
       </DocsDescription>
       <div className="flex flex-row gap-2 items-center border-b pb-6">
-        <LLMCopyButton markdownUrl={`${page.url}.mdx`} />
+        <LLMCopyButton {...{ markdownUrl }} />
         <ViewOptions
-          markdownUrl={`${page.url}.mdx`}
+          {...{ markdownUrl }}
           // update it to match your repo
           githubUrl={
             page.data.editURL ||
@@ -87,7 +96,13 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
 }
 
 export async function generateStaticParams() {
-  return source.generateParams();
+  return [
+    ...source.generateParams(),
+    { slug: [] },
+    ...["cli-kit", "forge-sync"].map((pkg) => ({
+      slug: [pkg],
+    })),
+  ];
 }
 
 export async function generateMetadata(

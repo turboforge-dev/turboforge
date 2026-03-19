@@ -7,12 +7,12 @@ const getDebugInfo = async () => {
       Binaries: ["Node", "Yarn", "npm", "pnpm"],
       Browsers: ["Chrome", "Edge", "Firefox", "Safari"],
       npmPackages: ["typescript", "vite", "turborepo", "biome"],
-      npmGlobalPackages: ["turbo-forge-cli"], // REBRAND_TARGET
+      // npmGlobalPackages: ["turbo-forge-cli"],
     },
     { showNotFound: true, duplicates: true, fullTree: false },
   );
 
-  console.log("--- TURBO-FORGE DEBUG INFO ---");
+  console.log("--- TURBOFORGE DEBUG INFO ---");
   console.log(info);
   console.log("------------------------------");
 };

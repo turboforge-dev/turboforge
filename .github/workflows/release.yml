@@ -25,11 +25,14 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm turbo telemetry disable
+          cd apps/web && pnpm next telemetry disable && cd ../..
 
       - name: Create Release PR or Publish
         id: changesets
@@ -57,3 +60,21 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
+      - name: Generate API docs
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          git config --global user.name "mayank1513"
+          git config --global user.email "${{ secrets.EMAIL_ADDRESS || 'info@mayankchaudhari.com' }}"
+          git fetch
+          git checkout $GITHUB_REF_NAME
+          git checkout -- .
+          git clean -fd
+          pnpm docs
+          git add apps/web/content/docs
+          if ! git diff --staged --quiet; then
+            git commit -m "docs: updated documentation [skip ci]"
+            git pull --rebase origin $GITHUB_REF_NAME
+            git push origin $GITHUB_REF_NAME
+          else
+            echo "No documentation changes to commit"
+          fi

@@ -82,7 +82,7 @@ export const packageGenerator: PlopGeneratorConfig = {
       type: "input",
       name: "repo",
       message:
-        "Enter the owner/repository for the package (e.g., 'react18-tools/turbo-forge'):",
+        "Enter the owner/repository for the package (e.g., 'turboforge-dev/turboforge'):",
       default: execSync(
         'git remote get-url --push origin | sed "s/https:\\/\\/github\\.com\\///" | sed "s/https:\\/\\/[^@]*@github\\.com\\///" | sed "s/\\.git//"',
       )

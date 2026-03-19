@@ -1,19 +1,28 @@
 import fs from "node:fs";
 import path from "node:path";
+import { CACHE_DIR } from "./forge.const";
+import { readJson } from "./utilts";
+
+type Pkg = {
+  name: string;
+  dir: string;
+};
 
 const ROOT = process.cwd();
 const INPUT = path.join(ROOT, "coverage/lcov.info");
-const OUT_DIR = path.join(ROOT, "coverage/packages");
-const PACKAGE_PREFIX = "packages/";
+const OUT_DIR = path.join(ROOT, "coverage");
+const PKG_CONFIG = path.join(ROOT, `${CACHE_DIR}/packages.json`);
+
+const normalize = (p: string) => p.replaceAll("\\", "/");
 
 if (!fs.existsSync(INPUT)) {
-  console.error(`LCOV file not found: ${INPUT}`);
-  process.exit(1);
+  throw new Error(`LCOV file not found: ${INPUT}`);
 }
-
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
-const content = fs.readFileSync(INPUT, "utf8").replaceAll("\\", "/");
+const packages = await readJson<Pkg[]>(PKG_CONFIG);
+
+const content = normalize(fs.readFileSync(INPUT, "utf8"));
 
 const records = content
   .split("end_of_record")
@@ -28,27 +37,30 @@ for (let record of records) {
   const sfIndex = lines.findIndex((l) => l.startsWith("SF:"));
   if (sfIndex === -1) continue;
 
-  const filePath = lines[sfIndex].slice(3); // remove SF:
-  const idx = filePath.indexOf(PACKAGE_PREFIX);
-  if (idx === -1) continue;
+  const filePath = lines[sfIndex].slice(3);
 
-  const rest = filePath.slice(idx + PACKAGE_PREFIX.length);
-  const [pkg, ...relativeParts] = rest.split("/");
-  if (!pkg || relativeParts.length === 0) continue;
+  // Find matching package by prefix
+  const pkg = packages?.find((p) => filePath.includes(`${p.dir}/`));
+  if (!pkg) continue;
 
-  // Rewrite SF to be package-local (as if cwd = packages/<pkg>)
-  lines[sfIndex] = `SF:${relativeParts.join("/")}`;
+  const idx = filePath.indexOf(pkg.dir);
+  const relative = filePath.slice(idx + pkg.dir.length);
+  if (!relative) continue;
+
+  // Rewrite SF path to package-local
+  lines[sfIndex] = `SF:${relative}`;
 
   record = `${lines.join("\n")}\n`;
 
-  if (!byPackage.has(pkg)) byPackage.set(pkg, []);
-  byPackage.get(pkg)?.push(record);
+  if (!byPackage.has(pkg.dir)) byPackage.set(pkg.dir, []);
+  byPackage.get(pkg.dir)?.push(record);
 }
 
-for (const [pkg, recs] of byPackage.entries()) {
-  const out = path.join(OUT_DIR, `${pkg}.lcov`);
+for (const [pkgDir, recs] of byPackage.entries()) {
+  const out = path.join(OUT_DIR, `${pkgDir}.lcov`);
+  fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, recs.join(""), "utf8");
-  console.log(`✓ ${pkg}: ${recs.length} records`);
+  console.log(`✓ ${pkgDir}: ${recs.length} records`);
 }
 
 if (byPackage.size === 0) {

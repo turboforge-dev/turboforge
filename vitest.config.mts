@@ -40,7 +40,7 @@ export default defineConfig({
         "packages/**/*.test.*",
         "packages/**/declaration.d.ts",
       ],
-      reporter: ["lcov", "text", "html"], // text/html for local DX
+      reporter: ["lcov", "text"], // text for local DX
     },
   },
 });

@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        ### 📚 Turbo-Forge: Docs Audit
+        ### 📚 turboforge: Docs Audit
         Quality documentation is a first-class citizen. Please help us identify where our technical guides or API references are falling short.
 
   - type: input
@@ -13,7 +13,7 @@ body:
     attributes:
       label: Affected Page/URL
       description: Provide a link to the page or the file path in `apps/docs` or `packages/`.
-      placeholder: "https://docs.turbo-forge.com/api/core-library"
+      placeholder: "https://docs.turboforge.com/api/core-library"
     validations:
       required: true
 

@@ -1,3 +1,115 @@
 @import "tailwindcss";
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
+
+@theme {
+  --color-ps-bg: var(--ps-bg);
+  --color-ps-fg: var(--ps-fg);
+  --color-ps-primary: var(--ps-primary);
+  --color-ps-secondary: var(--ps-secondary);
+  --color-ps-border: var(--ps-border);
+  --color-ps-card: var(--ps-card);
+  --color-ps-card-fg: var(--ps-card-fg);
+  --color-ps-muted: var(--ps-muted);
+  --color-ps-muted-fg: var(--ps-muted-fg);
+  --color-ps-accent: var(--ps-accent);
+  --color-ps-accent-fg: var(--ps-accent-fg);
+
+  --animate-fade-in-up: fade-in-up 0.7s ease-out forwards;
+  --animate-fade-in: fade-in 1s ease-out forwards;
+  --animate-pulse-slow: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  --spacing-18: 4.5rem;
+  --spacing-112: 28rem;
+  --spacing-128: 32rem;
+
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes pulse-slow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+}
+
+@layer base {
+  :root {
+    --ps-bg: #fafafa;
+    --ps-fg: #09090b;
+    --ps-primary: #18181b;
+    --ps-secondary: #f4f4f5;
+    --ps-border: #e4e4e7;
+    --ps-card: #ffffff;
+    --ps-card-fg: #09090b;
+    --ps-muted: #f4f4f5;
+    --ps-muted-fg: #71717a;
+    --ps-accent: #2563eb;
+    --ps-accent-fg: #ffffff;
+
+    /* Code highlight suger-high */
+    --sh-class: #2d5e9d;
+    --sh-identifier: #354150;
+    --sh-sign: #8996a3;
+    --sh-property: #0550ae;
+    --sh-entity: #249a97;
+    --sh-jsxliterals: #6266d1;
+    --sh-string: #00a99a;
+    --sh-keyword: #f47067;
+    --sh-comment: #a19595;
+  }
+
+  .dark {
+    --ps-bg: #09090b;
+    --ps-fg: #fafafa;
+    --ps-primary: #fafafa;
+    --ps-secondary: #27272a;
+    --ps-border: #27272a;
+    --ps-card: #18181b;
+    --ps-card-fg: #fafafa;
+    --ps-muted: #27272a;
+    --ps-muted-fg: #a1a1aa;
+    --ps-accent: #3b82f6;
+    --ps-accent-fg: #ffffff;
+
+    /* Code highlight sugar-high dark mode */
+    --sh-class: #fef08a;
+    --sh-identifier: #d1d5db;
+    --sh-sign: #9ca3af;
+    --sh-property: #60a5fa;
+    --sh-entity: #60a5fa;
+    --sh-string: #4ade80;
+    --sh-keyword: #f472b6;
+    --sh-comment: #6b7280;
+    --sh-jsxliterals: #c084fc;
+  }
+
+  body {
+    background-color: var(--ps-bg);
+    color: var(--ps-fg);
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+}

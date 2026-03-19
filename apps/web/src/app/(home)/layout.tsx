@@ -1,6 +1,11 @@
 import { HomeLayout } from "fumadocs-ui/layouts/home";
+import { RootProvider } from "fumadocs-ui/provider/next";
 import { baseOptions } from "@/lib/layout.shared";
 
-export default function Layout({ children }: LayoutProps<"/">) {
-  return <HomeLayout {...baseOptions()}>{children}</HomeLayout>;
-}
+const Layout = ({ children }: LayoutProps<"/">) => (
+  <RootProvider search={{ options: { type: "static" } }}>
+    <HomeLayout {...baseOptions()}>{children}</HomeLayout>
+  </RootProvider>
+);
+
+export default Layout;

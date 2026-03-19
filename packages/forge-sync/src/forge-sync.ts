@@ -5,7 +5,7 @@ import {
   execAsync,
   execFileAsync,
   type LogLevel,
-} from "@turbo-forge/cli-kit";
+} from "@turboforge/cli-kit";
 import {
   cleanCheck,
   createAndApplyPatch,
@@ -44,7 +44,7 @@ export interface ForgeSyncOptions {
 export const DEFAULT_CONFIG: Required<ForgeSyncOptions> = {
   logLevel: "info",
   dryRun: false,
-  templateUrl: "https://github.com/turbo-forge/forge-template.git",
+  templateUrl: "https://github.com/turboforge/forge-template.git",
   excludePaths: [],
   remoteName: "template",
   maxPatchRetries: 3,

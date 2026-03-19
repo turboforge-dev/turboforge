@@ -38,14 +38,18 @@
   "scripts": {
     "build": "tsup && gzip -c dist/index.js | wc -c",
     "clean": "rm -rf dist",
-    "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "dev": "tsup --watch"
   },
   "devDependencies": {
     "@types/node": "latest",
     "tsup": "latest",
     "typescript": "latest",
-    "@turbo-forge/cli-kit": "latest"
+    "@turboforge/cli-kit": "latest"
+  },
+  "forge": {
+    "aliases": [],
+    "icon": "Terminal",
+    "description": ""
   },
   "funding": [
     {
@@ -59,6 +63,6 @@
   ],
   "keywords": [
     "{{name}}",
-    "turbo-forge"
+    "turboforge"
   ]
 }

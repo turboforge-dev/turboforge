@@ -1,91 +1,143 @@
-import { execSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import path from "node:path";
-import pkgJson from "../../package.json";
+import { mkdir, readFile } from "node:fs/promises";
+import { join } from "node:path";
 
-const getEntries = (dir: string) =>
-  existsSync(dir)
-    ? readdirSync(dir, { withFileTypes: true })
-        .filter((d) => d.isDirectory())
-        .map((d) => ({
-          dir: d.name,
-          name: JSON.parse(
-            readFileSync(path.join(dir, d.name, "package.json"), "utf-8"),
-          ).name,
-        }))
-    : [];
+import commitlintConfig from "../../.commitlintrc.json";
+import { CACHE_DIR } from "./forge.const";
+import {
+  atomicWrite,
+  execAsync,
+  getWorkspacePackages,
+  readJson,
+  stripJsonComments,
+} from "./utilts";
 
-const packages = getEntries("./packages");
+type WorkspaceEntry = {
+  dir: string;
+  name: string;
+};
 
-packages.sort((a, b) => a.name.localeCompare(b.name));
+/**
+ * Update VSCode conventional commit scopes.
+ */
+const updateVSCodeScopes = async (scopes: string[]) => {
+  const settingsPath = ".vscode/settings.json";
 
-// 1. Collect all scopes
-const scopes = [
-  "root",
-  "tooling",
-  "docs",
-  "deps",
-  "changeset",
-  ...packages.map(({ name }) => name),
-  ...getEntries("./apps").map(({ name }) => name),
-  ...getEntries("./examples").map(({ name }) => name),
-];
+  const raw = await readFile(settingsPath, "utf8");
+  const settings = JSON.parse(stripJsonComments(raw));
 
-// 2. Path to VS Code settings
-const settingsPath = path.join(process.cwd(), ".vscode/settings.json");
-
-try {
-  const settings = JSON.parse(
-    readFileSync(settingsPath, "utf-8")
-      .split("\n")
-      .filter((line) => !line.trim().startsWith("//"))
-      .join("\n"),
-  );
-
-  // 3. Update the specific extension key
   settings["conventionalCommits.scopes"] = scopes;
 
-  writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
-  console.log("✅ VS Code scopes synced with workspace packages!");
+  await atomicWrite(settingsPath, JSON.stringify(settings, null, 2));
+};
 
-  // Update biome schema
-  const biomeFilePath = path.join(process.cwd(), "biome.json");
-  const biomeConfig = readFileSync(biomeFilePath, "utf-8").replace(
-    /schemas\/.*\/schema\.json/,
-    `schemas/${pkgJson.devDependencies["@biomejs/biome"]}/schema.json`,
+/**
+ * Update commitlint scope enum rule.
+ */
+const updateCommitlint = async (scopes: string[]) => {
+  commitlintConfig.rules["scope-enum"][2] = scopes;
+
+  await atomicWrite(
+    ".commitlintrc.json",
+    JSON.stringify(commitlintConfig, null, 2),
   );
-  writeFileSync(biomeFilePath, biomeConfig);
+};
 
-  console.log("✅ Biome schema version synced with package.json!");
+/**
+ * Sync biome schema version with package.json dependency.
+ */
+const updateBiomeSchema = async () => {
+  const biomeFilePath = "biome.json";
 
-  const tsconfig = readFileSync("./tsconfig.json", "utf-8");
-  const paths = packages.reduce(
-    (acc: Record<string, string[]>, { name, dir }) => {
-      acc[name] = [`./packages/${dir}/src`];
+  const pkg = (await readJson("package.json")) as {
+    devDependencies: Record<string, string>;
+  };
+
+  const biomeVersion = pkg.devDependencies["@biomejs/biome"];
+
+  const biomeConfig = await readFile(biomeFilePath, "utf8");
+
+  const updated = biomeConfig.replace(
+    /schemas\/.*\/schema\.json/,
+    `schemas/${biomeVersion}/schema.json`,
+  );
+
+  await atomicWrite(biomeFilePath, updated);
+};
+
+/**
+ * Generate TS path mappings for workspace packages.
+ */
+const updateTsPaths = async (packages: WorkspaceEntry[]) => {
+  const paths = packages.reduce<Record<string, string[]>>(
+    (acc, { name, dir }) => {
+      acc[name] = [`${dir}/src`, `${dir}/dist`];
       return acc;
     },
     {},
   );
-  writeFileSync(
-    "./tsconfig.json",
-    tsconfig.replace(
+
+  const updateFile = async (file: string) => {
+    const raw = await readFile(file, "utf8");
+
+    const updated = raw.replace(
       /"paths":\s*\{([\s\S]*?)\}/,
-      () => `"paths": ${JSON.stringify(paths)}`,
-    ),
-  );
+      () => `"paths": ${JSON.stringify(paths, null, 2)}`,
+    );
 
-  const tsconfigBuild = readFileSync("./tsconfig.build.json", "utf-8");
-  writeFileSync(
-    "./tsconfig.build.json",
-    tsconfigBuild.replace(
-      /"paths":\s*\{([\s\S]*?)\}/,
-      () => `"paths": ${JSON.stringify(paths)}`,
-    ),
-  );
+    await atomicWrite(file, updated);
+  };
 
-  console.log("✅ TS Config paths synced with workspace packages!");
+  await Promise.all([
+    updateFile("./tsconfig.json"),
+    updateFile("./tsconfig.build.json"),
+  ]);
+};
 
-  execSync("pnpm format");
-} catch (e) {
-  console.error(e);
-}
+/**
+ * Execute repository formatter.
+ */
+const runFormatter = () => execAsync("pnpm format");
+
+/**
+ * Main workspace synchronization routine.
+ *
+ * Ensures all tooling configs remain aligned with
+ * the current monorepo package structure.
+ */
+const main = async () => {
+  try {
+    await mkdir(CACHE_DIR, { recursive: true });
+
+    const packages = await getWorkspacePackages();
+    packages.sort((a, b) => a.name.localeCompare(b.name));
+
+    const libPackages = packages.filter(
+      ({ dir }) => !/\b(apps|examples|tooling)\b/i.test(dir),
+    );
+
+    atomicWrite(
+      join(CACHE_DIR, "packages.json"),
+      JSON.stringify(libPackages, null, 2),
+    );
+
+    const scopes = packages.map((p) => p.name);
+
+    await updateVSCodeScopes(scopes);
+    console.log("✅ VS Code scopes synced");
+
+    await updateCommitlint(scopes);
+    console.log("✅ Commitlint scopes synced");
+
+    await updateBiomeSchema();
+    console.log("✅ Biome schema synced");
+
+    await updateTsPaths(libPackages);
+    console.log("✅ TSConfig paths synced");
+
+    await runFormatter();
+  } catch (error) {
+    console.error("❌ Workspace sync failed:", error);
+  }
+};
+
+await main();

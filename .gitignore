@@ -18,5 +18,8 @@ tsup.config.bundled*
 *.patch
 .merge-backups
 
-# promptshield cache+
+# promptshield artifacts
 .promptshield
+
+# Turboforge artifacts
+.turboforge

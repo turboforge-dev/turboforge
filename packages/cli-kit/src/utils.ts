@@ -134,7 +134,7 @@ export const readJson = async <T = unknown>(
  * - Native dynamic `import()`
  * - TypeScript configs via `jiti` (if available)
  *
- * @param p - Module path.
+ * @param p - Module
  */
 export const tryImport = async <T = unknown>(
   p: string,
@@ -205,6 +205,77 @@ export const deepMerge = (target: any, source: any): any => {
 };
 
 /**
+ * Atomically writes a file using a temp-file + rename strategy.
+ *
+ * Guarantees readers never observe partially written files.
+ *
+ * Strategy:
+ * 1. Write data to a temporary file in the same directory.
+ * 2. Rename temp file to target (atomic on same filesystem).
+ *
+ * Why this matters:
+ * - Prevents partially written files.
+ * - Ensures readers never observe truncated JSON.
+ * - Safe under concurrent writers (last-writer-wins).
+ *
+ * Concurrency Model:
+ * - Each invocation uses a `randomUUID()` temp filename
+ *   to avoid cross-process collisions.
+ * - Rename is atomic on the same filesystem.
+ * - No locking is performed here.
+ *
+ * Limitations:
+ * - Does not prevent logical race conditions.
+ * - If two processes write simultaneously, the last rename wins.
+ * - Both temp and target must reside on the same filesystem
+ *   for atomic guarantees.
+ *
+ * @param path Target file path.
+ * @param data UTF-8 string content.
+ */
+export const atomicWrite = async (
+  path: string,
+  data: string,
+): Promise<void> => {
+  const tmp = join(dirname(path), `${randomUUID()}.tmp`);
+
+  try {
+    await writeFile(tmp, data, "utf-8");
+    await safeRename(tmp, path);
+  } catch (err) {
+    await rm(tmp, { force: true }).catch(() => {});
+    throw err;
+  }
+};
+
+/**
+ * Safely renames a file or directory.
+ *
+ * Handles common Windows rename issues where the target
+ * already exists.
+ *
+ * @param from Source
+ * @param to Target
+ */
+export const safeRename = async (from: string, to: string) => {
+  if (!(await existsAsync(from))) return;
+
+  try {
+    await rename(from, to);
+  } catch (err) {
+    const e = err as NodeJS.ErrnoException;
+
+    if (e.code === "EEXIST" || e.code === "EPERM") {
+      await rm(to, { recursive: true, force: true });
+      await rename(from, to);
+      return;
+    }
+
+    throw err;
+  }
+};
+
+/**
  * Creates a minimal promise concurrency limiter.
  *
  * Ensures no more than `concurrency` async tasks run simultaneously.
@@ -238,75 +309,4 @@ export const createLimiter = (concurrency: number) => {
       next();
     }
   };
-};
-
-/**
- * Atomically writes a file using a temp-file + rename strategy.
- *
- * Guarantees readers never observe partially written files.
- *
- * Strategy:
- * 1. Write data to a temporary file in the same directory.
- * 2. Rename temp file to target (atomic on same filesystem).
- *
- * Why this matters:
- * - Prevents partially written files.
- * - Ensures readers never observe truncated JSON.
- * - Safe under concurrent writers (last-writer-wins).
- *
- * Concurrency Model:
- * - Each invocation uses a `randomUUID()` temp filename
- *   to avoid cross-process collisions.
- * - Rename is atomic on the same filesystem.
- * - No locking is performed here.
- *
- * Limitations:
- * - Does not prevent logical race conditions.
- * - If two processes write simultaneously, the last rename wins.
- * - Both temp and target must reside on the same filesystem
- *   for atomic guarantees.
- *
- * @param path Absolute target path.
- * @param data UTF-8 string content.
- */
-export const atomicWrite = async (
-  path: string,
-  data: string,
-): Promise<void> => {
-  const tmp = join(dirname(path), `${randomUUID()}.tmp`);
-
-  try {
-    await writeFile(tmp, data, "utf-8");
-    await safeRename(tmp, path);
-  } catch (err) {
-    await rm(tmp, { force: true }).catch(() => {});
-    throw err;
-  }
-};
-
-/**
- * Safely renames a file or directory.
- *
- * Handles common Windows rename issues where the target
- * already exists.
- *
- * @param from Source path.
- * @param to Target path.
- */
-export const safeRename = async (from: string, to: string) => {
-  if (!(await existsAsync(from))) return;
-
-  try {
-    await rename(from, to);
-  } catch (err) {
-    const e = err as NodeJS.ErrnoException;
-
-    if (e.code === "EEXIST" || e.code === "EPERM") {
-      await rm(to, { recursive: true, force: true });
-      await rename(from, to);
-      return;
-    }
-
-    throw err;
-  }
 };

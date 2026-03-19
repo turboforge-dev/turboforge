@@ -1,0 +1,17 @@
+{
+  "extends": ["@commitlint/config-conventional"],
+  "rules": {
+    "scope-enum": [
+      2,
+      "always",
+      [
+        "@app/web",
+        "@tool/scripts",
+        "@tool/tsconfig",
+        "@turboforge/cli-kit",
+        "forge-sync",
+        "remark-typedoc-mdx"
+      ]
+    ]
+  }
+}

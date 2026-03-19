@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Turbo-Forge React Library",
+  "display": "Turboforge React Library",
   "extends": "./base.json",
   "compilerOptions": {
     "jsx": "react-jsx",

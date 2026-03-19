@@ -1,24 +1,24 @@
-# TurboForge CLI Kit <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px" />
+# Turboforge CLI Kit <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px" />
 
 Essential utilities for building powerful CLIs and tools in Turbo Forge monorepos.
 
 <p className="flex gap-2">
-  <a href="https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml" rel="noopener noreferrer">
-    <img alt="CI" src="https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg" />
+  <a href="https://github.com/turboforge-dev/turboforge/actions/workflows/ci.yml" rel="noopener noreferrer">
+    <img alt="CI" src="https://github.com/turboforge-dev/turboforge/actions/workflows/ci.yml/badge.svg" />
   </a>
-  <a href="https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/@turbo-forge/cli-kit" rel="noopener noreferrer">
-    <img alt="codecov" src="https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=@turbo-forge/cli-kit" />
+  <a href="https://codecov.io/gh/turboforge-dev/turboforge/tree/main/packages/@turboforge/cli-kit" rel="noopener noreferrer">
+    <img alt="codecov" src="https://codecov.io/gh/turboforge-dev/turboforge/graph/badge.svg?flag=@turboforge/cli-kit" />
   </a> 
-  <a href="https://npmjs.com/package/@turbo-forge/cli-kit" rel="noopener noreferrer">
-    <img alt="npm version" src="https://img.shields.io/npm/v/@turbo-forge/cli-kit" />
+  <a href="https://npmjs.com/package/@turboforge/cli-kit" rel="noopener noreferrer">
+    <img alt="npm version" src="https://img.shields.io/npm/v/@turboforge/cli-kit" />
   </a>
-  <a href="https://npmjs.com/package/@turbo-forge/cli-kit" rel="noopener noreferrer">
-    <img alt="npm downloads" src="https://img.shields.io/npm/d18m/@turbo-forge/cli-kit" />
+  <a href="https://npmjs.com/package/@turboforge/cli-kit" rel="noopener noreferrer">
+    <img alt="npm downloads" src="https://img.shields.io/npm/d18m/@turboforge/cli-kit" />
   </a>
-  <a href="https://npmjs.com/package/@turbo-forge/cli-kit" rel="noopener noreferrer">
-    <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/@turbo-forge/cli-kit" />
+  <a href="https://npmjs.com/package/@turboforge/cli-kit" rel="noopener noreferrer">
+    <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/@turboforge/cli-kit" />
   </a>
-  <img alt="license" src="https://img.shields.io/npm/l/@turbo-forge/cli-kit" />
+  <img alt="license" src="https://img.shields.io/npm/l/@turboforge/cli-kit" />
 </p>
 
 > **Note:** This package is part of the Turbo Forge ecosystem.
@@ -40,7 +40,7 @@ Essential utilities for building powerful CLIs and tools in Turbo Forge monorepo
 ## 📦 Installation
 
 ```bash
-pnpm add @turbo-forge/cli-kit
+pnpm add @turboforge/cli-kit
 ```
 
 ### Optional Peer Dependencies
@@ -63,7 +63,7 @@ pnpm add -D jiti defu
 Load and merge user configurations with type safety.
 
 ```ts
-import { resolveConfig, defineConfig } from "@turbo-forge/cli-kit";
+import { resolveConfig, defineConfig } from "@turboforge/cli-kit";
 
 // 1. Define your config type
 interface MyToolConfig {
@@ -87,7 +87,7 @@ console.log(config);
 **User Config File (`my-tool.config.ts`):**
 ```ts
 // Users can use the helper for autocomplete
-import { defineConfig } from "@turbo-forge/cli-kit";
+import { defineConfig } from "@turboforge/cli-kit";
 
 export default defineConfig({
   input: "src/main.ts", // Overrides default
@@ -99,7 +99,7 @@ export default defineConfig({
 Detect the monorepo root and list available workspaces.
 
 ```ts
-import { findProjectRoot, getWorkspacePackages, isMonorepo } from "@turbo-forge/cli-kit";
+import { findProjectRoot, getWorkspacePackages, isMonorepo } from "@turboforge/cli-kit";
 
 // Check if inside a monorepo
 if (isMonorepo()) {
@@ -117,7 +117,7 @@ if (isMonorepo()) {
 Handy helpers for common CLI tasks.
 
 ```ts
-import { findUp, readJson } from "@turbo-forge/cli-kit";
+import { findUp, readJson } from "@turboforge/cli-kit";
 
 // Find a file upwards
 const gitDir = findUp(process.cwd(), [".git"]);

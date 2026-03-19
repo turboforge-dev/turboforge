@@ -24,7 +24,7 @@ export const docs = defineDocs({
         .transform((data) => {
           const jsonPath = (
             normalizedPath.includes("/api/")
-              ? path.replace(/[\\/]api[\\/]/, `${sep}api${sep}.meta${sep}`)
+              ? path.replace(/[\\/]api[\\/]/, `${sep}.meta${sep}`)
               : path
           ).replace(/\.mdx?$/, ".json");
 

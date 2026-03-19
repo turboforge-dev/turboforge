@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: 💬 Community Discussions
-    url: https://github.com/react18-tools/turbo-forge/discussions
+    url: https://github.com/turboforge-dev/turboforge/discussions
     about: Ask questions and share ideas with the community.
   # - name: 📖 Documentation
-  #   url: https://turbo-forge...
+  #   url: https://turboforge...
   #   about: Read the official documentation.

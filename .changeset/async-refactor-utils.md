@@ -1,5 +1,5 @@
 ---
-"@turbo-forge/cli-kit": major
+"@turboforge/cli-kit": major
 ---
 
 **BREAKING CHANGE**: Core utility functions are now asynchronous to improve performance and avoid blocking the event loop.

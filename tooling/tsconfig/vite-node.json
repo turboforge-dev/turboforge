@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Turbo-Forge Vite Node",
+  "display": "Turboforge Vite Node",
   "extends": "./base.json",
   "compilerOptions": {
     "composite": true,

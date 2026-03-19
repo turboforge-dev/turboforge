@@ -1,12 +1,12 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: Use of any is ok for test files */
 import * as fs from "node:fs/promises";
-import * as cliKit from "@turbo-forge/cli-kit";
+import * as cliKit from "@turboforge/cli-kit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { main, parseArgs, showHelp } from "./cli";
 import * as forgeSyncModule from "./forge-sync";
 import * as utils from "./utils";
 
-vi.mock("@turbo-forge/cli-kit", () => ({
+vi.mock("@turboforge/cli-kit", () => ({
   findProjectRoot: vi.fn(),
   resolveConfig: vi.fn(),
   LogLevel: {},
@@ -109,7 +109,7 @@ describe("cli-main", () => {
     });
 
     it("should init config file", async () => {
-      vi.mocked(cliKit.findProjectRoot).mockReturnValue("/root");
+      vi.mocked(cliKit.findProjectRoot).mockResolvedValue("/root");
       await main(["--init"]);
       expect(fs.writeFile).toHaveBeenCalledWith(
         expect.stringContaining("forge-sync.config.json"),
@@ -118,7 +118,7 @@ describe("cli-main", () => {
     });
 
     it("should init custom config file", async () => {
-      vi.mocked(cliKit.findProjectRoot).mockReturnValue("/root");
+      vi.mocked(cliKit.findProjectRoot).mockResolvedValue("/root");
       await main(["--init", "my.json"]);
       expect(fs.writeFile).toHaveBeenCalledWith(
         expect.stringContaining("my.json"),

@@ -1,11 +1,11 @@
 # Remark TypeDoc to MDX <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px"/>
 
 <p className="flex gap-2">
-  <a href="https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml" rel="noopener noreferrer">
-    <img alt="CI" src="https://github.com/react18-tools/turbo-forge/actions/workflows/ci.yml/badge.svg" />
+  <a href="https://github.com/turboforge-dev/turboforge/actions/workflows/ci.yml" rel="noopener noreferrer">
+    <img alt="CI" src="https://github.com/turboforge-dev/turboforge/actions/workflows/ci.yml/badge.svg" />
   </a>
-  <a href="https://codecov.io/gh/react18-tools/turbo-forge/tree/main/packages/remark-typedoc-mdx" rel="noopener noreferrer">
-    <img alt="codecov" src="https://codecov.io/gh/react18-tools/turbo-forge/graph/badge.svg?flag=remark-typedoc-mdx" />
+  <a href="https://codecov.io/gh/turboforge-dev/turboforge/tree/main/packages/remark-typedoc-mdx" rel="noopener noreferrer">
+    <img alt="codecov" src="https://codecov.io/gh/turboforge-dev/turboforge/graph/badge.svg?flag=remark-typedoc-mdx" />
   </a> 
   <a href="https://npmjs.com/package/remark-typedoc-mdx" rel="noopener noreferrer">
     <img alt="npm version" src="https://img.shields.io/npm/v/remark-typedoc-mdx" />

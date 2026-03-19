@@ -1,11 +1,11 @@
 import * as fs from "node:fs/promises";
-import * as cliKit from "@turbo-forge/cli-kit";
+import * as cliKit from "@turboforge/cli-kit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DEFAULT_CONFIG, type ForgeSyncOptions, forgeSync } from "./forge-sync";
 import * as utils from "./utils";
 
 // Mock dependencies
-vi.mock("@turbo-forge/cli-kit", () => ({
+vi.mock("@turboforge/cli-kit", () => ({
   createLogger: vi.fn(() => ({
     info: vi.fn(),
     debug: vi.fn(),

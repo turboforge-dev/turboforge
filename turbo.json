@@ -9,9 +9,6 @@
     "test": {
       "outputs": ["coverage/**"]
     },
-    "typecheck": {
-      "dependsOn": ["^build"]
-    },
     "dev": {
       "cache": false,
       "dependsOn": ["^build"],
@@ -20,16 +17,7 @@
     "clean": {
       "cache": false
     },
-    "docs:build": {
-      "dependsOn": ["//#docs:api", "^build"],
-      "outputs": ["apps/web/.next/**"],
-      "inputs": [
-        "apps/web/content/**",
-        "apps/web/src/**",
-        "apps/web/package.json"
-      ]
-    },
-    "//#docs:api": {
+    "docs": {
       "inputs": [
         "packages/*/src/**",
         "tooling/scripts/generate-api-docs.ts",

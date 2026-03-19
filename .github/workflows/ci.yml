@@ -10,64 +10,89 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
-  discover-packages:
+  build-test:
     runs-on: ubuntu-latest
+
     outputs:
-      packages: ${{ steps.discover.outputs.matrix }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Discover packages
-        id: discover
-        run: echo "matrix=$(ls -d packages/* | xargs -n1 basename | jq -Rc '[inputs]')" >> "$GITHUB_OUTPUT"
-
-  build-test-and-upload:
-    needs: discover-packages
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        pkg: ${{ fromJSON(needs.discover-packages.outputs.packages) }}
+      matrix: ${{ steps.packages.outputs.matrix }}
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build & Test
-        run: pnpm build && pnpm test
+        run: |
+          pnpm turbo telemetry disable
+          pnpm build --filter=!@app/web
+          pnpm test
+          node --experimental-strip-types ./tooling/scripts/split-lcov.ts
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
-      - name: Upload coverage (${{ matrix.pkg }})
-        continue-on-error: true
+      # Create matrix from packages.json
+      - name: Prepare coverage matrix
+        id: packages
+        run: |
+          matrix=$(jq -c '[.[] | {name: .name, dir: .dir, pkg: (.dir | split("/") | last)}]' .turboforge/packages.json)
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/**/*.lcov
+
+  upload-coverage:
+    needs: build-test
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        pkg: ${{ fromJSON(needs.build-test.outputs.matrix) }}
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+
+      - name: Upload coverage (${{ matrix.pkg.name }})
+        if: hashFiles(format('coverage/{0}.lcov', matrix.pkg.pkg)) != ''
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage/packages/${{ matrix.pkg }}.lcov
-          flags: ${{ matrix.pkg }}
+          files: coverage/${{ matrix.pkg.pkg }}.lcov
+          flags: ${{ matrix.pkg.name }}
+          name: ${{ matrix.pkg.name }}
           fail_ci_if_error: false
 
-
   check-changeset:
-    # Strictly for PRs to main. Quick pushes to main (hotfixes/meta) bypass this.
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - uses: pnpm/action-setup@v4
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Check for Changeset
         run: pnpm exec changeset status --since=origin/${{ github.base_ref }}

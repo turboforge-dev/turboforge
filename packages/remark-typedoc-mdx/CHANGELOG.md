@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- [`183ff70`](https://github.com/react18-tools/turbo-forge/commit/183ff70a4fb46d18f7da4e66a3eab1d3e1a76d69) Thanks [@mayank1513](https://github.com/mayank1513)! - ### Added
+- [`183ff70`](https://github.com/turboforge-dev/turboforge/commit/183ff70a4fb46d18f7da4e66a3eab1d3e1a76d69) Thanks [@mayank1513](https://github.com/mayank1513)! - ### Added
 
   - **Hierarchical Table Rendering**: Introduced a sophisticated nesting logic for the `parametersAsTable` option.
   - **Context-Aware Processing**: The plugin now differentiates between top-level function arguments, nested object properties, and method signatures within return objects.
