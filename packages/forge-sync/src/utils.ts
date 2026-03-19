@@ -22,7 +22,8 @@ export const checkFileExists = async (path: string) => {
 };
 
 // Helper functions for sanitization
-export const sanitizeGitRef = (ref: string) => ref.replace(/[^a-zA-Z0-9]/g, "");
+export const sanitizeGitRef = (ref: string) =>
+  ref.replace(/[^a-zA-Z0-9._/-]/g, "");
 
 export const sanitizeRemoteName = (name: string) => {
   // Only allow alphanumeric, underscore, hyphen, *not* starting with dash

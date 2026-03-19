@@ -59,8 +59,8 @@ describe("utils", () => {
 
   describe("sanitization", () => {
     it("should sanitize git refs", () => {
-      expect(sanitizeGitRef("feature/branch-1")).toBe("featurebranch1");
-      expect(sanitizeGitRef("foo; rm -rf /")).toBe("foormrf");
+      expect(sanitizeGitRef("feature/branch-1")).toBe("feature/branch-1");
+      expect(sanitizeGitRef("foo; rm -rf /")).toBe("foorm-rf/");
     });
 
     it("should sanitize remote names", () => {

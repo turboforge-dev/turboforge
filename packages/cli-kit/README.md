@@ -1,6 +1,6 @@
 # @turboforge/cli-kit
 
-> Low-level utilities for building high-performance CLI tools in monorepos.
+Build monorepo-aware CLIs without rewriting config loading, workspace detection, and logging every time.
 
 <p className="flex gap-2">
   <a href="https://github.com/turboforge-dev/turboforge/actions/workflows/ci.yml" rel="noopener noreferrer">
@@ -8,7 +8,7 @@
   </a>
   <a href="https://codecov.io/gh/turboforge-dev/turboforge/tree/main/packages/@turboforge/cli-kit" rel="noopener noreferrer">
     <img alt="codecov" src="https://codecov.io/gh/turboforge-dev/turboforge/graph/badge.svg?flag=@turboforge/cli-kit" />
-  </a> 
+  </a>
   <a href="https://npmjs.com/package/@turboforge/cli-kit" rel="noopener noreferrer">
     <img alt="npm version" src="https://img.shields.io/npm/v/@turboforge/cli-kit" />
   </a>
@@ -21,13 +21,53 @@
   <img alt="license" src="https://img.shields.io/npm/l/@turboforge/cli-kit" />
 </p>
 
-## ✨ Features
+`@turboforge/cli-kit` exists because internal tooling usually starts as one script, then turns into five slightly different scripts with different root-detection rules, different config formats, and no shared mental model. This package gives Turboforge and downstream tools a common foundation.
 
-- **Hierarchical Config Resolution**: Load and merge `.ts`, `.js`, and `.json` configs with type safety.
-- **Monorepo Awareness**: Automatic detection of project roots and workspace packages.
-- **Structured Logging**: Level-based logging with ANSI colors and optional file output.
-- **Workspace Discovery**: Seamlessly find and list packages in pnpm, npm, or yarn monorepos.
-- **Robust Utilities**: Zero-dependency helpers for file traversal, deep merging, and JSON/YAML parsing.
+Part of the Turboforge system:
+
+- use [`@turboforge/sync`](/c:/Users/G/web/open-source/turbo-forge/packages/forge-sync/README.md) when the problem is keeping a repo aligned with its upstream shape
+- use `@turboforge/cli-kit` when the problem is building the repo-aware tools that operate inside that shape
+
+## Highlights
+
+- Resolve layered config from defaults, files, env, and CLI input.
+- Detect project roots and workspace packages without repo-specific glue code.
+- Share one logging and runtime foundation across multiple repo tools.
+
+## Why It Exists
+
+Most CLI helpers are either too generic to understand monorepos or too entangled with one app to reuse cleanly.
+
+`@turboforge/cli-kit` focuses on the boring parts every serious repo tool needs:
+
+- find the real project root
+- discover workspace packages
+- load layered config from the right place
+- log in a way that works for both humans and automation
+
+## Real Example
+
+You are building `repo doctor`, `release check`, and `docs sync` commands for the same workspace.
+
+Without a shared kit, each command re-implements:
+
+- "where is the repo root?"
+- "which packages belong to this workspace?"
+- "which config wins: default, file, env, or CLI flag?"
+
+With `@turboforge/cli-kit`, those decisions become shared infrastructure instead of repeated code.
+
+## When To Use It
+
+- You are building internal or OSS CLIs that need monorepo awareness.
+- You want layered config resolution without writing a config loader from scratch.
+- You need a small foundation, not a full CLI framework.
+
+## When Not To Use It
+
+- You only need argument parsing.
+- Your tool does not care about workspaces, repo roots, or shared config.
+- You want a batteries-included command framework with prompts, subcommands, and plugin loading out of the box.
 
 ## 📦 Installation
 
@@ -35,91 +75,56 @@
 pnpm add @turboforge/cli-kit
 ```
 
-### Optional Peer Dependencies
+**_or_**
 
-To enable TypeScript config loading (`.ts` files) or advanced merging features, install the following:
+```bash
+$ npm install @turboforge/cli-kit
+```
+
+**_or_**
+
+```bash
+$ yarn add @turboforge/cli-kit
+```
+
+### Optional Peer Dependencies
 
 ```bash
 pnpm add -D jiti defu
 ```
 
-- **`jiti`**: Required for loading `.ts` configuration files at runtime.
-- **`defu`**: Recommended for robust deep merging of configurations (falls back to a lightweight internal implementation if missing).
+- `jiti` lets you load TypeScript config files at runtime.
+- `defu` gives you richer object merge behavior.
 
-## 🚀 Usage
-
-### Config Resolution
-
-Load and merge user configurations with full TypeScript support.
+## Example
 
 ```ts
-import { resolveConfig, defineConfig } from "@turboforge/cli-kit";
+import {
+  createLogger,
+  findProjectRoot,
+  getWorkspacePackages,
+  resolveConfig,
+} from "@turboforge/cli-kit";
 
-interface MyToolConfig {
-  input: string;
-  outDir: string;
-}
+const logger = createLogger({ level: "info", name: "repo-doctor" });
+const root = await findProjectRoot();
+const packages = await getWorkspacePackages(root);
 
-const config = await resolveConfig<MyToolConfig>({
-  name: "my-tool", // Looks for my-tool.config.{ts,js,json}
-  defaults: {
-    input: "src/index.ts",
-    outDir: "dist",
-  },
-});
-```
-
-### Root & Workspace Detection
-
-Reliably detect the monorepo root and discover workspace packages.
-
-```ts
-import { findProjectRoot, getWorkspacePackages, isMonorepo } from "@turboforge/cli-kit";
-
-if (isMonorepo()) {
-  const root = findProjectRoot();
-  const packages = getWorkspacePackages(root);
-  
-  console.log(`Found ${packages.length} packages in root: ${root}`);
-}
-```
-
-### Structured Logger
-
-A minimal, high-performance logger with colored terminal output and file persistence.
-
-```ts
-import { createLogger } from "@turboforge/cli-kit";
-
-const logger = createLogger({ 
-  level: "info", 
-  logFile: "./logs/cli.log",
-  name: "my-cli"
+const config = await resolveConfig({
+  name: "repo-doctor",
+  defaults: { fix: false },
 });
 
-logger.info("Starting build process...");
-logger.error("Build failed", new Error("Unexpected token"));
+logger.info(`checking ${packages.length} packages`, config.fix);
 ```
 
-## 🧠 API
+## What You Get
 
-### `resolveConfig<T>(options)`
-Resolves configuration from files, environment variables, and defaults.
+- `resolveConfig`: layered config for repo tools
+- `findProjectRoot`: stable root detection
+- `getWorkspacePackages`: workspace discovery
+- `createLogger`: structured output for local use and automation
 
-### `findProjectRoot(cwd?)`
-Finds the root of the project by looking for `.git`, `pnpm-workspace.yaml`, or `package.json`.
+## Ecosystem Fit
 
-### `createLogger(config)`
-Creates a structured logger with support for levels, colors, and JSON output.
-
-### `getWorkspacePackages(root)`
-Lists all packages in a monorepo workspace with their absolute paths.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please see our [Contributing Guide](https://github.com/turboforge-dev/turboforge/blob/main/CONTRIBUTING.md) for more details.
-
-## 📄 License
-
-MIT © [Mayank Kumar Chaudhari](https://mayankchaudhari.com)
-
+If Turboforge is about keeping a monorepo coherent, `@turboforge/cli-kit` is the layer you build that coherence on top of.

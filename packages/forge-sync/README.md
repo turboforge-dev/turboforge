@@ -1,6 +1,6 @@
-# @turboforge/sync <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px"/>
+# @turboforge/sync
 
-> The authoritative synchronization engine for Turboforge monorepos.
+Keep a real monorepo aligned with its upstream template after the repo has already diverged.
 
 <p className="flex gap-2">
   <a href="https://github.com/turboforge-dev/turboforge/actions/workflows/ci.yml" rel="noopener noreferrer">
@@ -8,7 +8,7 @@
   </a>
   <a href="https://codecov.io/gh/turboforge-dev/turboforge/tree/main/packages/forge-sync" rel="noopener noreferrer">
     <img alt="codecov" src="https://codecov.io/gh/turboforge-dev/turboforge/graph/badge.svg?flag=forge-sync" />
-  </a> 
+  </a>
   <a href="https://npmjs.com/package/forge-sync" rel="noopener noreferrer">
     <img alt="npm version" src="https://img.shields.io/npm/v/forge-sync" />
   </a>
@@ -21,16 +21,59 @@
   <img alt="license" src="https://img.shields.io/npm/l/forge-sync" />
 </p>
 
-## ✨ Features
+`@turboforge/sync` exists because templates are great right up until the moment your repo becomes real. After that, every upstream improvement turns into manual diffing, selective copy-paste, and a quiet fear of breaking local customizations.
 
-- **Intelligent Template Sync**: Seamlessly pull updates from upstream templates into existing monorepos.
-- **Smart Dependency Merging**: SemVer-aware resolution for `package.json` to prevent dependency drift.
-- **Three-Way Merge Strategy**: Applies template patches while preserving custom local modifications.
-- **Dry Run Verification**: Preview all proposed changes and file patches before execution.
-- **Persistent Configuration**: Manage sync settings via `forge-sync.config.json` or CLI flags.
-- **Safety First**: Integrated git-tree validation ensures zero data loss during synchronization.
+This package is the maintenance story inside Turboforge.
 
-## 📦 Installation
+Part of the Turboforge system:
+
+- use `@turboforge/sync` to keep the repo shape current
+- use [`@turboforge/cli-kit`](/c:/Users/G/web/open-source/turbo-forge/packages/cli-kit/README.md) to build the repo-aware commands around that workflow
+
+## Highlights
+
+- Pull upstream template changes into a repo that has already diverged.
+- Preview upgrades before applying them.
+- Resolve `package.json` conflicts with package-aware merge rules.
+
+## Why It Exists
+
+Templates stop helping once you have edited them.
+
+From that point on, most teams choose one of two bad options:
+
+- never pull improvements from the source template again
+- manually replay changes and hope nothing important was missed
+
+`@turboforge/sync` gives you a third option: treat template updates as an explicit sync workflow.
+
+## Real Example
+
+Your monorepo started from an internal template six months ago.
+
+Since then, the template added:
+
+- a stricter Biome config
+- improved release automation
+- better docs generation
+
+Your repo also added custom apps, custom package scripts, and local dependency choices.
+
+Instead of copying files by hand, `@turboforge/sync` fetches the upstream template, computes the diff from your last sync point, applies a patch, and resolves `package.json` conflicts with package-aware rules.
+
+## When To Use It
+
+- You maintain a repo that started from a template and still wants to inherit template improvements.
+- You want upgrades to be repeatable, reviewable, and less dependent on one maintainer's memory.
+- You need a system for "template drift," not just a one-time scaffold.
+
+## When Not To Use It
+
+- Your repo has no upstream template relationship.
+- You want to generate a new repo from scratch; use a starter for that.
+- You need a full project migration across unrelated architectures.
+
+## Installation
 
 To use it as a CLI tool in your project:
 
@@ -44,61 +87,27 @@ Or run it directly with `npx`:
 npx @turboforge/sync
 ```
 
-## 🚀 Usage
+## Example
 
-Run the sync command from the root of your monorepo to align with the latest template.
-
-```bash
-pnpm forge-sync
-```
-
-### Dry Run
-
-Preview changes without modifying any files on disk.
+Preview what changed upstream before touching the repo:
 
 ```bash
-pnpm forge-sync --dry-run
+npx @turboforge/sync --dry-run
 ```
 
-### Excluding Paths
-
-Ignore specific directories or files that have been heavily customized.
+Exclude heavily customized paths during sync:
 
 ```bash
-pnpm forge-sync --exclude "apps/docs,tooling/custom-script.ts"
+npx @turboforge/sync --exclude "apps/web,tooling/custom"
 ```
 
-## 🔧 Configuration
+## Mental Model
 
-Create a `forge-sync.config.json` in your project root for persistent settings.
+`@turboforge/sync` is not a scaffolder.
 
-```json
-{
-  "templateUrl": "https://github.com/turboforge-dev/forge-template.git",
-  "excludePaths": [
-    "pnpm-lock.yaml",
-    "apps/web/public"
-  ],
-  "postSync": [
-    "pnpm install",
-    "pnpm format"
-  ]
-}
-```
+It is a bridge between:
 
-## 🧠 How it Works
+- the template you started from
+- the customized repo you run today
 
-1. **Safety Check**: Verifies the current working directory is clean.
-2. **Fetch**: Adds the template as a temporary remote and fetches the target reference.
-3. **Diff**: Calculates the difference between the last sync point and the target template state.
-4. **Patch**: Generates and applies a git patch using a 3-way merge strategy.
-5. **Conflict Resolution**: Employs specialized logic for `package.json` to merge dependencies using SemVer rules.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please see our [Contributing Guide](https://github.com/turboforge-dev/turboforge/blob/main/CONTRIBUTING.md) for more details.
-
-## 📄 License
-
-MIT © [Mayank Kumar Chaudhari](https://mayankchaudhari.com)
-
+That is the core Turboforge bet: monorepos need an upgrade path, not just a bootstrap command.

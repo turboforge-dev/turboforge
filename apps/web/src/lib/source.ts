@@ -12,13 +12,13 @@ const PKG_MAX_VERSION = await readdir("content/docs")
     Promise.all(
       dirs.toSorted().map((dir) =>
         limiter(async () => {
-          const version = await readdir(`content/docs/${dir}`).then(
-            (vDirs) =>
-              vDirs
-                .filter((vDir) => /^v\d+$/.test(vDir))
-                .toSorted(
-                  (a, b) => parseInt(a.slice(1), 10) - parseInt(b.slice(1), 10),
-                )[0],
+          const version = await readdir(`content/docs/${dir}`).then((vDirs) =>
+            vDirs
+              .filter((vDir) => /^v\d+$/.test(vDir))
+              .toSorted(
+                (a, b) => parseInt(a.slice(1), 10) - parseInt(b.slice(1), 10),
+              )
+              .pop(),
           );
           return { dir, version };
         }),

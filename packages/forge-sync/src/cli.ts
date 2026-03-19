@@ -141,7 +141,7 @@ export const main = async (args: string[] = process.argv.slice(2)) => {
     configFile,
   })) as Required<CliOptions>;
 
-  config.baseRef = await getBaseCommit(config.metaFile);
+  config.baseRef = config.baseRef || (await getBaseCommit(config.metaFile));
 
   await forgeSync(config);
 };
