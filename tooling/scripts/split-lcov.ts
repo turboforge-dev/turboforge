@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { CACHE_DIR } from "./forge.const";
-import { readJson } from "./utilts";
+import { CACHE_DIR } from "./forge.const.ts";
+import { readJson } from "./utils.ts";
 
 type Pkg = {
   name: string;

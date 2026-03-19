@@ -1,7 +1,9 @@
-import { execSync } from "node:child_process";
-import fs from "node:fs/promises";
+/** biome-ignore-all lint/suspicious/noExplicitAny: utility script */
+
+import { mkdir, readdir, readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { parseArgs } from "node:util";
+import { atomicWrite, execAsync, existsAsync, readJson } from "./utils.ts";
 
 const aliasNotice = (canonical: string) => `
 > [!TIP]
@@ -42,12 +44,8 @@ We provide this package to offer shorter import paths and improved discoverabili
 
 const getPackageDirs = async (root = process.cwd()) => {
   const packagesDir = path.resolve(root, "packages");
-  try {
-    await fs.access(packagesDir);
-  } catch {
-    return [];
-  }
-  const dirents = await fs.readdir(packagesDir, { withFileTypes: true });
+  if (!(await existsAsync(packagesDir))) return [];
+  const dirents = await readdir(packagesDir, { withFileTypes: true });
   return dirents
     .filter((d) => d.isDirectory())
     .map((d) => path.join(packagesDir, d.name));
@@ -85,7 +83,7 @@ const publishAliases = async () => {
   await Promise.all(
     packageDirs.map(async (dir) => {
       const pkgJsonPath = path.join(dir, "package.json");
-      const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, "utf-8"));
+      const pkgJson = (await readJson(pkgJsonPath)) as any;
 
       const canonical = pkgJson.name;
 
@@ -106,13 +104,13 @@ const publishAliases = async () => {
       console.log(`Processing aliases for ${canonical}: ${aliases.join(", ")}`);
 
       const distAliasesDir = path.join(dir, "dist-aliases");
-      await fs.rm(distAliasesDir, { recursive: true, force: true });
-      await fs.mkdir(distAliasesDir, { recursive: true });
+      await rm(distAliasesDir, { recursive: true, force: true });
+      await mkdir(distAliasesDir, { recursive: true });
 
       // README
       let readmeContent = "";
       try {
-        const originalReadme = await fs.readFile(
+        const originalReadme = await readFile(
           path.join(dir, "README.md"),
           "utf-8",
         );
@@ -174,7 +172,7 @@ const publishAliases = async () => {
         }
 
         if (/.css$/.test(key)) {
-          await fs.writeFile(
+          await atomicWrite(
             path.resolve(distAliasesDir, key),
             `@import "${canonical}/${key}";`,
           );
@@ -193,7 +191,7 @@ const publishAliases = async () => {
         // e.g. key="./utils" -> aliasDir/utils/index.mjs
 
         const fileDir = path.join(distAliasesDir, subpath);
-        await fs.mkdir(fileDir, { recursive: true });
+        await mkdir(fileDir, { recursive: true });
 
         // Construct import path from canonical
         // e.g. canonical/utils or just canonical
@@ -208,8 +206,8 @@ const publishAliases = async () => {
         const dtsFileName = "index.d.mts";
 
         await Promise.all([
-          fs.writeFile(path.join(fileDir, fileName), fileContent, "utf-8"),
-          fs.writeFile(path.join(fileDir, dtsFileName), fileContent, "utf-8"),
+          atomicWrite(path.join(fileDir, fileName), fileContent),
+          atomicWrite(path.join(fileDir, dtsFileName), fileContent),
         ]);
 
         // Update Alias Package JSON exports
@@ -230,22 +228,19 @@ const publishAliases = async () => {
 
       for (const alias of aliases) {
         await Promise.all([
-          fs.writeFile(
+          atomicWrite(
             path.join(distAliasesDir, "README.md"),
             readmeContent.replaceAll("::alias::", alias),
-            "utf-8",
           ),
-          fs.writeFile(
+          atomicWrite(
             path.join(distAliasesDir, "package.json"),
             JSON.stringify({ ...aliasPkgJson, name: alias }, null, 2),
-            "utf-8",
           ),
         ]);
         console.log(`Publishing alias ${alias}...`);
         try {
-          execSync(`npm publish --provenance --access public`, {
+          await execAsync(`npm publish --provenance --access public`, {
             cwd: distAliasesDir,
-            stdio: "inherit",
           });
           console.log(`Successfully published ${alias}`);
         } catch (err) {
@@ -257,7 +252,7 @@ const publishAliases = async () => {
 };
 
 if (process.env["NPM_TOKEN"]) {
-  execSync(
+  await execAsync(
     `npm config set //registry.npmjs.org/:_authToken ${process.env["NPM_TOKEN"]}`,
   );
 }

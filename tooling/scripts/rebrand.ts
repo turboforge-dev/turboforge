@@ -1,55 +1,16 @@
 import { readFile, rm } from "node:fs/promises";
 import { resolve } from "node:path";
-import { stdin as input, stdout as output } from "node:process";
-import readline from "node:readline/promises";
 
 import {
   atomicWrite,
   createLimiter,
   execAsync,
   getWorkspacePackages,
+  prompt,
   readJson,
-} from "./utilts";
+} from "./utils.ts";
 
 const limiter = createLimiter(10);
-
-/**
- * ANSI color helpers (tiny + dependency-free)
- */
-const color = {
-  reset: "\x1b[0m",
-  dim: "\x1b[2m",
-  bold: "\x1b[1m",
-  cyan: "\x1b[36m",
-  gray: "\x1b[90m",
-};
-
-/**
- * Interactive prompt with visual hierarchy.
- *
- * - Question → cyan
- * - Default (ghost text) → dim gray
- * - Input cursor → bold
- *
- * Example:
- *   Enter repo slug (user/repo) (my-org/my-repo):
- */
-const ask = async (question: string, defaultValue?: string) => {
-  const rl = readline.createInterface({ input, output });
-
-  const q = `${color.cyan}${question}${color.reset}`;
-  const ghost = defaultValue
-    ? ` ${color.gray}${color.dim}(${defaultValue})${color.reset}`
-    : "";
-
-  const prompt = `${q}${ghost}: ${color.bold}`;
-
-  const answer = (await rl.question(prompt)).trim();
-
-  rl.close();
-
-  return answer || defaultValue || "";
-};
 
 /**
  * Safely trims Husky pre-commit hook.
@@ -143,7 +104,7 @@ const rebrand = async (): Promise<void> => {
   const { stdout } = await execAsync("git remote get-url --push origin");
   const detected = parseRepoSlug(stdout.toString());
 
-  const repoSlug = await ask("Enter repo slug (user/repo)", detected);
+  const repoSlug = await prompt("Enter repo slug (user/repo)", detected);
 
   const securityPath = resolve("SECURITY.md");
   const content = await readFile(securityPath, "utf-8");
@@ -175,7 +136,7 @@ const cleanUp = async (): Promise<void> => {
  */
 const run = async () => {
   const shouldClean =
-    (await ask("Run cleanup? (y/n)", "y")).toLowerCase() === "y";
+    (await prompt("Run cleanup? (y/n)", "y")).toLowerCase() === "y";
 
   if (shouldClean) {
     console.log("→ Running cleanup...");

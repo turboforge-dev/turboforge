@@ -1,82 +1,82 @@
 import { mkdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-import commitlintConfig from "../../.commitlintrc.json";
-import { CACHE_DIR } from "./forge.const";
+import { CACHE_DIR } from "./forge.const.ts";
 import {
   atomicWrite,
-  execAsync,
+  existsAsync,
   getWorkspacePackages,
   readJson,
   stripJsonComments,
-} from "./utilts";
+} from "./utils.ts";
 
 type WorkspaceEntry = {
   dir: string;
   name: string;
 };
 
+const PACKAGES_FILE = join(CACHE_DIR, "packages.json");
+
 /**
- * Update VSCode conventional commit scopes.
+ * Shallow compare of package lists.
+ * Assumes stable sorting.
+ */
+const isSamePackages = (
+  a: WorkspaceEntry[] | null,
+  b: WorkspaceEntry[],
+): boolean => {
+  if (!a || a.length !== b.length) return false;
+  return a.every((pkg, i) => pkg.name === b[i].name && pkg.dir === b[i].dir);
+};
+
+/**
+ * Updates VSCode conventional commit scopes.
+ * Skips if .vscode/settings.json is missing.
  */
 const updateVSCodeScopes = async (scopes: string[]) => {
-  const settingsPath = ".vscode/settings.json";
+  const file = ".vscode/settings.json";
+  if (!(await existsAsync(file))) return;
 
-  const raw = await readFile(settingsPath, "utf8");
-  const settings = JSON.parse(stripJsonComments(raw));
+  const raw = await readFile(file, "utf8");
+  const json = JSON.parse(stripJsonComments(raw));
 
-  settings["conventionalCommits.scopes"] = scopes;
+  json["conventionalCommits.scopes"] = scopes;
 
-  await atomicWrite(settingsPath, JSON.stringify(settings, null, 2));
+  await atomicWrite(file, JSON.stringify(json, null, 2));
 };
 
 /**
- * Update commitlint scope enum rule.
+ * Updates commitlint scope enum rule.
+ * Uses read/write instead of import mutation to avoid cache issues.
  */
 const updateCommitlint = async (scopes: string[]) => {
-  commitlintConfig.rules["scope-enum"][2] = scopes;
+  const file = ".commitlintrc.json";
+  if (!(await existsAsync(file))) return;
 
-  await atomicWrite(
-    ".commitlintrc.json",
-    JSON.stringify(commitlintConfig, null, 2),
-  );
+  const config = await readJson<any>(file);
+
+  if (!config?.rules?.["scope-enum"]) return;
+
+  config.rules["scope-enum"][2] = scopes;
+
+  await atomicWrite(file, JSON.stringify(config, null, 2));
 };
 
 /**
- * Sync biome schema version with package.json dependency.
- */
-const updateBiomeSchema = async () => {
-  const biomeFilePath = "biome.json";
-
-  const pkg = (await readJson("package.json")) as {
-    devDependencies: Record<string, string>;
-  };
-
-  const biomeVersion = pkg.devDependencies["@biomejs/biome"];
-
-  const biomeConfig = await readFile(biomeFilePath, "utf8");
-
-  const updated = biomeConfig.replace(
-    /schemas\/.*\/schema\.json/,
-    `schemas/${biomeVersion}/schema.json`,
-  );
-
-  await atomicWrite(biomeFilePath, updated);
-};
-
-/**
- * Generate TS path mappings for workspace packages.
+ * Generates TS path mappings for workspace packages.
+ * Skips missing tsconfig files.
+ *
+ * NOTE: Uses simple replace — safe enough given controlled format.
+ * Can be upgraded to jsonc-parser later.
  */
 const updateTsPaths = async (packages: WorkspaceEntry[]) => {
-  const paths = packages.reduce<Record<string, string[]>>(
-    (acc, { name, dir }) => {
-      acc[name] = [`${dir}/src`, `${dir}/dist`];
-      return acc;
-    },
-    {},
+  const paths = Object.fromEntries(
+    packages.map(({ name, dir }) => [name, [`${dir}/src`, `${dir}/dist`]]),
   );
 
   const updateFile = async (file: string) => {
+    if (!(await existsAsync(file))) return;
+
     const raw = await readFile(file, "utf8");
 
     const updated = raw.replace(
@@ -88,21 +88,23 @@ const updateTsPaths = async (packages: WorkspaceEntry[]) => {
   };
 
   await Promise.all([
-    updateFile("./tsconfig.json"),
-    updateFile("./tsconfig.build.json"),
+    updateFile("tsconfig.json"),
+    updateFile("tsconfig.build.json"),
   ]);
 };
 
 /**
- * Execute repository formatter.
- */
-const runFormatter = () => execAsync("pnpm format");
-
-/**
- * Main workspace synchronization routine.
+ * Main entrypoint.
  *
- * Ensures all tooling configs remain aligned with
- * the current monorepo package structure.
+ * Responsibilities:
+ * - Always ensure `.turboforge/packages.json` exists
+ * - Detect workspace drift (new/removed packages)
+ * - Sync dependent tooling ONLY when drift is detected
+ *
+ * Design principles:
+ * - Idempotent
+ * - Fast on no-op
+ * - Safe in CI environments
  */
 const main = async () => {
   try {
@@ -115,26 +117,24 @@ const main = async () => {
       ({ dir }) => !/\b(apps|examples|tooling)\b/i.test(dir),
     );
 
-    atomicWrite(
-      join(CACHE_DIR, "packages.json"),
-      JSON.stringify(libPackages, null, 2),
-    );
+    const prev = await readJson<WorkspaceEntry[]>(PACKAGES_FILE);
+
+    if (isSamePackages(prev, libPackages)) {
+      console.info("No workspace changes detected");
+      return;
+    }
+
+    await atomicWrite(PACKAGES_FILE, JSON.stringify(libPackages, null, 2));
+
+    console.info("🔄 Workspace change detected → syncing configs");
 
     const scopes = packages.map((p) => p.name);
 
     await updateVSCodeScopes(scopes);
-    console.log("✅ VS Code scopes synced");
-
     await updateCommitlint(scopes);
-    console.log("✅ Commitlint scopes synced");
-
-    await updateBiomeSchema();
-    console.log("✅ Biome schema synced");
-
     await updateTsPaths(libPackages);
-    console.log("✅ TSConfig paths synced");
 
-    await runFormatter();
+    console.info("✅ Workspace sync complete");
   } catch (error) {
     console.error("❌ Workspace sync failed:", error);
   }

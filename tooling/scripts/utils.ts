@@ -10,6 +10,8 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
+import { stdin as input, stdout as output } from "node:process";
+import readline from "node:readline/promises";
 import { promisify } from "node:util";
 
 /**
@@ -278,4 +280,42 @@ export const getWorkspacePackages = async (
       ),
     )
   ).filter((p) => p.name);
+};
+
+/**
+ * ANSI color helpers (tiny + dependency-free)
+ */
+const color = {
+  reset: "\x1b[0m",
+  dim: "\x1b[2m",
+  bold: "\x1b[1m",
+  cyan: "\x1b[36m",
+  gray: "\x1b[90m",
+};
+
+/**
+ * Interactive prompt with visual hierarchy.
+ *
+ * - Question → cyan
+ * - Default (ghost text) → dim gray
+ * - Input cursor → bold
+ *
+ * Example:
+ *   Enter repo slug (user/repo) (my-org/my-repo):
+ */
+export const prompt = async (question: string, defaultValue?: string) => {
+  const rl = readline.createInterface({ input, output });
+
+  const q = `${color.cyan}${question}${color.reset}`;
+  const ghost = defaultValue
+    ? ` ${color.gray}${color.dim}(${defaultValue})${color.reset}`
+    : "";
+
+  const prompt = `${q}${ghost}: ${color.bold}`;
+
+  const answer = (await rl.question(prompt)).trim();
+
+  rl.close();
+
+  return answer || defaultValue || "";
 };

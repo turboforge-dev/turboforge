@@ -1,10 +1,9 @@
 import { execFileSync } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import pLimit from "p-limit";
-import { safeRename } from "./utilts";
+import { createLimiter, safeRename } from "./utils.ts";
 
-const limit = pLimit(4);
+const limit = createLimiter(4);
 
 const PACKAGES_DIR = "packages";
 const DOCS_ROOT = "apps/web/content/docs";
