@@ -23,7 +23,7 @@
     "next": "16.2.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "remark-typedoc-mdx": "workspace:*",
+    "@turboforge/remark-typedoc-mdx": "workspace:*",
     "sugar-high": "^0.9.5",
     "tailwind-merge": "^3.5.0"
   },

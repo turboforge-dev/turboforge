@@ -41,9 +41,6 @@ importers:
       cz-conventional-changelog:
         specifier: ^3.3.0
         version: 3.3.0(@types/node@25.5.0)(typescript@5.9.3)
-      enquirer:
-        specifier: ^2.4.1
-        version: 2.4.1
       envinfo:
         specifier: ^7.21.0
         version: 7.21.0
@@ -53,15 +50,9 @@ importers:
       husky:
         specifier: ^9.1.7
         version: 9.1.7
-      p-limit:
-        specifier: ^7.3.0
-        version: 7.3.0
       plop:
         specifier: ^4.0.5
         version: 4.0.5(@types/node@25.5.0)
-      tsx:
-        specifier: ^4.21.0
-        version: 4.21.0
       turbo:
         specifier: ^2.8.19
         version: 2.8.19
@@ -101,6 +92,9 @@ importers:
       '@turboforge/cli-kit':
         specifier: workspace:*
         version: link:../../packages/cli-kit
+      '@turboforge/remark-typedoc-mdx':
+        specifier: workspace:*
+        version: link:../../packages/remark-typedoc-mdx
       fumadocs-core:
         specifier: 16.6.17
         version: 16.6.17(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.14)(lucide-react@0.577.0(react@19.2.4))(next@16.2.0(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.97.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod@4.3.6)
@@ -122,9 +116,6 @@ importers:
       react-dom:
         specifier: ^19.2.4
         version: 19.2.4(react@19.2.4)
-      remark-typedoc-mdx:
-        specifier: workspace:*
-        version: link:../../packages/remark-typedoc-mdx
       sugar-high:
         specifier: ^0.9.5
         version: 0.9.5
@@ -3611,10 +3602,6 @@ packages:
     resolution: {integrity: sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==}
     engines: {node: '>=6'}
 
-  p-limit@7.3.0:
-    resolution: {integrity: sha512-7cIXg/Z0M5WZRblrsOla88S4wAK+zOQQWeBYfV3qJuJXMr+LnbYjaadrFaS0JILfEDPVqHyKnZ1Z/1d6J9VVUw==}
-    engines: {node: '>=20'}
-
   p-locate@4.1.0:
     resolution: {integrity: sha512-R79ZZ/0wAxKGu3oYMlz8jy/kbhsNrS7SKZ7PxEHBgJ5+F2mtFW2fK2cOtBh1cHYkQsbzFV7I+EoRKe6Yt0oK7A==}
     engines: {node: '>=8'}
@@ -4570,10 +4557,6 @@ packages:
   yargs@17.7.2:
     resolution: {integrity: sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==}
     engines: {node: '>=12'}
-
-  yocto-queue@1.2.2:
-    resolution: {integrity: sha512-4LCcse/U2MHZ63HAJVE+v71o7yOdIe4cZ70Wpf8D/IyjDKYQLV5GD46B+hSTjJsvV5PztjvHoU580EftxjDZFQ==}
-    engines: {node: '>=12.20'}
 
   yoctocolors-cjs@2.1.3:
     resolution: {integrity: sha512-U/PBtDf35ff0D8X8D0jfdzHYEPFxAI7jJlxZXwCSez5M3190m+QobIfh+sWDWSHMCWWJN2AWamkegn6vr6YBTw==}
@@ -7044,6 +7027,7 @@ snapshots:
   get-tsconfig@4.13.6:
     dependencies:
       resolve-pkg-maps: 1.0.0
+    optional: true
 
   git-json-resolver-semver@1.0.0(git-json-resolver@1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.3)(yaml@2.8.2)):
     dependencies:
@@ -8255,10 +8239,6 @@ snapshots:
     dependencies:
       p-try: 2.2.0
 
-  p-limit@7.3.0:
-    dependencies:
-      yocto-queue: 1.2.2
-
   p-locate@4.1.0:
     dependencies:
       p-limit: 2.3.0
@@ -8675,7 +8655,8 @@ snapshots:
 
   resolve-from@5.0.0: {}
 
-  resolve-pkg-maps@1.0.0: {}
+  resolve-pkg-maps@1.0.0:
+    optional: true
 
   resolve@1.22.11:
     dependencies:
@@ -9009,6 +8990,7 @@ snapshots:
       get-tsconfig: 4.13.6
     optionalDependencies:
       fsevents: 2.3.3
+    optional: true
 
   turbo@2.8.19:
     optionalDependencies:
@@ -9278,8 +9260,6 @@ snapshots:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 21.1.1
-
-  yocto-queue@1.2.2: {}
 
   yoctocolors-cjs@2.1.3: {}
 

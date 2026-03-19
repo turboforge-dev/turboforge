@@ -9,8 +9,8 @@
         "@tool/scripts",
         "@tool/tsconfig",
         "@turboforge/cli-kit",
-        "forge-sync",
-        "remark-typedoc-mdx"
+        "@turboforge/remark-typedoc-mdx",
+        "@turboforge/sync"
       ]
     ]
   }

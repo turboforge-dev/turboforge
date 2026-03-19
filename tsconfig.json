@@ -27,10 +27,13 @@
     "baseUrl": ".",
     "paths": {
       "@turboforge/cli-kit": ["packages/cli-kit/src", "packages/cli-kit/dist"],
-      "forge-sync": ["packages/forge-sync/src", "packages/forge-sync/dist"],
-      "remark-typedoc-mdx": [
+      "@turboforge/remark-typedoc-mdx": [
         "packages/remark-typedoc-mdx/src",
         "packages/remark-typedoc-mdx/dist"
+      ],
+      "@turboforge/sync": [
+        "packages/forge-sync/src",
+        "packages/forge-sync/dist"
       ]
     }
   },
