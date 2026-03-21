@@ -84,17 +84,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
               }
               const cleanedHref =
                 href?.replace(/index\.mdx?/, "")?.replace(/\.mdx?$/, "") ?? "";
-              return (
-                <Link
-                  {...props}
-                  href={
-                    /^(\/|\.)/.test(cleanedHref) ||
-                    cleanedHref.startsWith(lastSegment)
-                      ? cleanedHref
-                      : `${lastSegment}/${cleanedHref}`
-                  }
-                />
-              );
+              return <Link {...props} href={cleanedHref} />;
             },
             // @ts-expect-error -- ok
             // biome-ignore lint/complexity/noUselessFragments: Required to suppress default icon
