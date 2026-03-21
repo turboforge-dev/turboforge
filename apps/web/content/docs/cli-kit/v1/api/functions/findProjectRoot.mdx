@@ -1,0 +1,24 @@
+[**@turboforge/cli-kit**](../index.md)
+
+***
+
+[@turboforge/cli-kit](../index.md) / findProjectRoot
+
+# Function: findProjectRoot()
+
+> **findProjectRoot**(`cwd?`): `Promise`\<`string`\>
+
+Defined in: [packages/cli-kit/src/root.ts:10](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/root.ts#L10)
+
+Finds the project root directory based on common markers.
+Priority: .git > .changeset > pnpm-workspace.yaml > package.json (with workspaces)
+
+## Parameters
+
+### cwd?
+
+`string` = `...`
+
+## Returns
+
+`Promise`\<`string`\>

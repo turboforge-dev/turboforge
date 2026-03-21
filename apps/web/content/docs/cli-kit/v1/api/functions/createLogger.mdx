@@ -1,0 +1,44 @@
+[**@turboforge/cli-kit**](../index.md)
+
+***
+
+[@turboforge/cli-kit](../index.md) / createLogger
+
+# Function: createLogger()
+
+> **createLogger**(`config`): [`Logger`](../interfaces/Logger.md)
+
+Defined in: [packages/cli-kit/src/logger.ts:129](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/logger.ts#L129)
+
+Creates a minimal structured logger.
+
+Features:
+- Level-based filtering
+- Colored terminal output
+- Optional file logging
+- Automatic stream cleanup on process exit
+
+Designed for:
+- CLI tools
+- developer utilities
+- small Node services
+
+Example:
+
+```ts
+const logger = createLogger({ level: "info", logFile: "./app.log" })
+
+logger.info("Server started", port)
+logger.warn("Cache miss")
+logger.error("Unhandled error", err)
+```
+
+## Parameters
+
+### config
+
+[`LoggerConfig`](../interfaces/LoggerConfig.md)
+
+## Returns
+
+[`Logger`](../interfaces/Logger.md)

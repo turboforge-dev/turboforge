@@ -32,8 +32,6 @@ export const PKG_MAX_VERSION = await readdir("content/docs")
 
 export const DEFAULT_PKG_DIR = defaultPkgDir || PKG_MAX_VERSION[0]?.dir;
 
-console.debug({ DEFAULT_PKG_DIR, PKG_MAX_VERSION });
-
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
   baseUrl: "/docs",

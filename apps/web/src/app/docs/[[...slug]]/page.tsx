@@ -15,6 +15,7 @@ import {
   PKG_MAX_VERSION,
   source,
 } from "@/lib/source";
+import { formatLastUpdated } from "@/lib/utils";
 import { getMDXComponents } from "@/mdx-components";
 
 const GIT_CONFIG = {
@@ -44,6 +45,11 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
       <DocsTitle>{page.data.title}</DocsTitle>
+      {page.data.lastModified && (
+        <p className="text-sm text-muted-foreground -mt-4 mb-2">
+          Updated {formatLastUpdated(page.data.lastModified)}
+        </p>
+      )}
       <DocsDescription className="mb-0">
         {page.data.description}
       </DocsDescription>

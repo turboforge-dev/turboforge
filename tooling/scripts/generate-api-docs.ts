@@ -1,16 +1,25 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: script file */
 import { execFileSync } from "node:child_process";
-import { promises as fs } from "node:fs";
+import {
+  access,
+  copyFile,
+  cp,
+  mkdir,
+  readdir,
+  readFile,
+  stat,
+} from "node:fs/promises";
 import path from "node:path";
-import { createLimiter, safeRename } from "./utils.ts";
+import { atomicWrite, createLimiter, readJson, safeRename } from "./utils.ts";
 
 const limit = createLimiter(4);
 
 const PACKAGES_DIR = "packages";
 const DOCS_ROOT = "apps/web/content/docs";
 
-await fs.mkdir(DOCS_ROOT, { recursive: true });
+await mkdir(DOCS_ROOT, { recursive: true });
 
-const PKG_DOC_DIRS = (await fs.readdir(PACKAGES_DIR, { withFileTypes: true }))
+const PKG_DOC_DIRS = (await readdir(PACKAGES_DIR, { withFileTypes: true }))
   .filter((d) => d.isDirectory())
   .map((d) => d.name);
 
@@ -22,12 +31,12 @@ for (const pkgDir of PKG_DOC_DIRS) {
   const pkgJsonPath = path.join(pkgPath, "package.json");
   const entry = path.join(pkgPath, "src/index.ts").replaceAll("\\", "/");
   try {
-    await fs.access(pkgJsonPath);
-    await fs.access(entry);
+    await access(pkgJsonPath);
+    await access(entry);
   } catch {
     continue;
   }
-  const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, "utf8"));
+  const pkgJson = (await readJson(pkgJsonPath)) as any;
   const major = pkgJson.version.split(".")[0];
   const outDir = path.join(DOCS_ROOT, pkgDir, `v${major}`, "api");
 
@@ -51,7 +60,7 @@ for (const pkgDir of PKG_DOC_DIRS) {
     { stdio: "inherit" },
   );
 
-  await fs.copyFile(
+  await copyFile(
     path.join(pkgPath, "README.md"),
     path.join(outDir, "..", "overview.mdx"),
   );
@@ -59,8 +68,8 @@ for (const pkgDir of PKG_DOC_DIRS) {
   // Copy reference docs
   try {
     const cutomDocsDir = path.join(pkgPath, "docs");
-    if ((await fs.stat(cutomDocsDir)).isDirectory()) {
-      await fs.cp(path.join(pkgPath, "docs"), path.resolve(outDir, ".."), {
+    if ((await stat(cutomDocsDir)).isDirectory()) {
+      await cp(path.join(pkgPath, "docs"), path.resolve(outDir, ".."), {
         recursive: true,
       });
     }
@@ -72,19 +81,14 @@ for (const pkgDir of PKG_DOC_DIRS) {
   const description = pkgJson.forge?.description || pkgJson.description;
   const tagLine = pkgJson.forge?.tagLine || pkgJson.description;
   const icon = pkgJson.forge?.icon || (pkgJson.bin ? "Terminal" : "FileCode");
-  try {
-    const meta = JSON.parse(await fs.readFile(rootMetaFilePath, "utf8"));
-    if (
-      meta.version !== pkgJson.version ||
-      meta.description !== description ||
-      meta.icon !== icon ||
-      meta.title !== pkgJson.name ||
-      meta.tagLine !== tagLine
-    ) {
-      throw new Error("Meta file is outdated");
-    }
-  } catch {
-    await fs.writeFile(
+  const pages = await readdir(path.join(DOCS_ROOT, pkgDir)).then((dirs) =>
+    dirs
+      .filter((dir) => /^v\d+$/.test(dir))
+      .toSorted((a, b) => parseInt(b.slice(1), 10) - parseInt(a.slice(1), 10)),
+  );
+
+  await Promise.all([
+    atomicWrite(
       rootMetaFilePath,
       JSON.stringify(
         {
@@ -95,17 +99,29 @@ for (const pkgDir of PKG_DOC_DIRS) {
           version: pkgJson.version,
           root: true,
           icon,
+          pages,
         },
         null,
         2,
       ),
-    );
-  }
+    ),
+    atomicWrite(
+      path.join(outDir, "..", "meta.json"),
+      JSON.stringify(
+        {
+          title: `Version ${pkgJson.version}`,
+          description: tagLine,
+        },
+        null,
+        2,
+      ),
+    ),
+  ]);
 }
 
 // copy banner image
 try {
-  await fs.copyFile(
+  await copyFile(
     path.join(process.cwd(), "banner.jpg"),
     path.join(DOCS_ROOT, "banner.jpg"),
   );
@@ -121,7 +137,7 @@ const walk = async (
   dir: string,
   action: (file: string) => Promise<void>,
 ): Promise<void> => {
-  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const entries = await readdir(dir, { withFileTypes: true });
   await Promise.all(
     entries.map(async (entry) => {
       const fullPath = path.join(dir, entry.name);
@@ -169,7 +185,7 @@ const createMeta = async (file: string) => {
   if (!file.endsWith(".mdx")) {
     return;
   }
-  const src = await fs.readFile(file, "utf8");
+  const src = await readFile(file, "utf8");
 
   // Extract title safely
   const title = file.endsWith("api/index.mdx")
@@ -186,9 +202,9 @@ const createMeta = async (file: string) => {
   const editURL = src.match(DEFINED_IN_REGEXP)?.[1];
   const metaPath = file.replace("/api/", "/.meta/").replace(/\.mdx$/, ".json");
 
-  await fs.mkdir(path.dirname(metaPath), { recursive: true });
+  await mkdir(path.dirname(metaPath), { recursive: true });
 
-  await fs.writeFile(
+  await atomicWrite(
     metaPath,
     `${JSON.stringify(
       {
