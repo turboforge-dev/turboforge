@@ -1,9 +1,0 @@
-{
-  "title": "@turboforge/sync",
-  "description": "Monorepo Sync Engine",
-  "tagLine": "The authoritative synchronization engine for Turboforge monorepos to align tooling, configurations, and dependencies with upstream templates.",
-  "lastModified": "2026-03-19T17:25:14.279Z",
-  "version": "0.0.0",
-  "root": true,
-  "icon": "Terminal"
-}
