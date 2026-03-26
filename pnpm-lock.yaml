@@ -23,7 +23,7 @@ importers:
         version: 2.30.0(@types/node@25.5.0)
       '@commitlint/cli':
         specifier: ^20.5.0
-        version: 20.5.0(@types/node@25.5.0)(conventional-commits-parser@6.3.0)(typescript@5.9.3)
+        version: 20.5.0(@types/node@25.5.0)(conventional-commits-parser@6.3.0)(typescript@6.0.2)
       '@commitlint/config-conventional':
         specifier: ^20.5.0
         version: 20.5.0
@@ -38,19 +38,19 @@ importers:
         version: 25.5.0
       '@vitest/coverage-v8':
         specifier: ^4.1.0
-        version: 4.1.0(vitest@4.1.0(@types/node@25.5.0)(happy-dom@20.8.4)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3)))
+        version: 4.1.0(vitest@4.1.0(@types/node@25.5.0)(happy-dom@20.8.8)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3)))
       commitizen:
         specifier: ^4.3.1
-        version: 4.3.1(@types/node@25.5.0)(typescript@5.9.3)
+        version: 4.3.1(@types/node@25.5.0)(typescript@6.0.2)
       cz-conventional-changelog:
         specifier: ^3.3.0
-        version: 3.3.0(@types/node@25.5.0)(typescript@5.9.3)
+        version: 3.3.0(@types/node@25.5.0)(typescript@6.0.2)
       envinfo:
         specifier: ^7.21.0
         version: 7.21.0
       happy-dom:
-        specifier: ^20.8.4
-        version: 20.8.4
+        specifier: ^20.8.8
+        version: 20.8.8
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -62,16 +62,16 @@ importers:
         version: 2.8.20
       typedoc:
         specifier: ^0.28.18
-        version: 0.28.18(typescript@5.9.3)
+        version: 0.28.18(typescript@6.0.2)
       typedoc-plugin-markdown:
         specifier: ^4.11.0
-        version: 4.11.0(typedoc@0.28.18(typescript@5.9.3))
+        version: 4.11.0(typedoc@0.28.18(typescript@6.0.2))
       vite-tsconfig-paths:
         specifier: ^6.1.1
-        version: 6.1.1(typescript@5.9.3)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3))
+        version: 6.1.1(typescript@6.0.2)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3))
       vitest:
         specifier: ^4.1.0
-        version: 4.1.0(@types/node@25.5.0)(happy-dom@20.8.4)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3))
+        version: 4.1.0(@types/node@25.5.0)(happy-dom@20.8.8)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3))
 
   apps/web:
     dependencies:
@@ -190,10 +190,10 @@ importers:
     dependencies:
       git-json-resolver:
         specifier: ^1.3.7
-        version: 1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.3)(yaml@2.8.3)
+        version: 1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.4)(yaml@2.8.3)
       git-json-resolver-semver:
         specifier: ^1.0.0
-        version: 1.0.0(git-json-resolver@1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.3)(yaml@2.8.3))
+        version: 1.0.0(git-json-resolver@1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.4)(yaml@2.8.3))
     devDependencies:
       '@turboforge/cli-kit':
         specifier: workspace:^
@@ -203,10 +203,10 @@ importers:
         version: 25.5.0
       tsup:
         specifier: latest
-        version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.3)
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(typescript@6.0.2)(yaml@2.8.3)
       typescript:
         specifier: latest
-        version: 5.9.3
+        version: 6.0.2
 
   packages/remark-typedoc-mdx:
     dependencies:
@@ -222,10 +222,10 @@ importers:
         version: 25.5.0
       tsup:
         specifier: latest
-        version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.3)
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(typescript@6.0.2)(yaml@2.8.3)
       typescript:
         specifier: latest
-        version: 5.9.3
+        version: 6.0.2
       unified:
         specifier: ^11.0.5
         version: 11.0.5
@@ -500,8 +500,8 @@ packages:
     peerDependencies:
       '@csstools/css-tokenizer': ^4.0.0
 
-  '@csstools/css-syntax-patches-for-csstree@1.1.1':
-    resolution: {integrity: sha512-BvqN0AMWNAnLk9G8jnUT77D+mUbY/H2b3uDTvg2isJkHaOufUE2R3AOwxWo7VBQKT1lOdwdvorddo2B/lk64+w==}
+  '@csstools/css-syntax-patches-for-csstree@1.1.2':
+    resolution: {integrity: sha512-5GkLzz4prTIpoyeUiIu3iV6CSG3Plo7xRVOFPKI7FVEJ3mZ0A8SwK0XU3Gl7xAkiQ+mDyam+NNp875/C5y+jSA==}
     peerDependencies:
       css-tree: ^3.2.1
     peerDependenciesMeta:
@@ -2825,8 +2825,8 @@ packages:
     engines: {node: '>=0.4.7'}
     hasBin: true
 
-  happy-dom@20.8.4:
-    resolution: {integrity: sha512-GKhjq4OQCYB4VLFBzv8mmccUadwlAusOZOI7hC1D9xDIT5HhzkJK17c4el2f6R6C715P9xB4uiMxeKUa2nHMwQ==}
+  happy-dom@20.8.8:
+    resolution: {integrity: sha512-5/F8wxkNxYtsN0bXfMwIyNLZ9WYsoOYPbmoluqVJqv8KBUbcyKZawJ7uYK4WTX8IHBLYv+VXIwfeNDPy1oKMwQ==}
     engines: {node: '>=20.0.0'}
 
   has-flag@3.0.0:
@@ -3703,6 +3703,10 @@ packages:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.4:
+    resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
+    engines: {node: '>=12'}
+
   pify@4.0.1:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
@@ -4297,6 +4301,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@6.0.2:
+    resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   uc.micro@2.1.0:
     resolution: {integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==}
 
@@ -4829,11 +4838,11 @@ snapshots:
       human-id: 4.1.3
       prettier: 2.8.8
 
-  '@commitlint/cli@20.5.0(@types/node@25.5.0)(conventional-commits-parser@6.3.0)(typescript@5.9.3)':
+  '@commitlint/cli@20.5.0(@types/node@25.5.0)(conventional-commits-parser@6.3.0)(typescript@6.0.2)':
     dependencies:
       '@commitlint/format': 20.5.0
       '@commitlint/lint': 20.5.0
-      '@commitlint/load': 20.5.0(@types/node@25.5.0)(typescript@5.9.3)
+      '@commitlint/load': 20.5.0(@types/node@25.5.0)(typescript@6.0.2)
       '@commitlint/read': 20.5.0(conventional-commits-parser@6.3.0)
       '@commitlint/types': 20.5.0
       tinyexec: 1.0.4
@@ -4882,14 +4891,14 @@ snapshots:
       '@commitlint/rules': 20.5.0
       '@commitlint/types': 20.5.0
 
-  '@commitlint/load@20.5.0(@types/node@25.5.0)(typescript@5.9.3)':
+  '@commitlint/load@20.5.0(@types/node@25.5.0)(typescript@6.0.2)':
     dependencies:
       '@commitlint/config-validator': 20.5.0
       '@commitlint/execute-rule': 20.0.0
       '@commitlint/resolve-extends': 20.5.0
       '@commitlint/types': 20.5.0
-      cosmiconfig: 9.0.1(typescript@5.9.3)
-      cosmiconfig-typescript-loader: 6.2.0(@types/node@25.5.0)(cosmiconfig@9.0.1(typescript@5.9.3))(typescript@5.9.3)
+      cosmiconfig: 9.0.1(typescript@6.0.2)
+      cosmiconfig-typescript-loader: 6.2.0(@types/node@25.5.0)(cosmiconfig@9.0.1(typescript@6.0.2))(typescript@6.0.2)
       is-plain-obj: 4.1.0
       lodash.mergewith: 4.6.2
       picocolors: 1.1.1
@@ -4973,7 +4982,7 @@ snapshots:
       '@csstools/css-tokenizer': 4.0.0
     optional: true
 
-  '@csstools/css-syntax-patches-for-csstree@1.1.1(css-tree@3.2.1)':
+  '@csstools/css-syntax-patches-for-csstree@1.1.2(css-tree@3.2.1)':
     optionalDependencies:
       css-tree: 3.2.1
     optional: true
@@ -5366,7 +5375,7 @@ snapshots:
       detect-libc: 2.1.2
       is-glob: 4.0.3
       node-addon-api: 7.1.1
-      picomatch: 4.0.3
+      picomatch: 4.0.4
     optionalDependencies:
       '@parcel/watcher-android-arm64': 2.5.6
       '@parcel/watcher-darwin-arm64': 2.5.6
@@ -6268,7 +6277,7 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@vitest/coverage-v8@4.1.0(vitest@4.1.0(@types/node@25.5.0)(happy-dom@20.8.4)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3)))':
+  '@vitest/coverage-v8@4.1.0(vitest@4.1.0(@types/node@25.5.0)(happy-dom@20.8.8)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3)))':
     dependencies:
       '@bcoe/v8-coverage': 1.0.2
       '@vitest/utils': 4.1.0
@@ -6280,7 +6289,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.0(@types/node@25.5.0)(happy-dom@20.8.4)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3))
+      vitest: 4.1.0(@types/node@25.5.0)(happy-dom@20.8.8)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3))
 
   '@vitest/expect@4.1.0':
     dependencies:
@@ -6529,10 +6538,10 @@ snapshots:
 
   commander@4.1.1: {}
 
-  commitizen@4.3.1(@types/node@25.5.0)(typescript@5.9.3):
+  commitizen@4.3.1(@types/node@25.5.0)(typescript@6.0.2):
     dependencies:
       cachedir: 2.3.0
-      cz-conventional-changelog: 3.3.0(@types/node@25.5.0)(typescript@5.9.3)
+      cz-conventional-changelog: 3.3.0(@types/node@25.5.0)(typescript@6.0.2)
       dedent: 0.7.0
       detect-indent: 6.1.0
       find-node-modules: 2.1.3
@@ -6579,21 +6588,21 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  cosmiconfig-typescript-loader@6.2.0(@types/node@25.5.0)(cosmiconfig@9.0.1(typescript@5.9.3))(typescript@5.9.3):
+  cosmiconfig-typescript-loader@6.2.0(@types/node@25.5.0)(cosmiconfig@9.0.1(typescript@6.0.2))(typescript@6.0.2):
     dependencies:
       '@types/node': 25.5.0
-      cosmiconfig: 9.0.1(typescript@5.9.3)
+      cosmiconfig: 9.0.1(typescript@6.0.2)
       jiti: 2.6.1
-      typescript: 5.9.3
+      typescript: 6.0.2
 
-  cosmiconfig@9.0.1(typescript@5.9.3):
+  cosmiconfig@9.0.1(typescript@6.0.2):
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
       js-yaml: 4.1.1
       parse-json: 5.2.0
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   crelt@1.0.6: {}
 
@@ -6614,23 +6623,23 @@ snapshots:
   cssstyle@5.3.7:
     dependencies:
       '@asamuzakjp/css-color': 4.1.2
-      '@csstools/css-syntax-patches-for-csstree': 1.1.1(css-tree@3.2.1)
+      '@csstools/css-syntax-patches-for-csstree': 1.1.2(css-tree@3.2.1)
       css-tree: 3.2.1
       lru-cache: 11.2.7
     optional: true
 
   csstype@3.2.3: {}
 
-  cz-conventional-changelog@3.3.0(@types/node@25.5.0)(typescript@5.9.3):
+  cz-conventional-changelog@3.3.0(@types/node@25.5.0)(typescript@6.0.2):
     dependencies:
       chalk: 2.4.2
-      commitizen: 4.3.1(@types/node@25.5.0)(typescript@5.9.3)
+      commitizen: 4.3.1(@types/node@25.5.0)(typescript@6.0.2)
       conventional-commit-types: 3.0.0
       lodash.map: 4.6.0
       longest: 2.0.1
       word-wrap: 1.2.5
     optionalDependencies:
-      '@commitlint/load': 20.5.0(@types/node@25.5.0)(typescript@5.9.3)
+      '@commitlint/load': 20.5.0(@types/node@25.5.0)(typescript@6.0.2)
     transitivePeerDependencies:
       - '@types/node'
       - typescript
@@ -6844,6 +6853,10 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.3
 
+  fdir@6.5.0(picomatch@4.0.4):
+    optionalDependencies:
+      picomatch: 4.0.4
+
   figures@3.2.0:
     dependencies:
       escape-string-regexp: 1.0.5
@@ -7049,15 +7062,15 @@ snapshots:
       resolve-pkg-maps: 1.0.0
     optional: true
 
-  git-json-resolver-semver@1.0.0(git-json-resolver@1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.3)(yaml@2.8.3)):
+  git-json-resolver-semver@1.0.0(git-json-resolver@1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.4)(yaml@2.8.3)):
     dependencies:
-      git-json-resolver: 1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.3)(yaml@2.8.3)
+      git-json-resolver: 1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.4)(yaml@2.8.3)
 
-  git-json-resolver@1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.3)(yaml@2.8.3):
+  git-json-resolver@1.3.7(json5@2.2.3)(micromatch@4.0.8)(picomatch@4.0.4)(yaml@2.8.3):
     optionalDependencies:
       json5: 2.2.3
       micromatch: 4.0.8
-      picomatch: 4.0.3
+      picomatch: 4.0.4
       yaml: 2.8.3
 
   git-raw-commits@5.0.1(conventional-commits-parser@6.3.0):
@@ -7123,7 +7136,7 @@ snapshots:
     optionalDependencies:
       uglify-js: 3.19.3
 
-  happy-dom@20.8.4:
+  happy-dom@20.8.8:
     dependencies:
       '@types/node': 25.5.0
       '@types/whatwg-mimetype': 3.0.2
@@ -8333,6 +8346,8 @@ snapshots:
 
   picomatch@4.0.3: {}
 
+  picomatch@4.0.4: {}
+
   pify@4.0.1: {}
 
   pirates@4.0.7: {}
@@ -8966,9 +8981,9 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  tsconfck@3.1.6(typescript@5.9.3):
+  tsconfck@3.1.6(typescript@6.0.2):
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   tslib@2.8.1: {}
 
@@ -9000,6 +9015,34 @@ snapshots:
       - tsx
       - yaml
 
+  tsup@8.5.1(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(typescript@6.0.2)(yaml@2.8.3):
+    dependencies:
+      bundle-require: 5.1.0(esbuild@0.27.4)
+      cac: 6.7.14
+      chokidar: 4.0.3
+      consola: 3.4.2
+      debug: 4.4.3
+      esbuild: 0.27.4
+      fix-dts-default-cjs-exports: 1.0.1
+      joycon: 3.1.1
+      picocolors: 1.1.1
+      postcss-load-config: 6.0.1(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(yaml@2.8.3)
+      resolve-from: 5.0.0
+      rollup: 4.60.0
+      source-map: 0.7.6
+      sucrase: 3.35.1
+      tinyexec: 0.3.2
+      tinyglobby: 0.2.15
+      tree-kill: 1.2.2
+    optionalDependencies:
+      postcss: 8.5.8
+      typescript: 6.0.2
+    transitivePeerDependencies:
+      - jiti
+      - supports-color
+      - tsx
+      - yaml
+
   tsx@4.21.0:
     dependencies:
       esbuild: 0.27.4
@@ -9019,20 +9062,22 @@ snapshots:
 
   type-fest@0.21.3: {}
 
-  typedoc-plugin-markdown@4.11.0(typedoc@0.28.18(typescript@5.9.3)):
+  typedoc-plugin-markdown@4.11.0(typedoc@0.28.18(typescript@6.0.2)):
     dependencies:
-      typedoc: 0.28.18(typescript@5.9.3)
+      typedoc: 0.28.18(typescript@6.0.2)
 
-  typedoc@0.28.18(typescript@5.9.3):
+  typedoc@0.28.18(typescript@6.0.2):
     dependencies:
       '@gerrit0/mini-shiki': 3.23.0
       lunr: 2.3.9
       markdown-it: 14.1.1
       minimatch: 10.2.4
-      typescript: 5.9.3
+      typescript: 6.0.2
       yaml: 2.8.3
 
   typescript@5.9.3: {}
+
+  typescript@6.0.2: {}
 
   uc.micro@2.1.0: {}
 
@@ -9129,11 +9174,11 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite-tsconfig-paths@6.1.1(typescript@5.9.3)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3)):
+  vite-tsconfig-paths@6.1.1(typescript@6.0.2)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3)):
     dependencies:
       debug: 4.4.3
       globrex: 0.1.2
-      tsconfck: 3.1.6(typescript@5.9.3)
+      tsconfck: 3.1.6(typescript@6.0.2)
       vite: 7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3)
     transitivePeerDependencies:
       - supports-color
@@ -9142,8 +9187,8 @@ snapshots:
   vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3):
     dependencies:
       esbuild: 0.27.4
-      fdir: 6.5.0(picomatch@4.0.3)
-      picomatch: 4.0.3
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
       postcss: 8.5.8
       rollup: 4.60.0
       tinyglobby: 0.2.15
@@ -9156,7 +9201,7 @@ snapshots:
       tsx: 4.21.0
       yaml: 2.8.3
 
-  vitest@4.1.0(@types/node@25.5.0)(happy-dom@20.8.4)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3)):
+  vitest@4.1.0(@types/node@25.5.0)(happy-dom@20.8.8)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3)):
     dependencies:
       '@vitest/expect': 4.1.0
       '@vitest/mocker': 4.1.0(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.3))
@@ -9180,7 +9225,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 25.5.0
-      happy-dom: 20.8.4
+      happy-dom: 20.8.8
       jsdom: 27.4.0
     transitivePeerDependencies:
       - msw
