@@ -3,14 +3,17 @@
   "compilerOptions": {
     "rootDir": "../../",
     "paths": {
-      "@turboforge/cli-kit": ["packages/cli-kit/src", "packages/cli-kit/dist"],
+      "@turboforge/cli-kit": [
+        "./packages/cli-kit/src",
+        "./packages/cli-kit/dist"
+      ],
       "@turboforge/remark-typedoc-mdx": [
-        "packages/remark-typedoc-mdx/src",
-        "packages/remark-typedoc-mdx/dist"
+        "./packages/remark-typedoc-mdx/src",
+        "./packages/remark-typedoc-mdx/dist"
       ],
       "@turboforge/sync": [
-        "packages/forge-sync/src",
-        "packages/forge-sync/dist"
+        "./packages/forge-sync/src",
+        "./packages/forge-sync/dist"
       ]
     }
   }

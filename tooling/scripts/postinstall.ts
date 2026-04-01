@@ -71,7 +71,7 @@ const updateCommitlint = async (scopes: string[]) => {
  */
 const updateTsPaths = async (packages: WorkspaceEntry[]) => {
   const paths = Object.fromEntries(
-    packages.map(({ name, dir }) => [name, [`${dir}/src`, `${dir}/dist`]]),
+    packages.map(({ name, dir }) => [name, [`./${dir}/src`, `./${dir}/dist`]]),
   );
 
   const updateFile = async (file: string) => {
