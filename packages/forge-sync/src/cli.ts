@@ -4,6 +4,7 @@ import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import {
   findProjectRoot,
+  isCLI,
   type LogLevel,
   resolveConfig,
 } from "@turboforge/cli-kit";
@@ -146,6 +147,6 @@ export const main = async (args: string[] = process.argv.slice(2)) => {
   await forgeSync(config);
 };
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (isCLI()) {
   main().catch(console.error);
 }

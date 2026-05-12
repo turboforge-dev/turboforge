@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { findProjectRoot, resolveConfig } from "@turboforge/cli-kit";
+import { findProjectRoot, resolveConfig, isCLI } from "@turboforge/cli-kit";
 import { 
   {{camelCase fileName}}, 
   DEFAULT_CONFIG, 
@@ -85,11 +85,6 @@ export const main = async (args: string[] = process.argv.slice(2)) => {
   await {{camelCase fileName}}(config);
 };
 
-const isCLI =
-  typeof require !== "undefined"
-    ? require.main === module
-    : fileURLToPath(import.meta.url) === process.argv[1];
-
-if (isCLI) {
+if (isCLI()) {
   main().catch(console.error);
 }

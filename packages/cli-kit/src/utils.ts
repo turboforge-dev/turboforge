@@ -1,7 +1,9 @@
 import { exec, execFile } from "node:child_process";
 import { randomUUID } from "node:crypto";
+import { realpathSync } from "node:fs";
 import { access, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, parse, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
 export { parseYaml } from "./yaml";
@@ -312,3 +314,6 @@ export const createLimiter = (concurrency: number) => {
     }
   };
 };
+
+export const isCLI = () =>
+  realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
