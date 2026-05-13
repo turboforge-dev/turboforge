@@ -7,6 +7,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
     "noEmit": true,
+    "types": ["node"],
 
     /* Module Resolution */
     "moduleResolution": "bundler",

@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "rootDir": "../../",
     "paths": {
       "@turboforge/cli-kit": [

@@ -25,7 +25,7 @@
     "icon": "Terminal",
     "description": "CLI & Config Utilities",
     "aliases": [
-      "@turbo-forge/cli-kit"
+      "@turboforge/cli-kit"
     ]
   },
   "repository": {
@@ -45,11 +45,11 @@
     "dev": "tsup --watch"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
-    "defu": "^6.1.4",
-    "jiti": "^2.6.1",
+    "@types/node": "^25.7.0",
+    "defu": "^6.1.7",
+    "jiti": "^2.7.0",
     "tsup": "^8.5.1",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.3"
   },
   "funding": [
     {
