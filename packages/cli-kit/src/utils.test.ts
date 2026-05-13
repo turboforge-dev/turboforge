@@ -106,6 +106,10 @@ describe("utils", () => {
       await Promise.all([task, task, task, task].map((t) => limiter(t)));
       expect(maxCount).toBe(2);
     });
+
+    test("should throw if concurrency < 1", () => {
+      expect(() => createLimiter(0)).toThrow("concurrency must be >= 1");
+    });
   });
 
   describe("atomicWrite", () => {
@@ -139,6 +143,25 @@ describe("utils", () => {
       vi.mocked(rename).mockRejectedValue(new Error("CRASH"));
       await expect(safeRename("a", "b")).rejects.toThrow("CRASH");
     });
+
+    test("should retry rename on EEXIST", async () => {
+      vi.mocked(access).mockResolvedValue(undefined);
+      const eexist = Object.assign(new Error("EEXIST"), { code: "EEXIST" });
+      vi.mocked(rename)
+        .mockRejectedValueOnce(eexist)
+        .mockResolvedValueOnce(undefined);
+      vi.mocked(rm).mockResolvedValue(undefined);
+      await safeRename("a", "b");
+      expect(rm).toHaveBeenCalled();
+      expect(rename).toHaveBeenCalledTimes(2);
+    });
+
+    test("should skip if source does not exist", async () => {
+      const err = Object.assign(new Error("ENOENT"), { code: "ENOENT" });
+      vi.mocked(access).mockRejectedValue(err);
+      await safeRename("missing", "dest");
+      expect(rename).not.toHaveBeenCalled();
+    });
   });
 
   describe("findUp", () => {
@@ -150,6 +173,13 @@ describe("utils", () => {
 
       const result = await findUp("a/b/c", ["marker"]);
       expect(result).toBeDefined();
+    });
+
+    test("should return null if marker not found", async () => {
+      const err = Object.assign(new Error("ENOENT"), { code: "ENOENT" });
+      vi.mocked(access).mockRejectedValue(err);
+      const result = await findUp("/", ["nonexistent"]);
+      expect(result).toBeNull();
     });
   });
 

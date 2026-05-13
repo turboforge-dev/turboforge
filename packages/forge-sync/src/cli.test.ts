@@ -9,6 +9,7 @@ import * as utils from "./utils";
 vi.mock("@turboforge/cli-kit", () => ({
   findProjectRoot: vi.fn(),
   resolveConfig: vi.fn(),
+  isCLI: vi.fn(() => false),
   LogLevel: {},
 }));
 
