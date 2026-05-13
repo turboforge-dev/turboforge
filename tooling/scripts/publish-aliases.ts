@@ -156,6 +156,7 @@ const publishAliases = async () => {
         types: undefined,
         // Cleanup forge config from alias
         forge: undefined,
+        files: undefined,
       };
 
       // 4. Generate Barrel Files & Maps
