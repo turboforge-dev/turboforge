@@ -6,7 +6,5 @@
   "version": "0.1.0",
   "root": true,
   "icon": "Terminal",
-  "pages": [
-    "v0"
-  ]
+  "pages": ["v0"]
 }

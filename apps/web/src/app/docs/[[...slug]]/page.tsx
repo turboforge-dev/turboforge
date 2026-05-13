@@ -37,7 +37,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
     }
   }
 
-  const lastSegment = params.slug?.pop() ?? "";
+  const _lastSegment = params.slug?.pop() ?? "";
 
   const MDX = page.data.body;
 

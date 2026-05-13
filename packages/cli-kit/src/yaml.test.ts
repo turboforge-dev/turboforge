@@ -50,6 +50,7 @@ packages:
       throw new Error("not found");
     });
     // Re-import to get fresh module with mocked yaml
+    // @ts-expect-error -- ok for test
     const { parseYaml: parse } = await import("./yaml?fallback");
     // Since dynamic import caching may prevent re-execution, test the fallback directly
     // by calling with content that exercises the regex path

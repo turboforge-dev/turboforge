@@ -1,4 +1,4 @@
-import { readdir, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { describe, expect, test, vi } from "vitest";
 import { getWorkspacePackages, isMonorepo } from "./workspace";
 
