@@ -3373,8 +3373,8 @@ packages:
     resolution: {integrity: sha512-Ajzxb8CM6WAnFjgiloPsI3bF+WCxcvhdIG3KNA2KN962+tdBsHcuQ4k4qX/EcS/2CRkcc0iAkR956Nib6aXU/Q==}
     engines: {node: '>=0.10.0'}
 
-  lru-cache@11.4.0:
-    resolution: {integrity: sha512-W+R+kFL4HgVxONq2bhXPi3bGpzGe/yEhVOp233qw9wCRtgncJ15P3bC+e4zZMu4Cq7d+WAJjXGW0uUkifhcatA==}
+  lru-cache@11.5.0:
+    resolution: {integrity: sha512-5YgH9UJd7wVb9hIouI2adWpgqrrICkt070Dnj8EUY1+B4B2P9eRLPAkAAo6NICA7CEhOIeBHl46u9zSNpNu7zA==}
     engines: {node: 20 || >=22}
 
   lucide-react@1.16.0:
@@ -4699,7 +4699,7 @@ snapshots:
       '@csstools/css-color-parser': 4.1.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
-      lru-cache: 11.4.0
+      lru-cache: 11.5.0
     optional: true
 
   '@asamuzakjp/dom-selector@6.8.1':
@@ -4708,7 +4708,7 @@ snapshots:
       bidi-js: 1.0.3
       css-tree: 3.2.1
       is-potential-custom-element-name: 1.0.1
-      lru-cache: 11.4.0
+      lru-cache: 11.5.0
     optional: true
 
   '@asamuzakjp/nwsapi@2.3.9':
@@ -6753,7 +6753,7 @@ snapshots:
       '@asamuzakjp/css-color': 4.1.2
       '@csstools/css-syntax-patches-for-csstree': 1.1.4(css-tree@3.2.1)
       css-tree: 3.2.1
-      lru-cache: 11.4.0
+      lru-cache: 11.5.0
     optional: true
 
   csstype@3.2.3: {}
@@ -7759,7 +7759,7 @@ snapshots:
 
   longest@2.0.1: {}
 
-  lru-cache@11.4.0:
+  lru-cache@11.5.0:
     optional: true
 
   lucide-react@1.16.0(react@19.2.6):
