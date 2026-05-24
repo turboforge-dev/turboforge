@@ -3403,8 +3403,8 @@ packages:
     resolution: {integrity: sha512-o5vL7aDWatOTX8LzaS1WMoaoxIiLRQJuIKKe2wAw6IeULDHaqbiqiggmx+pKvZDb1Sj+pE46Sn1T7lCqfFtg1Q==}
     engines: {node: '>=16'}
 
-  markdown-it@14.1.1:
-    resolution: {integrity: sha512-BuU2qnTti9YKgK5N+IeMubp14ZUKUUw7yeJbkjtosvHiP0AZ5c8IAgEMk79D0eC8F23r4Ac/q8cAIFdm2FtyoA==}
+  markdown-it@14.2.0:
+    resolution: {integrity: sha512-1TGiQiJVRQ3NPmZH6sx5Cfnmg6GQm9jvC1ch4TK511NjSJvjzKLzn5pPfZRNZkRPZP0HqCioSndqH8v2nRaWVQ==}
     hasBin: true
 
   markdown-table@3.0.4:
@@ -4286,11 +4286,11 @@ packages:
   title-case@4.3.2:
     resolution: {integrity: sha512-I/nkcBo73mO42Idfv08jhInV61IMb61OdIFxk+B4Gu1oBjWBPOLmhZdsli+oJCVaD+86pYQA93cJfFt224ZFAA==}
 
-  tldts-core@7.0.32:
-    resolution: {integrity: sha512-GbSw6chU2HsHIB/NAyBJYxXQKpcqhtgY6bvWi90OarpbuMia+Z4Gw5BYiW4hJo1DzQ/6k9coba7FU/ijcgVLLw==}
+  tldts-core@7.1.0:
+    resolution: {integrity: sha512-Ou+YJ467tR700sk2mZBB1/uFah6LDeH/VKO0N4xfjFOXE0hJkZgiOgXj16gEi1wQ4L6334UTKjxF6gum8ftZzQ==}
 
-  tldts@7.0.32:
-    resolution: {integrity: sha512-5eDV0tK2NhLAAqBeXDAQ36+EwuStd1HbsSOnGsp+JbExITnExcALLL5M1kTH8gjDYN5QvwmUWimE3GoMZ2A7xQ==}
+  tldts@7.1.0:
+    resolution: {integrity: sha512-Y+iRHtDrPOlNH9ZZpqpIogonv7jwSPHIt3Gpe+kRvYJlBaK+QGNXu+xooJY0QEmb62/ERo3GF3zCxRMbMtKEEA==}
     hasBin: true
 
   tmp@0.2.5:
@@ -7786,7 +7786,7 @@ snapshots:
 
   markdown-extensions@2.0.0: {}
 
-  markdown-it@14.1.1:
+  markdown-it@14.2.0:
     dependencies:
       argparse: 2.0.1
       entities: 4.5.0
@@ -9043,12 +9043,12 @@ snapshots:
 
   title-case@4.3.2: {}
 
-  tldts-core@7.0.32:
+  tldts-core@7.1.0:
     optional: true
 
-  tldts@7.0.32:
+  tldts@7.1.0:
     dependencies:
-      tldts-core: 7.0.32
+      tldts-core: 7.1.0
     optional: true
 
   tmp@0.2.5: {}
@@ -9059,7 +9059,7 @@ snapshots:
 
   tough-cookie@6.0.1:
     dependencies:
-      tldts: 7.0.32
+      tldts: 7.1.0
     optional: true
 
   tr46@0.0.3: {}
@@ -9138,7 +9138,7 @@ snapshots:
     dependencies:
       '@gerrit0/mini-shiki': 3.23.0
       lunr: 2.3.9
-      markdown-it: 14.1.1
+      markdown-it: 14.2.0
       minimatch: 10.2.5
       typescript: 6.0.3
       yaml: 2.9.0
