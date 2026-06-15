@@ -24,7 +24,7 @@
     "docs": "node --experimental-strip-types ./tooling/scripts/generate-api-docs.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.16",
+    "@biomejs/biome": "2.5.0",
     "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.31.0",
     "@commitlint/cli": "^21.0.2",
@@ -32,18 +32,18 @@
     "@tool/tsconfig": "workspace:*",
     "@types/envinfo": "^7.8.4",
     "@types/node": "^25.9.3",
-    "@vitest/coverage-v8": "^4.1.8",
-    "commitizen": "^4.3.1",
+    "@vitest/coverage-v8": "^4.1.9",
+    "commitizen": "^4.3.2",
     "cz-conventional-changelog": "^3.3.0",
     "envinfo": "^7.21.0",
-    "happy-dom": "^20.10.2",
+    "happy-dom": "^20.10.3",
     "husky": "^9.1.7",
     "plop": "^4.0.5",
     "turbo": "^2.9.18",
     "typedoc": "^0.28.19",
     "typedoc-plugin-markdown": "^4.12.0",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.9"
   },
   "packageManager": "pnpm@10.27.0",
   "publishConfig": {
