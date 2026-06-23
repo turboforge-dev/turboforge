@@ -24,7 +24,7 @@
     "docs": "node --experimental-strip-types ./tooling/scripts/generate-api-docs.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.0",
+    "@biomejs/biome": "2.5.1",
     "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.31.0",
     "@commitlint/cli": "^21.0.2",
