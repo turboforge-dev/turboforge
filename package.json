@@ -31,7 +31,7 @@
     "@commitlint/config-conventional": "^21.1.0",
     "@tool/tsconfig": "workspace:*",
     "@types/envinfo": "^7.8.4",
-    "@types/node": "^26.0.0",
+    "@types/node": "^26.0.1",
     "@vitest/coverage-v8": "^4.1.9",
     "commitizen": "^4.3.2",
     "cz-conventional-changelog": "^3.3.0",
