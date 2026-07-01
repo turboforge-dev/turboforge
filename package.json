@@ -24,14 +24,14 @@
     "docs": "node --experimental-strip-types ./tooling/scripts/generate-api-docs.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.1",
+    "@biomejs/biome": "2.5.2",
     "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.31.0",
     "@commitlint/cli": "^21.2.0",
     "@commitlint/config-conventional": "^21.2.0",
     "@tool/tsconfig": "workspace:*",
     "@types/envinfo": "^7.8.4",
-    "@types/node": "^26.0.1",
+    "@types/node": "^26.1.0",
     "@vitest/coverage-v8": "^4.1.9",
     "commitizen": "^4.3.2",
     "cz-conventional-changelog": "^3.3.0",
