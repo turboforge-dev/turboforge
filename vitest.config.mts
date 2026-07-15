@@ -1,9 +1,10 @@
 import { existsSync, readdirSync } from "node:fs";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [tsconfigPaths()],
+  resolve: {
+    tsconfigPaths: true,
+  },
   test: {
     // Default Environment for the whole workspace, can override per file using // @vitest-environment node as first line in any test file
     environment: "happy-dom",

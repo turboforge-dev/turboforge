@@ -4,9 +4,16 @@ packages:
   - tooling/*
   - examples/*
 
+allowBuilds:
+  esbuild: true
+  sharp: true
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
+  - esbuild
+  - sharp
 
 overrides:
   lodash@>=4.0.0 <=4.17.22: '>=4.17.23'
   tmp@<=0.2.3: '>=0.2.4'
+  typescript: "^6.0.2"
