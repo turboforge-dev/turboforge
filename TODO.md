@@ -7,6 +7,7 @@
 - [ ] Install and set up Node.js and your IDE (VSCode recommended)
 - [ ] Install the recommended VSCode extensions:
   - [Trello Kanban](https://marketplace.visualstudio.com/items?itemName=mayank1513.trello-kanban-task-board)
+  - [PromptShield](https://marketplace.visualstudio.com/items?itemName=mayank1513.promptshield)
 - [ ] Install `pnpm` using `npm i -g pnpm`
 - [ ] Install dependencies using `pnpm`
   - Run `pnpm i` to install dependencies
