@@ -60,7 +60,10 @@ const handleWorkspaceDeps = async (): Promise<void> => {
           if (!deps) continue;
 
           for (const name of Object.keys(deps)) {
-            if (deps[name].startsWith("workspace:")) {
+            if (
+              deps[name].startsWith("workspace:") &&
+              !name.startsWith("@tool/")
+            ) {
               deps[name] = "latest";
             }
           }
