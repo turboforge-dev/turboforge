@@ -46,7 +46,7 @@
     "@turboforge/cli-kit": "workspace:^",
     "@types/node": "latest",
     "tsup": "latest",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.3"
   },
   "forge": {
     "aliases": [

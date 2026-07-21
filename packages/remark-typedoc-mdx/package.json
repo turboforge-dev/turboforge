@@ -41,7 +41,7 @@
     "@types/mdast": "^4.0.4",
     "@types/node": "latest",
     "tsup": "latest",
-    "typescript": "^7.0.2",
+    "typescript": "^6.0.3",
     "unified": "^11.0.5"
   },
   "forge": {
