@@ -32,7 +32,7 @@ packages:
   test("should return empty object for non-matching content in fallback", async () => {
     const randomContent = "foo: bar\nbaz: qux";
     // Without 'yaml' package, this should return {} based on my implementation
-    const result = await parseYaml<any>(randomContent);
+    const result = await parseYaml<{ foo?: string }>(randomContent);
 
     // If 'yaml' is present, it will parse it correctly.
     // If not, it returns {}.
@@ -51,10 +51,12 @@ packages:
     });
     // Re-import to get fresh module with mocked yaml
     // @ts-expect-error -- ok for test
-    const { parseYaml: parse } = await import("./yaml?fallback");
+    const { parseYaml: parse } = (await import("./yaml?fallback")) as {
+      parseYaml: typeof parseYaml;
+    };
     // Since dynamic import caching may prevent re-execution, test the fallback directly
     // by calling with content that exercises the regex path
-    const result = await parseYaml<{ packages: string[] }>(pnpmWorkspaceYaml);
+    const result = await parse<{ packages: string[] }>(pnpmWorkspaceYaml);
     expect(result.packages).toBeDefined();
     vi.doUnmock("yaml");
   });

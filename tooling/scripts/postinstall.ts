@@ -45,6 +45,14 @@ const updateVSCodeScopes = async (scopes: string[]) => {
   await atomicWrite(file, JSON.stringify(json, null, 2));
 };
 
+type CommitlintConfig = {
+  rules?: {
+    "scope-enum"?: [number, string, string[]];
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+};
+
 /**
  * Updates commitlint scope enum rule.
  * Uses read/write instead of import mutation to avoid cache issues.
@@ -53,7 +61,7 @@ const updateCommitlint = async (scopes: string[]) => {
   const file = ".commitlintrc.json";
   if (!(await existsAsync(file))) return;
 
-  const config = await readJson<any>(file);
+  const config = await readJson<CommitlintConfig>(file);
 
   if (!config?.rules?.["scope-enum"]) return;
 
