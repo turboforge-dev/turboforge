@@ -45,11 +45,11 @@
     "dev": "tsup --watch"
   },
   "devDependencies": {
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.6.4",
     "defu": "^6.1.7",
     "jiti": "^2.7.0",
     "tsup": "^8.5.1",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
   "funding": [
     {
