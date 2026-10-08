@@ -2,7 +2,7 @@
   "name": "@turboforge/cli-kit",
   "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
   "private": false,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publishConfig": {
     "access": "public",
     "provenance": true
