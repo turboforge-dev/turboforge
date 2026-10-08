@@ -3,6 +3,10 @@
   "author": "Mayank Kumar Chaudhari <https://mayankchaudhari.com>",
   "private": false,
   "version": "1.0.1",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "description": "Low-level utilities and configuration resolution for building high-performance CLI tools in monorepos.",
   "license": "MIT",
   "main": "./dist/index.js",

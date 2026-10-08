@@ -53,10 +53,7 @@ export const DEFAULT_CONFIG: Required<ForgeSyncOptions> = {
   targetRef: "main",
   metaFile: ".forge-meta.json",
   baseRef: "",
-  postSync: [
-    "pnpm install",
-    "pnpm biome check --write --no-errors-on-unmatched $(git diff --cached --name-only --diff-filter=ACM | grep -E '\\.(ts|tsx|js|json)$' || true)",
-  ],
+  postSync: ["pnpm install", "pnpm format"],
 };
 
 const errorLogs: unknown[] = [];
@@ -193,7 +190,9 @@ export const forgeSync = async (options: ForgeSyncOptions) => {
     if (!dryRun) {
       logger.info("Running post-sync commands...");
       logger.info(postSync.join("\n"));
-      await Promise.all(postSync.map((cmd) => execAsync(cmd)));
+      for (const cmd of postSync) {
+        await execAsync(cmd);
+      }
     }
   } catch (err) {
     console.error("❌ Upgrade failed:", err);
