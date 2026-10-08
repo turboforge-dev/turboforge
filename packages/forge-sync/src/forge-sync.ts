@@ -1,4 +1,4 @@
-import { writeFile } from "node:fs/promises";
+import { rm, writeFile } from "node:fs/promises";
 import {
   createLogger,
   deepMerge,
@@ -44,7 +44,7 @@ export interface ForgeSyncOptions {
 export const DEFAULT_CONFIG: Required<ForgeSyncOptions> = {
   logLevel: "info",
   dryRun: false,
-  templateUrl: "https://github.com/turboforge/forge-template.git",
+  templateUrl: "https://github.com/turboforge-dev/turboforge.git",
   excludePaths: [],
   remoteName: "template",
   maxPatchRetries: 3,
@@ -107,7 +107,7 @@ export const forgeSync = async (options: ForgeSyncOptions) => {
   try {
     await Promise.all([
       execFileAsync("git", ["remote", "add", sanitizedRemoteName, templateUrl]),
-      execAsync(`rm -rf ${backupDir}`),
+      rm(backupDir, { recursive: true, force: true }),
     ]);
   } catch {
     logger.debug(
