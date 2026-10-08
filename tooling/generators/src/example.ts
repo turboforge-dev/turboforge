@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { PlopGeneratorConfig } from "plop";
-import { cwd, getInternalPackages, TEMPLATE_DIR } from "./utils";
+import { cwd, getInternalPackages, TEMPLATE_DIR } from "./utils.ts";
 
 export const exampleGenerator: PlopGeneratorConfig = {
   description: "Scaffold a new example app",

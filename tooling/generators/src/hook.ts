@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { ActionType, PlopGeneratorConfig } from "plop";
-import { cwd, getPackageDirs, TEMPLATE_DIR } from "./utils";
+import { cwd, getPackageDirs, TEMPLATE_DIR } from "./utils.ts";
 
 const packagesDir = path.resolve(cwd, "packages");
 

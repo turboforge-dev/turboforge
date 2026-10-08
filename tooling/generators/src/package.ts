@@ -1,7 +1,7 @@
 import { execSync } from "node:child_process";
 import path from "node:path";
 import type { ActionType, PlopGeneratorConfig } from "plop";
-import { cwd, TEMPLATE_DIR } from "./utils";
+import { cwd, TEMPLATE_DIR } from "./utils.ts";
 
 interface InquirerDataType {
   type: "ui" | "lib" | "cli";
@@ -83,11 +83,20 @@ export const packageGenerator: PlopGeneratorConfig = {
       name: "repo",
       message:
         "Enter the owner/repository for the package (e.g., 'turboforge-dev/turboforge'):",
-      default: execSync(
-        'git remote get-url --push origin | sed "s/https:\\/\\/github\\.com\\///" | sed "s/https:\\/\\/[^@]*@github\\.com\\///" | sed "s/\\.git//"',
-      )
-        .toString()
-        .trim(),
+      default: () => {
+        try {
+          const url = execSync("git remote get-url --push origin", {
+            encoding: "utf-8",
+            stdio: ["pipe", "pipe", "ignore"],
+          }).trim();
+          return url
+            .replace(/^https?:\/\/([^@]+@)?github\.com\//, "")
+            .replace(/^git@github\.com:/, "")
+            .replace(/\.git$/, "");
+        } catch {
+          return "turboforge-dev/turboforge";
+        }
+      },
     },
   ],
   actions: (data) => (data ? getActions(data as InquirerDataType) : []),
