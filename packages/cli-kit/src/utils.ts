@@ -315,5 +315,13 @@ export const createLimiter = (concurrency: number) => {
   };
 };
 
-export const isCLI = () =>
-  realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
+export const isCLI = (url?: string) => {
+  if (!process.argv[1]) return false;
+  try {
+    return (
+      realpathSync(process.argv[1]) === fileURLToPath(url || import.meta.url)
+    );
+  } catch {
+    return false;
+  }
+};

@@ -147,6 +147,6 @@ export const main = async (args: string[] = process.argv.slice(2)) => {
   await forgeSync(config);
 };
 
-if (isCLI()) {
+if (isCLI(import.meta.url)) {
   main().catch(console.error);
 }

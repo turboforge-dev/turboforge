@@ -164,14 +164,16 @@ export const getBaseCommit = async (metaFile: string) => {
   } catch {}
 
   // 2. Get first commit date and template commits in parallel
-  const [{ stdout: firstCommitDate }, { stdout: templateLog }] =
-    await Promise.all([
-      execAsync("git log --reverse --format=%ai | head -n 1", {
-        encoding: "utf8",
-      }),
-      execAsync("git log --format=%H::%ai template/main", { encoding: "utf8" }),
-    ]);
+  // Note: In Git, `-n 1` limits before reversing, so `git log -n 1 --reverse` returns the latest commit.
+  // We fetch reverse chronological log and take the first line in JavaScript to remain cross-platform (avoids piping to `head`).
+  const [{ stdout: commitLog }, { stdout: templateLog }] = await Promise.all([
+    execAsync("git log --reverse --format=%ai", {
+      encoding: "utf8",
+    }),
+    execAsync("git log --format=%H::%ai template/main", { encoding: "utf8" }),
+  ]);
 
+  const firstCommitDate = commitLog.trim().split("\n")[0];
   const firstDate = new Date(firstCommitDate.trim());
 
   // 3. Parse template commits
