@@ -189,6 +189,9 @@ importers:
       '@tool/tsconfig':
         specifier: workspace:*
         version: link:tooling/tsconfig
+      '@turboforge/sync':
+        specifier: workspace:*
+        version: link:packages/forge-sync
       '@types/envinfo':
         specifier: ^7.8.4
         version: 7.8.4
