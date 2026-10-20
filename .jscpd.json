@@ -1,0 +1,10 @@
+{
+  "ignore": [
+    "**/*.md",
+    "**/*.json",
+    "**/__tests__/**",
+    "**/*.test.*",
+    "**/tsup.config.ts",
+    "**/.changeset/**"
+  ]
+}
