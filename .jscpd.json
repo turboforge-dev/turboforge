@@ -1,7 +1,10 @@
 {
+  "gitignore": true,
   "ignore": [
     "**/*.md",
     "**/*.json",
+    "**/*.hbs",
+    "pnpm-lock.yaml",
     "**/__tests__/**",
     "**/*.test.*",
     "**/tsup.config.ts",
