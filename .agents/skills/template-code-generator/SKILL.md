@@ -49,9 +49,10 @@ pnpm gen exp
   - `lib`: Node.js utilities, algorithmic libraries, and pure logic.
   - `ui`: React UI components configured with Happy-DOM testing.
   - `cli`: Standalone CLI executable built with `@turboforge/cli-kit`.
-- **CLI Package Naming Rule**:
-  - When the package directory or name is `cli`, the core pure-function export is named `shared.ts` (and `shared.test.ts`) instead of `cli.ts` to prevent colliding with the binary entry point `cli.ts`.
-  - For all other packages, the core file matches the package name (e.g., `packages/parser/src/parser.ts`).
+- **CLI Package Conventions**:
+  - **Collision Prevention**: When the package directory or name is `cli`, the core pure-function export is named `shared.ts` (and `shared.test.ts`) instead of `cli.ts` to prevent colliding with the binary entry point `cli.ts`. For other packages, the core file matches the package name.
+  - **Multiple Bin Entry Points**: Scaffolds multiple binary aliases in `package.json` (`cli`, `scope`, and `fileName` when distinct), all pointing to `./dist/cli.mjs`.
+  - **Config Name (`configName`)**: Config file defaults to `<scope>.config.json` (or package name if not `cli`, never `cli.config.json`) with an interactive prompt for user customization.
 - **Configuration Templates**:
   - Test and build configs use ESM extensions: `vitest.config.mts.hbs` and `tsup.config.ts.hbs`.
 
