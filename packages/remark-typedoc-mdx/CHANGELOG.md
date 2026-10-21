@@ -1,5 +1,11 @@
 # remark-typedoc-mdx
 
+## 0.2.0
+
+### Minor Changes
+
+- [`d7734c0`](https://github.com/turboforge-dev/turboforge/commit/d7734c05f248702bf99e65d1bb4d206253efd876) Thanks [@mayank1513](https://github.com/mayank1513)! - Add `sanitizeMdxCurlyBraces` utility and `sanitizeCurlyBraces` plugin option to escape unquoted/unfenced curly braces in TypeDoc markdown output to prevent Next.js MDX compilation crashes.
+
 ## 0.1.1
 
 ### Patch Changes
