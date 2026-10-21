@@ -37,7 +37,9 @@
     "dist/**"
   ],
   "bin": {
-    "{{kebabCase binName}}": "./dist/cli.mjs"
+    "cli": "./dist/cli.mjs"{{#if scope}},
+    "{{kebabCase scope}}": "./dist/cli.mjs"{{/if}}{{#if hasCustomFileName}},
+    "{{kebabCase fileName}}": "./dist/cli.mjs"{{/if}}
   },
   "scripts": {
     "build": "tsup && gzip -c dist/index.js | wc -c",

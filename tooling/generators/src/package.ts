@@ -10,16 +10,40 @@ interface InquirerDataType {
   license: "MIT" | "MPL-2.0";
   fileName: string;
   pkgDir: string;
-  binName: string;
+  scope: string;
+  hasCustomFileName: boolean;
+  configName: string;
   owner: string;
   repo: string;
 }
 
 const getActions = (data: InquirerDataType) => {
-  const rawName = data.name.split("/")[1]?.trim() || data.name;
+  const parts = data.name.split("/");
+  const scope = parts.length > 1 ? parts[0]?.replace(/^@/, "").trim() : "";
+  const rawName =
+    parts.length > 1 ? parts[1]?.trim() || data.name : data.name.trim();
+
+  data.scope = scope;
   data.pkgDir = rawName;
-  data.binName = rawName;
   data.fileName = data.type === "cli" && rawName === "cli" ? "shared" : rawName;
+  data.hasCustomFileName =
+    data.fileName !== "cli" &&
+    data.fileName !== "shared" &&
+    data.fileName !== scope;
+
+  if (data.type === "cli") {
+    if (!data.configName) {
+      data.configName =
+        rawName === "cli" && scope
+          ? scope
+          : rawName !== "cli"
+            ? rawName
+            : scope || "app";
+    }
+  } else {
+    data.configName = rawName;
+  }
+
   const [owner, repo] = data.repo.split("/");
   data.owner = owner;
   data.repo = repo;
@@ -67,6 +91,22 @@ export const packageGenerator: PlopGeneratorConfig = {
       name: "name",
       message: "What is the package name? (e.g., 'utils' or 'ui-core')",
       validate: (input: string) => input.length > 0 || "Name is required",
+    },
+    {
+      type: "input",
+      name: "configName",
+      message:
+        "What is the configuration base name? (e.g., 'm2d' for m2d.config.json):",
+      when: (answers: Partial<InquirerDataType>) => answers.type === "cli",
+      default: (answers: Partial<InquirerDataType>) => {
+        const parts = answers.name?.split("/") || [];
+        const scope =
+          parts.length > 1 ? parts[0]?.replace(/^@/, "").trim() : "";
+        const raw = parts.length > 1 ? parts[1]?.trim() : answers.name?.trim();
+        if (raw === "cli" && scope) return scope;
+        if (raw && raw !== "cli") return raw;
+        return scope || "app";
+      },
     },
     {
       type: "input",
