@@ -66,7 +66,7 @@ export const main = async (args: string[] = process.argv.slice(2)) => {
 
   if (init) {
     await writeFile(
-      resolve(findProjectRoot(), configFile || "{{kebabCase binName}}.config.json"),
+      resolve(await findProjectRoot(), configFile || "{{kebabCase binName}}.config.json"),
       JSON.stringify(DEFAULT_CONFIG, null, 2),
     );
     console.log(
