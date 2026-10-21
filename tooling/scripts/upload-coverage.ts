@@ -20,9 +20,10 @@ type Pkg = {
 
 const ROOT = process.cwd();
 const PKG_CONFIG = path.join(ROOT, `${CACHE_DIR}/packages.json`);
-const token = process.env["CODECOV_TOKEN"];
+const token = process.env["CODECOV_TOKEN"]?.trim();
 const CODECOV_VERSION = "v11.3.1"; // Pinned version for reproducible, reliable CI
 const MAX_CONCURRENCY = 4; // Prevent rate-limiting / overwhelming upload endpoint
+const failCiIfError = process.env["CODECOV_FAIL_CI_IF_ERROR"] === "true";
 
 if (!token) {
   console.log(
@@ -129,7 +130,8 @@ console.log(
 );
 
 // 1. Initialize commit metadata in Codecov
-const commitArgs = ["create-commit", "-t", token, "-r", slug, "-Z"];
+const commitArgs = ["create-commit", "-t", token, "-r", slug];
+if (failCiIfError) commitArgs.push("-Z");
 if (commitSha) commitArgs.push("-C", commitSha);
 if (prNumber) commitArgs.push("-P", prNumber);
 const refName = process.env["GITHUB_REF_NAME"];
@@ -149,7 +151,8 @@ try {
 }
 
 // 2. Initialize report in Codecov
-const reportArgs = ["create-report", "-t", token, "-r", slug, "-Z"];
+const reportArgs = ["create-report", "-t", token, "-r", slug];
+if (failCiIfError) reportArgs.push("-Z");
 if (commitSha) reportArgs.push("-C", commitSha);
 if (prNumber) reportArgs.push("-P", prNumber);
 
@@ -185,8 +188,11 @@ const uploadTasks = activePackages.map((pkg) =>
       "--disable-search",
       "-r",
       slug,
-      "-Z", // Fail on error
     ];
+
+    if (failCiIfError) {
+      args.push("-Z");
+    }
 
     if (commitSha) {
       args.push("-C", commitSha);
@@ -226,10 +232,15 @@ const results = await Promise.allSettled(uploadTasks);
 const failures = results.filter((r) => r.status === "rejected");
 
 if (failures.length > 0) {
-  console.error(
-    `\n${failures.length} of ${results.length} package coverage uploads failed.`,
-  );
-  process.exit(1); // Propagate failure to CI
+  const msg = `${failures.length} of ${results.length} package coverage uploads failed.`;
+  if (failCiIfError) {
+    console.error(`\n${msg}`);
+    process.exit(1); // Propagate failure to CI
+  } else {
+    console.warn(
+      `\nWarning: ${msg}\nEnsure CODECOV_TOKEN in GitHub repository secrets is valid for ${slug} on https://app.codecov.io/gh/${slug}/settings. Continuing without failing CI.`,
+    );
+  }
 }
 
 console.log(
