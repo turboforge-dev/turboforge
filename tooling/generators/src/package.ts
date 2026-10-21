@@ -9,12 +9,17 @@ interface InquirerDataType {
   description: string;
   license: "MIT" | "MPL-2.0";
   fileName: string;
+  pkgDir: string;
+  binName: string;
   owner: string;
   repo: string;
 }
 
 const getActions = (data: InquirerDataType) => {
-  data.fileName = data.name.split("/")[1]?.trim() || data.name;
+  const rawName = data.name.split("/")[1]?.trim() || data.name;
+  data.pkgDir = rawName;
+  data.binName = rawName;
+  data.fileName = data.type === "cli" && rawName === "cli" ? "shared" : rawName;
   const [owner, repo] = data.repo.split("/");
   data.owner = owner;
   data.repo = repo;
@@ -34,7 +39,7 @@ const getActions = (data: InquirerDataType) => {
   const actions: ActionType[] = [
     {
       type: "addMany",
-      destination: path.resolve(cwd, "packages/{{kebabCase fileName}}"),
+      destination: path.resolve(cwd, "packages/{{kebabCase pkgDir}}"),
       base: `${TEMPLATE_DIR}${pkgTemplateDir}`,
       templateFiles: [`${TEMPLATE_DIR}${pkgTemplateDir}/**`],
     },

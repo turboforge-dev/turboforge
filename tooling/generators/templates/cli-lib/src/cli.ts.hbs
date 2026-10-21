@@ -47,7 +47,7 @@ export const parseArgs = (args: string[]): Partial<CliOptions> => {
 
 export const showHelp = () => {
   console.log(`
-Usage: {{kebabCase fileName}} [options]
+Usage: {{kebabCase binName}} [options]
 
 Options:
   -h, --help              Show this help message
@@ -66,17 +66,17 @@ export const main = async (args: string[] = process.argv.slice(2)) => {
 
   if (init) {
     await writeFile(
-      resolve(findProjectRoot(), configFile || "{{kebabCase fileName}}.config.json"),
+      resolve(findProjectRoot(), configFile || "{{kebabCase binName}}.config.json"),
       JSON.stringify(DEFAULT_CONFIG, null, 2),
     );
     console.log(
-      `Created default config file at ${configFile || "{{kebabCase fileName}}.config.json"}`,
+      `Created default config file at ${configFile || "{{kebabCase binName}}.config.json"}`,
     );
     return;
   }
 
   const config = await resolveConfig<CliOptions>({
-    name: "{{kebabCase fileName}}",
+    name: "{{kebabCase binName}}",
     defaults: DEFAULT_CONFIG,
     cliArgs,
     configFile,
