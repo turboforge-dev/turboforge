@@ -2,6 +2,7 @@
 import type { Blockquote, Link, Paragraph, Root, Table } from "mdast";
 import { describe, expect, it } from "vitest";
 import { remarkTypedocMdx } from "./remark-typedoc-mdx";
+import { sanitizeMdxCurlyBraces } from "./sanitize";
 import { extractText } from "./utils";
 
 describe("remarkTypedocMdx", () => {
@@ -201,5 +202,64 @@ describe("remarkTypedocMdx", () => {
 
     // [H2 Returns, H3 method, H4 Parameters, Table]
     expect(tree.children[3].type).toBe("table");
+  });
+
+  it("should sanitize unescaped curly braces in text nodes", () => {
+    const tree: Root = {
+      type: "root",
+      children: [
+        {
+          type: "paragraph",
+          children: [
+            {
+              type: "text",
+              value: '[Image: {alt || "fallback"}] and {string}',
+            },
+          ],
+        },
+      ],
+    };
+
+    // @ts-expect-error -- testing simplification
+    const transform = remarkTypedocMdx({ sanitizeCurlyBraces: true });
+    (transform as any)(tree);
+
+    const paragraph = tree.children[0] as Paragraph;
+    expect((paragraph.children[0] as any).value).toBe(
+      '[Image: \\{alt || "fallback"\\}] and \\{string\\}',
+    );
+  });
+});
+
+describe("sanitizeMdxCurlyBraces", () => {
+  it("escapes unquoted curly braces in plain text", () => {
+    const input = 'This is [Image: {alt || "fallback"}] and {string} type.';
+    const output = sanitizeMdxCurlyBraces(input);
+    expect(output).toBe(
+      'This is [Image: \\{alt || "fallback"\\}] and \\{string\\} type.',
+    );
+  });
+
+  it("preserves fenced code blocks", () => {
+    const input =
+      "Before\n```ts\nconst obj = { foo: 'bar' };\n```\nAfter {alert}";
+    const output = sanitizeMdxCurlyBraces(input);
+    expect(output).toBe(
+      "Before\n```ts\nconst obj = { foo: 'bar' };\n```\nAfter \\{alert\\}",
+    );
+  });
+
+  it("preserves inline code", () => {
+    const input = "Check `{ a: 1 }` or ``{ b: 2 }`` but escape {this}.";
+    const output = sanitizeMdxCurlyBraces(input);
+    expect(output).toBe(
+      "Check `{ a: 1 }` or ``{ b: 2 }`` but escape \\{this\\}.",
+    );
+  });
+
+  it("does not double-escape already escaped curly braces", () => {
+    const input = "Already \\{escaped\\} braces and {unescaped}";
+    const output = sanitizeMdxCurlyBraces(input);
+    expect(output).toBe("Already \\{escaped\\} braces and \\{unescaped\\}");
   });
 });

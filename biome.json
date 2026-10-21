@@ -14,7 +14,8 @@
       "!dist",
       "!build",
       "!coverage",
-      "!apps/web/content/docs"
+      "!apps/web/content/docs",
+      "!.forge-meta.json"
     ]
   },
   "formatter": {

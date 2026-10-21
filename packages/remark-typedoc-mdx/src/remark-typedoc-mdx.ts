@@ -1,4 +1,4 @@
-import type { Blockquote, Heading, Link, Paragraph, Parent } from "mdast";
+import type { Blockquote, Heading, Link, Paragraph, Parent, Text } from "mdast";
 import type { Plugin } from "unified";
 import { visit } from "unist-util-visit";
 import { convertToTable } from "./table-utils";
@@ -11,6 +11,7 @@ export interface RemarkTypedocMdxOptions {
   rewriteLinks?: boolean;
   /** @alpha */
   parametersAsTable?: boolean;
+  sanitizeCurlyBraces?: boolean;
 }
 
 // type ModuleType =
@@ -31,6 +32,7 @@ export const remarkTypedocMdx: Plugin<[RemarkTypedocMdxOptions?]> = (
     normalizeSignatures = true,
     rewriteLinks = true,
     parametersAsTable = true,
+    sanitizeCurlyBraces = true,
   } = options;
   return (tree) => {
     // let moduleType = "" as ModuleType;
@@ -87,6 +89,14 @@ export const remarkTypedocMdx: Plugin<[RemarkTypedocMdxOptions?]> = (
           if (rewriteLinks && !(node as Link).url?.startsWith("http")) {
             (node as Link).url = (node as Link).url.replace(/\.md$/, ".mdx");
           }
+          break;
+        case "text":
+          if (sanitizeCurlyBraces) {
+            (node as Text).value = (node as Text).value
+              .replace(/(?<!\\)\{/g, "\\{")
+              .replace(/(?<!\\)\}/g, "\\}");
+          }
+          break;
       }
     });
   };
