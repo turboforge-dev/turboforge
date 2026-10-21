@@ -13,7 +13,8 @@
       "!.next",
       "!dist",
       "!build",
-      "!coverage"
+      "!coverage",
+      "!apps/web/content/docs"
     ]
   },
   "formatter": {
