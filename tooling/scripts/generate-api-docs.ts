@@ -67,9 +67,9 @@ for (const pkgDir of PKG_DOC_DIRS) {
 
   // Copy reference docs
   try {
-    const cutomDocsDir = path.join(pkgPath, "docs");
-    if ((await stat(cutomDocsDir)).isDirectory()) {
-      await cp(path.join(pkgPath, "docs"), path.resolve(outDir, ".."), {
+    const customDocsDir = path.join(pkgPath, "docs");
+    if ((await stat(customDocsDir)).isDirectory()) {
+      await cp(customDocsDir, path.resolve(outDir, ".."), {
         recursive: true,
       });
     }
@@ -86,6 +86,15 @@ for (const pkgDir of PKG_DOC_DIRS) {
       .filter((dir) => /^v\d+$/.test(dir))
       .toSorted((a, b) => parseInt(b.slice(1), 10) - parseInt(a.slice(1), 10)),
   );
+
+  const versionMetaPath = path.join(outDir, "..", "meta.json");
+  let customVersionMeta: Record<string, unknown> = {};
+  try {
+    customVersionMeta =
+      (await readJson<Record<string, unknown>>(versionMetaPath)) || {};
+  } catch {
+    // No custom meta.json provided in packages/<pkg>/docs
+  }
 
   await Promise.all([
     atomicWrite(
@@ -106,11 +115,12 @@ for (const pkgDir of PKG_DOC_DIRS) {
       ),
     ),
     atomicWrite(
-      path.join(outDir, "..", "meta.json"),
+      versionMetaPath,
       JSON.stringify(
         {
           title: `Version ${pkgJson.version}`,
           description: tagLine,
+          ...customVersionMeta, // Preserves custom "pages" array, titles, and icons from packages/<pkg>/docs/meta.json
         },
         null,
         2,
