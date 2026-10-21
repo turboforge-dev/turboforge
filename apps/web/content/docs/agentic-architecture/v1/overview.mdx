@@ -1,0 +1,47 @@
+---
+title: Agentic Monorepo Architecture
+description: How Turboforge is architected from the ground up for human-AI pair programming and autonomous agent teams.
+---
+
+# Agentic Monorepo Architecture
+
+Most monorepo templates were created before AI coding agents existed. They suffer from common friction points when agents operate within them:
+- Agents write ad-hoc files without following repo-wide conventions.
+- Test cycles take minutes because full documentation apps recompile on every run.
+- Commit messages drift from commitlint specifications.
+- Agents hallucinate config names or clobber existing code.
+
+**Turboforge is designed from day zero as an agent-native monorepo operating system.**
+
+---
+
+## The Four Pillars of Agentic Monorepos
+
+```
+┌────────────────────────────────────────────────────────┐
+│               Turboforge Agentic Core                  │
+├───────────────────┬────────────────────────────────────┤
+│ 1. Rules & Guides │ AGENTS.md & .agents/rules.md       │
+│ 2. Agent Skills   │ Scaffolding, Commits, Refactoring  │
+│ 3. Working Memory │ .brain/ Scratchpads & context.md   │
+│ 4. Fast Loopback  │ Sub-5s Turbo Build Isolation       │
+└───────────────────┴────────────────────────────────────┘
+```
+
+### 1. Instant Alignment (`AGENTS.md`)
+Whether a developer uses Google Antigravity, Cursor, Windsurf, Claude Code, or GitHub Copilot, the presence of `AGENTS.md` and `.agents/rules.md` ensures every AI agent aligns with:
+- Strict Conventional Commits scopes (`@tool/scripts`, `@turboforge/...`)
+- Naming conventions (ESM `.mts` config files, barrel exports)
+- Protected files during rebranding and upstream sync
+
+### 2. Autonomous Workspace Skills
+Instead of prompting an agent to write boilerplate code from scratch, agents trigger deterministic, parameter-driven **skills**:
+- `template-code-generator`: Invokes Plop generators to scaffold packages, docs, components, and hooks.
+- `git-commit-generator`: Gathers git context and authors precise, scope-validated conventional commits.
+- `dry-refactoring`: Identifies copy-paste code clones via `jscpd` and extracts shared modules.
+
+### 3. Memory & Scratch Isolation
+Agents often generate temporary scripts, research notes, and task lists. Turboforge isolates these into `.brain/` (automatically git-ignored), keeping the production repository pristine.
+
+### 4. Lightning-Fast Agent Loopback
+Every turn an AI agent takes running `pnpm test` or `pnpm build` is bounded by runner execution time. By decoupling `@app/web` from `pnpm build`, package build cycles take **under 3 seconds**, maximizing agent throughput and minimizing developer latency.

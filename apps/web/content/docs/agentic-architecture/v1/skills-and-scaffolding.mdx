@@ -1,0 +1,44 @@
+---
+title: Skills & Template Scaffolding
+description: Driving deterministic monorepo code generation with Plop generators and Handlebars templates.
+---
+
+# Skills & Template Scaffolding
+
+AI coding assistants are prone to structural drift when asked to generate multi-file packages from scratch. They may invent idiosyncratic `tsconfig.json` configurations, place exports in unexpected paths, or misconfigure build targets.
+
+Turboforge eliminates this variability by providing **deterministic Plop generators** wrapped in the `template-code-generator` skill.
+
+---
+
+## 1. The Scaffolding Pipeline
+
+When an agent needs to add functionality, it executes `pnpm gen [type]`:
+
+| Command | Action | Key Protections |
+| :--- | :--- | :--- |
+| `pnpm gen pkg` | Scaffolds library, UI, or CLI package | Automatic barrel exports, ESM `.mts` vitest configs, CLI collision avoidance |
+| `pnpm gen docs` | Scaffolds package docs & `meta.json` | `overview` first, `api` last, no `title` property |
+| `pnpm gen rc` | Scaffolds React component | Optional `"use client"`, SCSS modules, test stubs |
+| `pnpm gen hook` | Scaffolds React hook | Proper test stub with `@testing-library/react` |
+| `pnpm gen exp` | Scaffolds example app (Vite/Next.js) | Auto-registers in `.changeset/config.json` ignore list |
+
+---
+
+## 2. Collision-Proof CLI Generation
+
+CLI packages often introduce binary name collisions when the directory is named `cli`. Turboforge's generator enforces clear separation of concerns:
+
+- **Source Logic (`shared.ts`)**: Pure functions, configuration parsers, and algorithmic helpers live in `src/shared.ts` (and `src/shared.test.ts`), easily exported for Node.js or browser use.
+- **CLI Entry Point (`cli.ts`)**: The executable binary wrapper lives in `src/cli.ts` and imports pure functions from `./shared`.
+- **Multiple Bin Entry Points**: Automatically generates aliases for `cli`, the package scope (e.g. `m2d` or `turboforge`), and the tool name.
+- **Custom Configuration**: Defaults configuration files to `<scope>.config.json` rather than `cli.config.json`.
+
+---
+
+## 3. Extending the Generator Suite
+
+Agents and developers can add new generators by following the 3-step pattern:
+1. Create Handlebars templates under `tooling/generators/templates/<name>/`.
+2. Author generator config in `tooling/generators/src/<name>.ts`.
+3. Register the generator in `tooling/generators/src/index.ts`.

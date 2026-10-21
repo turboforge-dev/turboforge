@@ -1,0 +1,8 @@
+{
+  "title": "Agentic Architecture",
+  "description": "Autonomous AI engineering standards, skills, memory patterns, and workflows.",
+  "tagLine": "AI-Agent native monorepo architecture",
+  "icon": "Bot",
+  "pages": ["v1"],
+  "root": true
+}

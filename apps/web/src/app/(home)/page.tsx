@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AgenticFeatures } from "../../components/agentic-features";
 import { DriftComparison } from "../../components/drift-comparison";
 import { Footer } from "../../components/footer";
 import { Hero } from "../../components/hero";
@@ -21,6 +22,7 @@ export default function HomePage() {
     <main className="flex flex-col flex-1 w-full bg-background text-foreground antialiased selection:bg-primary/30">
       <Hero />
       <DriftComparison />
+      <AgenticFeatures />
       <PackageGrid />
       <TechnicalPreview />
       <Footer />

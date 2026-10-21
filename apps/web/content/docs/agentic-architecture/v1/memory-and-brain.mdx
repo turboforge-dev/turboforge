@@ -1,0 +1,43 @@
+---
+title: Memory Patterns & The .brain Directory
+description: Providing persistent working memory, task lists, and scratchpad isolation for multi-turn AI coding workflows.
+---
+
+# Memory Patterns & The .brain Directory
+
+Long-running coding sessions across complex monorepos require agents to retain domain context, track multi-step task backlogs, and run one-off diagnostic scripts. Turboforge establishes standard conventions for persistent memory and workspace hygiene.
+
+---
+
+## 1. Domain Memory (`context.md`)
+
+As a project grows beyond its starter template, domain knowledge must be recorded so AI agents make informed architectural choices:
+
+- Document package dependency relationships
+- Outline project-specific data flows and caching strategies
+- Capture coding conventions specific to your product
+
+Store domain notes in `context.md` (or `.agents/context.md`). Agents read this file at the start of complex tasks to orient themselves.
+
+---
+
+## 2. Scratchpad & Working Space (`.brain/`)
+
+AI agents frequently need to generate transient artifacts:
+- Single-use inspection scripts to verify APIs or reproduce edge cases
+- Intermediate research dumps and OpenAPI JSON schemas
+- Multi-step migration checklists and verification plans
+- Raw telemetry and temporary log files
+
+Turboforge designates the `.brain/` directory for this purpose. 
+
+> [!NOTE]
+> `.brain/` is added to `.gitignore` by default. Agents can write experimental code, inspect data, and preserve session state without generating git noise or dirtying production pull requests.
+
+---
+
+## 3. Best Practices for Developers & Agents
+
+1. **Keep `.brain/` for scratch**: Never place production packages or runtime dependencies inside `.brain/`.
+2. **Commit clean code**: Once an agent verifies logic in a scratch script, migrate the final functions into the target package under `packages/` with accompanying tests.
+3. **Update `context.md` on major milestones**: Whenever a major architecture decision is settled, record a brief summary in `context.md` so subsequent agent turns retain the rationale.
