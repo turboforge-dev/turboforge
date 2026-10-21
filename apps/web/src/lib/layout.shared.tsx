@@ -8,7 +8,7 @@ export function baseOptions(): BaseLayoutProps {
     nav: {
       title: (
         <span className="font-bold flex gap-2 items-center">
-          <Image src={icon} alt="PromptShield logo" width={28} /> {name}
+          <Image src={icon} alt={`${name} logo`} width={28} /> {name}
         </span>
       ),
     },

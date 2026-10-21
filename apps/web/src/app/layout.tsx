@@ -2,6 +2,7 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata } from "next";
 import "./global.css";
 import { Inter } from "next/font/google";
+import { name } from "@/meta.json";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,36 +14,28 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
     : `https://${process.env.NEXT_PUBLIC_SITE_URL}`
   : process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : "https://promptshield.js.org";
+    : "https://turboforge.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    template: "%s | PromptShield",
-    default: "PromptShield - Adversarial Prompt Security Layer",
+    template: `%s | ${name}`,
+    default: `${name} - Production-grade TypeScript Monorepo Template`,
   },
   description:
-    "Protect your LLMs from invisible Unicode characters, BIDI overrides (Trojan Source), homoglyph attacks, and prompt smuggling.",
-  keywords: [
-    "prompt security",
-    "prompt injection defense",
-    "Unicode attack detection",
-    "invisible character detection",
-    "homoglyph attack prevention",
-    "LLM input validation",
-    "Trojan Source",
-  ],
+    "Production-grade TypeScript monorepo template powered by Turborepo, Fumadocs, and Biome.",
+  keywords: ["monorepo", "typescript", "turborepo", "fumadocs", "biome"],
   openGraph: {
     type: "website",
-    siteName: "PromptShield",
+    siteName: name,
     locale: "en_US",
-    title: "PromptShield - Adversarial Prompt Security Layer",
-    description: "Detect and sanitize adversarial prompts robustly.",
+    title: `${name} - Production-grade TypeScript Monorepo Template`,
+    description: "Production-grade TypeScript monorepo template.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "PromptShield - Adversarial Prompt Security Layer",
-    description: "Detect and sanitize adversarial prompts robustly.",
+    title: `${name} - Production-grade TypeScript Monorepo Template`,
+    description: "Production-grade TypeScript monorepo template.",
   },
 };
 
