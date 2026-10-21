@@ -2,9 +2,12 @@
   "name": "turboforge",
   "private": true,
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo build --filter=!@app/web",
+    "build:all": "turbo build",
     "build:diff": "turbo run build --filter=[...origin/main]",
+    "build:web": "turbo build --filter=@app/web",
     "clean": "turbo clean",
+    "coverage:upload": "node --experimental-strip-types ./tooling/scripts/upload-coverage.ts",
     "dev": "turbo dev",
     "debug:info": "node --experimental-strip-types ./tooling/scripts/debug-info.ts",
     "deps:update": "pnpm update -r --latest && node --experimental-strip-types ./tooling/scripts/sync-biome.ts",

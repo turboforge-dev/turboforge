@@ -10,8 +10,13 @@ import {
   stat,
 } from "node:fs/promises";
 import path from "node:path";
-import { sanitizeMdxCurlyBraces } from "../../packages/remark-typedoc-mdx/src/sanitize.ts";
-import { atomicWrite, createLimiter, readJson, safeRename } from "./utils.ts";
+import {
+  atomicWrite,
+  createLimiter,
+  readJson,
+  safeRename,
+  sanitizeMdxCurlyBraces,
+} from "./utils.ts";
 
 const limit = createLimiter(4);
 

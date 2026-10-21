@@ -44,11 +44,11 @@ for (let record of records) {
   if (!pkg) continue;
 
   const idx = filePath.indexOf(pkg.dir);
-  const relative = filePath.slice(idx + pkg.dir.length);
-  if (!relative) continue;
+  if (idx === -1) continue;
+  const repoRelative = filePath.slice(idx);
 
-  // Rewrite SF path to package-local
-  lines[sfIndex] = `SF:${relative}`;
+  // Preserve repo-relative path (e.g. packages/list/src/index.ts) with forward slashes so Codecov matches git tree
+  lines[sfIndex] = `SF:${repoRelative}`;
 
   record = `${lines.join("\n")}\n`;
 
@@ -57,10 +57,11 @@ for (let record of records) {
 }
 
 for (const [pkgDir, recs] of byPackage.entries()) {
-  const out = path.join(OUT_DIR, `${pkgDir}.lcov`);
+  const pkgBasename = path.basename(pkgDir);
+  const out = path.join(OUT_DIR, `${pkgBasename}.lcov`);
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, recs.join(""), "utf8");
-  console.log(`✓ ${pkgDir}: ${recs.length} records`);
+  console.log(`[coverage] ${pkgBasename}: ${recs.length} records -> ${out}`);
 }
 
 if (byPackage.size === 0) {

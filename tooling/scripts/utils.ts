@@ -319,3 +319,33 @@ export const prompt = async (question: string, defaultValue?: string) => {
 
   return answer || defaultValue || "";
 };
+
+/**
+ * Sanitizes unquoted and unfenced curly braces in Markdown/MDX content.
+ * Prevents Next.js SSG prerendering crashes caused by TypeDoc JSDoc curly braces.
+ */
+export const sanitizeMdxCurlyBraces = (content: string): string => {
+  const codeBlockRegex = /(```[\s\S]*?```|~~~[\s\S]*?~~~)/g;
+  const parts = content.split(codeBlockRegex);
+
+  return parts
+    .map((part, index) => {
+      if (index % 2 === 1) {
+        return part;
+      }
+      const inlineCodeRegex = /(`+[\s\S]*?`+)/g;
+      const subParts = part.split(inlineCodeRegex);
+
+      return subParts
+        .map((subPart, subIndex) => {
+          if (subIndex % 2 === 1) {
+            return subPart;
+          }
+          return subPart
+            .replace(/(?<!\\)\{/g, "\\{")
+            .replace(/(?<!\\)\}/g, "\\}");
+        })
+        .join("");
+    })
+    .join("");
+};
