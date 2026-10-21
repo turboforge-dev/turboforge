@@ -10,6 +10,7 @@ import {
   stat,
 } from "node:fs/promises";
 import path from "node:path";
+import { sanitizeMdxCurlyBraces } from "../../packages/remark-typedoc-mdx/src/sanitize.ts";
 import { atomicWrite, createLimiter, readJson, safeRename } from "./utils.ts";
 
 const limit = createLimiter(4);
@@ -161,8 +162,17 @@ const walk = async (
 };
 
 await walk(DOCS_ROOT, async (file) => {
+  let targetFile = file;
   if (file.endsWith(".md")) {
-    await safeRename(file, file.replace(/.md$/, ".mdx"));
+    targetFile = file.replace(/\.md$/, ".mdx");
+    await safeRename(file, targetFile);
+  }
+  if (targetFile.endsWith(".mdx")) {
+    const raw = await readFile(targetFile, "utf-8");
+    const sanitized = sanitizeMdxCurlyBraces(raw);
+    if (sanitized !== raw) {
+      await atomicWrite(targetFile, sanitized);
+    }
   }
 });
 
