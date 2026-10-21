@@ -23,3 +23,6 @@ tsup.config.bundled*
 
 # Turboforge artifacts
 .turboforge
+
+# Agent memory and scratchpad
+.brain
