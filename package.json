@@ -21,7 +21,6 @@
     "rebrand": "node --experimental-strip-types ./tooling/scripts/rebrand.ts",
     "release": "pnpm build && changeset publish",
     "release:aliases": "node --experimental-strip-types ./tooling/scripts/publish-aliases.ts",
-    "release:github": "node --experimental-strip-types ./tooling/scripts/create-github-releases.ts",
     "sync": "forge-sync",
     "test": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
