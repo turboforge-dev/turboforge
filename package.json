@@ -10,7 +10,7 @@
     "coverage:upload": "node --experimental-strip-types ./tooling/scripts/upload-coverage.ts",
     "dev": "turbo dev",
     "debug:info": "node --experimental-strip-types ./tooling/scripts/debug-info.ts",
-    "deps:update": "pnpm update -r --latest && node --experimental-strip-types ./tooling/scripts/sync-biome.ts",
+    "deps:update": "pnpm update -r --latest && pnpm biome migrate --write",
     "format": "biome check . --write",
     "gen": "node --experimental-strip-types ./node_modules/plop/bin/plop.js --plopfile tooling/generators/src/index.ts",
     "gen:icons": "node --experimental-strip-types ./tooling/scripts/generate-icons.ts",
