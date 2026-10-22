@@ -1,7 +1,12 @@
 import * as fs from "node:fs/promises";
 import * as cliKit from "@turboforge/cli-kit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { DEFAULT_CONFIG, type ForgeSyncOptions, forgeSync } from "./forge-sync";
+import {
+  DEFAULT_CONFIG,
+  DEFAULT_EXCLUDE_PATHS,
+  type ForgeSyncOptions,
+  forgeSync,
+} from "./forge-sync";
 import * as utils from "./utils";
 
 // Mock dependencies
@@ -28,6 +33,7 @@ vi.mock("./utils", () => ({
 
 vi.mock("node:fs/promises", () => ({
   writeFile: vi.fn(),
+  rm: vi.fn(),
 }));
 
 describe("forgeSync", () => {
@@ -40,6 +46,10 @@ describe("forgeSync", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(utils.cleanCheck).mockResolvedValue([
+      { stdout: "", stderr: "" },
+      { stdout: "", stderr: "" },
+    ]);
     vi.mocked(cliKit.createLogger).mockReturnValue(
       loggerMock as unknown as cliKit.Logger,
     );
@@ -186,5 +196,39 @@ describe("forgeSync", () => {
     );
     // Should stop early
     expect(cliKit.execFileAsync).not.toHaveBeenCalled();
+  });
+
+  it("should define required default exclusions including .commitlintrc.json", () => {
+    expect(DEFAULT_EXCLUDE_PATHS).toContain(".commitlintrc.json");
+    expect(DEFAULT_EXCLUDE_PATHS).toContain("pnpm-lock.yaml");
+    expect(DEFAULT_EXCLUDE_PATHS).toContain(".forge-meta.json");
+    expect(DEFAULT_EXCLUDE_PATHS).toContain("apps/web/public/CNAME");
+    expect(DEFAULT_EXCLUDE_PATHS).toContain("README.md");
+  });
+
+  it("should combine default exclusions with user provided exclusions", async () => {
+    vi.mocked(cliKit.deepMerge).mockReturnValue({
+      ...DEFAULT_CONFIG,
+      baseRef: "main",
+      targetRef: "main",
+      excludePaths: ["custom-file.txt"],
+    } as unknown as Required<ForgeSyncOptions>);
+
+    vi.mocked(cliKit.execFileAsync).mockResolvedValue({
+      stdout: "mock-hash",
+    } as unknown as { stdout: string; stderr: string });
+
+    await forgeSync({ baseRef: "main", excludePaths: ["custom-file.txt"] });
+
+    expect(utils.createAndApplyPatch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        exclusions: expect.arrayContaining([
+          ":!.commitlintrc.json",
+          ":!pnpm-lock.yaml",
+          ":!.forge-meta.json",
+          ":!custom-file.txt",
+        ]),
+      }),
+    );
   });
 });

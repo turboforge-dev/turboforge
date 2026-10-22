@@ -41,6 +41,26 @@ export interface ForgeSyncOptions {
   baseRef: string;
 }
 
+export const DEFAULT_EXCLUDE_PATHS: string[] = [
+  // Commit & Lint configurations (preserve downstream project rules)
+  ".commitlintrc.json",
+  // Lockfiles (must be regenerated via package manager during postSync)
+  "pnpm-lock.yaml",
+  "package-lock.json",
+  "yarn.lock",
+  "bun.lockb",
+  // Sync metadata & patch artifacts
+  ".forge-meta.json",
+  "*.patch",
+  ".template.patch",
+  ".forge-backup/**",
+  // Project identity & documentation
+  "apps/web/public/CNAME",
+  "README.md",
+  "SECURITY.md",
+  "LICENSE",
+];
+
 export const DEFAULT_CONFIG: Required<ForgeSyncOptions> = {
   logLevel: "info",
   dryRun: false,
@@ -125,8 +145,11 @@ export const forgeSync = async (options: ForgeSyncOptions) => {
     const sanitizedBaseRef = sanitizeGitRef(baseRef);
     const sanitizedTargetRef = sanitizeGitRef(targetRef);
 
-    // Build exclusion list
-    const exclusions = [...excludePaths].map((entry) => `:!${entry}`);
+    // Build exclusion list (combining defaults with user exclusions)
+    const combinedExcludes = Array.from(
+      new Set([...DEFAULT_EXCLUDE_PATHS, ...excludePaths]),
+    );
+    const exclusions = combinedExcludes.map((entry) => `:!${entry}`);
     logger.debug(`Base exclusions: ${exclusions.length} items`);
 
     // Generate patch
@@ -143,8 +166,8 @@ export const forgeSync = async (options: ForgeSyncOptions) => {
           sanitizedBaseRef,
           `${sanitizedRemoteName}/${sanitizedTargetRef}`,
           "--",
-          ...exclusions,
           ".",
+          ...exclusions,
         ],
         { encoding: "utf8" },
       );
