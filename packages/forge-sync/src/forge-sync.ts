@@ -23,6 +23,8 @@ export interface ForgeSyncOptions {
   templateUrl?: string;
   /** Additional paths to exclude from upgrade */
   excludePaths?: string[];
+  /** Exclude template internal packages and their docs from upgrade @default true */
+  excludeTemplatePackages?: boolean;
   /** Commands to run after upgrade */
   postSync?: string[];
   /** Remote name for template @default "template" */
@@ -66,6 +68,7 @@ export const DEFAULT_CONFIG: Required<ForgeSyncOptions> = {
   dryRun: false,
   templateUrl: "https://github.com/turboforge-dev/turboforge.git",
   excludePaths: [],
+  excludeTemplatePackages: true,
   remoteName: "template",
   maxPatchRetries: 3,
   backupDir: ".forge-backup",
@@ -87,6 +90,7 @@ export const forgeSync = async (options: ForgeSyncOptions) => {
     backupDir,
     baseRef,
     excludePaths,
+    excludeTemplatePackages,
     targetRef,
     metaFile,
     postSync,
@@ -145,9 +149,15 @@ export const forgeSync = async (options: ForgeSyncOptions) => {
     const sanitizedBaseRef = sanitizeGitRef(baseRef);
     const sanitizedTargetRef = sanitizeGitRef(targetRef);
 
-    // Build exclusion list (combining defaults with user exclusions)
+    // Build exclusion list (combining defaults, template packages, and user exclusions)
     const combinedExcludes = Array.from(
-      new Set([...DEFAULT_EXCLUDE_PATHS, ...excludePaths]),
+      new Set([
+        ...DEFAULT_EXCLUDE_PATHS,
+        ...(excludeTemplatePackages
+          ? ["packages/**", "apps/web/content/docs/**"]
+          : []),
+        ...excludePaths,
+      ]),
     );
     const exclusions = combinedExcludes.map((entry) => `:!${entry}`);
     logger.debug(`Base exclusions: ${exclusions.length} items`);

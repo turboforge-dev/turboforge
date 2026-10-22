@@ -37,6 +37,13 @@ export const parseArgs = (args: string[]): Partial<CliOptions> => {
       case "--exclude":
         options.excludePaths = args[++i]?.split(",") || [];
         break;
+      case "--exclude-template-packages":
+        options.excludeTemplatePackages = true;
+        break;
+      case "--no-exclude-template-packages":
+      case "--include-template-packages":
+        options.excludeTemplatePackages = false;
+        break;
       case "--post-sync":
         options.postSync = args[++i]?.split(",") || [];
         break;
@@ -92,6 +99,7 @@ Options:
   --dry-run               Show what would be changed without applying
   --template-url <url>    Custom template repository URL
   --exclude <paths>       Comma-separated paths to exclude from upgrade
+  --no-exclude-template-packages  Do not exclude template packages/ and docs from sync
   --post-sync <cmds>      Comma-separated commands to run after sync
   --remote-name <name>    Custom remote name for template (default: template)
   --max-retries <num>     Maximum patch retry attempts (default: 3)

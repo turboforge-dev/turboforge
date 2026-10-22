@@ -226,8 +226,32 @@ describe("forgeSync", () => {
           ":!.commitlintrc.json",
           ":!pnpm-lock.yaml",
           ":!.forge-meta.json",
+          ":!packages/**",
+          ":!apps/web/content/docs/**",
           ":!custom-file.txt",
         ]),
+      }),
+    );
+  });
+
+  it("should not exclude template packages when excludeTemplatePackages is false", async () => {
+    vi.mocked(cliKit.deepMerge).mockReturnValue({
+      ...DEFAULT_CONFIG,
+      baseRef: "main",
+      targetRef: "main",
+      excludeTemplatePackages: false,
+      excludePaths: [],
+    } as unknown as Required<ForgeSyncOptions>);
+
+    vi.mocked(cliKit.execFileAsync).mockResolvedValue({
+      stdout: "mock-hash",
+    } as unknown as { stdout: string; stderr: string });
+
+    await forgeSync({ baseRef: "main", excludeTemplatePackages: false });
+
+    expect(utils.createAndApplyPatch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        exclusions: expect.not.arrayContaining([":!packages/**"]),
       }),
     );
   });

@@ -42,12 +42,28 @@ describe("cli-main", () => {
 
   describe("parseArgs", () => {
     it("should parse boolean flags", () => {
-      const args = ["--dry-run", "--skip-clean-check", "--init", "--help"];
+      const args = [
+        "--dry-run",
+        "--skip-clean-check",
+        "--init",
+        "--help",
+        "--exclude-template-packages",
+      ];
       const opts = parseArgs(args);
       expect(opts.dryRun).toBe(true);
       expect(opts.skipCleanCheck).toBe(true);
       expect(opts.init).toBe(true);
       expect(opts.help).toBe(true);
+      expect(opts.excludeTemplatePackages).toBe(true);
+    });
+
+    it("should parse --no-exclude-template-packages and --include-template-packages", () => {
+      expect(
+        parseArgs(["--no-exclude-template-packages"]).excludeTemplatePackages,
+      ).toBe(false);
+      expect(
+        parseArgs(["--include-template-packages"]).excludeTemplatePackages,
+      ).toBe(false);
     });
 
     it("should parse value flags", () => {
