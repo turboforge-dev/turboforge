@@ -40,9 +40,9 @@ jobs:
         id: changesets
         uses: changesets/action@v2
         with:
-          publish: pnpm release
-          commit: "chore: update versions"
-          title: "chore: update versions"
+          publish-script: pnpm release
+          commit-message: "chore: update versions"
+          pr-title: "chore: update versions"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
