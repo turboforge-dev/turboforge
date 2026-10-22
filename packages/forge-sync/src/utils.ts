@@ -67,13 +67,13 @@ export const createAndApplyPatch = async (
     return;
   }
 
-  const diffCmd = `git diff ${baseRef} ${remoteName}/main -- ${exclusions.join(
+  const diffCmd = `git diff ${baseRef} ${remoteName}/${targetRef} -- . ${exclusions.join(
     " ",
-  )} .`;
+  )}`;
   logger.debug(`Running: ${diffCmd}`);
   const { stdout: patch } = await execFileAsync(
     "git",
-    ["diff", baseRef, `${remoteName}/${targetRef}`, "--", ...exclusions, "."],
+    ["diff", baseRef, `${remoteName}/${targetRef}`, "--", ".", ...exclusions],
     { encoding: "utf8" },
   );
   await writeFile(".template.patch", patch);

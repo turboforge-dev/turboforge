@@ -117,7 +117,7 @@ describe("utils", () => {
         remoteName: "origin",
         baseRef: "base",
         targetRef: "target",
-        exclusions: [],
+        exclusions: [":!foo"],
         logger: mockLogger as unknown as cliKit.Logger,
         maxRetries: 3,
         errorLogs: [],
@@ -125,7 +125,7 @@ describe("utils", () => {
 
       expect(cliKit.execFileAsync).toHaveBeenCalledWith(
         "git",
-        expect.arrayContaining(["diff", "base", "origin/target"]),
+        ["diff", "base", "origin/target", "--", ".", ":!foo"],
         expect.anything(),
       );
       expect(fs.writeFile).toHaveBeenCalledWith(
