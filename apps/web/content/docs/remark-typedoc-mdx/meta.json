@@ -2,7 +2,7 @@
   "title": "@turboforge/remark-typedoc-mdx",
   "description": "TypeDoc to MDX Plugin",
   "tagLine": "Remark plugin to transform and sanitize TypeDoc generated markdown for seamless MDX integration.",
-  "lastModified": "2026-10-22T14:50:16.683Z",
+  "lastModified": "2026-10-22T15:42:47.277Z",
   "version": "0.2.0",
   "root": true,
   "icon": "Terminal",

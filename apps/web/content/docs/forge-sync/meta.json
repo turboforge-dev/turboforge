@@ -2,8 +2,8 @@
   "title": "@turboforge/sync",
   "description": "Monorepo Sync Engine",
   "tagLine": "The authoritative synchronization engine for Turboforge monorepos to align tooling, configurations, and dependencies with upstream templates.",
-  "lastModified": "2026-10-22T14:50:15.382Z",
-  "version": "0.1.0",
+  "lastModified": "2026-10-22T15:42:45.661Z",
+  "version": "0.1.1",
   "root": true,
   "icon": "Terminal",
   "pages": [

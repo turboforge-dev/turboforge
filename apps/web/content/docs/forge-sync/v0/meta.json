@@ -1,5 +1,5 @@
 {
-  "title": "Version 0.1.0",
+  "title": "Version 0.1.1",
   "description": "The authoritative synchronization engine for Turboforge monorepos to align tooling, configurations, and dependencies with upstream templates.",
   "pages": [
     "overview",

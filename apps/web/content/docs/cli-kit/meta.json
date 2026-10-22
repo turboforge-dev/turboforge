@@ -2,7 +2,7 @@
   "title": "@turboforge/cli-kit",
   "description": "CLI & Config Utilities",
   "tagLine": "Low-level utilities and configuration resolution for building high-performance CLI tools in monorepos.",
-  "lastModified": "2026-10-22T14:50:14.070Z",
+  "lastModified": "2026-10-22T15:42:43.989Z",
   "version": "1.0.2",
   "root": true,
   "icon": "Terminal",
