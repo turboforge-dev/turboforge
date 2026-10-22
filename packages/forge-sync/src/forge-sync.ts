@@ -59,6 +59,7 @@ export const DEFAULT_EXCLUDE_PATHS: string[] = [
   ".forge-backup/**",
   // Project identity & documentation
   "apps/web/public/CNAME",
+  "apps/web/src/app/(home)/**",
   "README.md",
   "SECURITY.md",
   "LICENSE",
