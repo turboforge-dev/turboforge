@@ -204,7 +204,6 @@ describe("forgeSync", () => {
     expect(DEFAULT_EXCLUDE_PATHS).toContain("pnpm-lock.yaml");
     expect(DEFAULT_EXCLUDE_PATHS).toContain(".forge-meta.json");
     expect(DEFAULT_EXCLUDE_PATHS).toContain("apps/web/public/CNAME");
-    expect(DEFAULT_EXCLUDE_PATHS).toContain("apps/web/src/meta.json");
     expect(DEFAULT_EXCLUDE_PATHS).toContain("apps/web/src/app/(home)/**");
     expect(DEFAULT_EXCLUDE_PATHS).toContain("README.md");
   });

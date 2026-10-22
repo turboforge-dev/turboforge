@@ -169,6 +169,49 @@ export const resolvePackageJSONConflicts = async (debug: boolean) => {
   } catch {
     // Ignore if .changeset/config.json is absent or has no conflicts
   }
+
+  // Automatically preserve consumer package path mappings in tsconfig.json and tsconfig.build.json
+  try {
+    await resolveConflicts({
+      include: ["tsconfig.json", "tsconfig.build.json"],
+      defaultStrategy: ["merge", "theirs"],
+      rules: {
+        "compilerOptions.paths": ["ours"],
+      },
+      debug,
+    });
+  } catch {
+    // Ignore if tsconfigs are absent or have no conflicts
+  }
+
+  // Automatically resolve pnpm-workspace.yaml conflicts
+  try {
+    await resolveConflicts({
+      include: ["pnpm-workspace.yaml"],
+      defaultStrategy: ["merge", "theirs"],
+      rules: {
+        onlyBuiltDependencies: ["unique", "theirs"],
+        packages: ["unique", "ours"],
+      },
+      debug,
+    });
+  } catch {
+    // Ignore if pnpm-workspace.yaml is absent or has no conflicts
+  }
+
+  // Automatically resolve turbo.json conflicts
+  try {
+    await resolveConflicts({
+      include: ["turbo.json"],
+      defaultStrategy: ["merge", "theirs"],
+      rules: {
+        "tasks.*": ["merge", "ours"],
+      },
+      debug,
+    });
+  } catch {
+    // Ignore if turbo.json is absent or has no conflicts
+  }
 };
 
 export const findConflictedFiles = async (): Promise<string[]> => {
