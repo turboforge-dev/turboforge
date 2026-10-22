@@ -47,18 +47,11 @@ jobs:
           publish-script: pnpm release
           commit-message: "chore: update versions"
           pr-title: "chore: update versions"
+          create-github-releases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-
-      # New: Create GitHub Releases for each published package
-      - name: Create GitHub Releases
-        if: steps.changesets.outputs.published == 'true'
-        run: pnpm release:github
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish Aliases
         if: steps.changesets.outputs.published == 'true'
