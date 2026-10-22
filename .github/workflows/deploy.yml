@@ -32,7 +32,7 @@ jobs:
         run: |
           cd apps/web && pnpm next telemetry disable && cd ../..
           pnpm turbo telemetry disable
-          pnpm build --filter @app/web
+          pnpm build:web
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
