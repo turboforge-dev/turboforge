@@ -15,7 +15,7 @@ import {
   createLimiter,
   readJson,
   safeRename,
-  sanitizeMdxCurlyBraces,
+  sanitizeMdx,
 } from "./utils.ts";
 
 const limit = createLimiter(4);
@@ -172,9 +172,14 @@ await walk(DOCS_ROOT, async (file) => {
     targetFile = file.replace(/\.md$/, ".mdx");
     await safeRename(file, targetFile);
   }
-  if (targetFile.endsWith(".mdx")) {
+  // Sanitize only handwritten documentation (overview and custom reference docs outside api/)
+  if (
+    targetFile.endsWith(".mdx") &&
+    !targetFile.includes(`${path.sep}api${path.sep}`) &&
+    !targetFile.includes("/api/")
+  ) {
     const raw = await readFile(targetFile, "utf-8");
-    const sanitized = sanitizeMdxCurlyBraces(raw);
+    const sanitized = sanitizeMdx(raw);
     if (sanitized !== raw) {
       await atomicWrite(targetFile, sanitized);
     }
