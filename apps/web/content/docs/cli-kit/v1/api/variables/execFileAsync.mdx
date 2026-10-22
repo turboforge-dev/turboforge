@@ -1,14 +1,14 @@
-[**@turboforge/cli-kit**](../index.md)
+[**@turboforge/cli-kit**](../index.mdx)
 
 ***
 
-[@turboforge/cli-kit](../index.md) / execFileAsync
+[@turboforge/cli-kit](../index.mdx) / execFileAsync
 
 # Variable: execFileAsync
 
 > `const` **execFileAsync**: \{(`file`): `PromiseWithChild`\<\{ `stderr`: `string`; `stdout`: `string`; \}\>; (`file`, `args`): `PromiseWithChild`\<\{ `stderr`: `string`; `stdout`: `string`; \}\>; (`file`, `options`): `PromiseWithChild`\<\{ `stderr`: `NonSharedBuffer`; `stdout`: `NonSharedBuffer`; \}\>; (`file`, `args`, `options`): `PromiseWithChild`\<\{ `stderr`: `NonSharedBuffer`; `stdout`: `NonSharedBuffer`; \}\>; (`file`, `options`): `PromiseWithChild`\<\{ `stderr`: `string`; `stdout`: `string`; \}\>; (`file`, `args`, `options`): `PromiseWithChild`\<\{ `stderr`: `string`; `stdout`: `string`; \}\>; (`file`, `options`): `PromiseWithChild`\<\{ `stderr`: `string` \| `NonSharedBuffer`; `stdout`: `string` \| `NonSharedBuffer`; \}\>; (`file`, `args`, `options`): `PromiseWithChild`\<\{ `stderr`: `string` \| `NonSharedBuffer`; `stdout`: `string` \| `NonSharedBuffer`; \}\>; \}
 
-Defined in: [packages/cli-kit/src/utils.ts:26](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/utils.ts#L26)
+Defined in: [packages/cli-kit/src/utils.ts:28](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/utils.ts#L28)
 
 Promisified version of `child_process.execFile`.
 Executes an executable directly without spawning a shell.
@@ -167,9 +167,13 @@ readonly `string`[] \| `null` \| `undefined`
 
 ## Param
 
+**file**
+
 Path to executable.
 
 ## Param
+
+**args**
 
 CLI arguments.
 

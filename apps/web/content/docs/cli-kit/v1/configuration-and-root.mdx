@@ -1,0 +1,105 @@
+---
+title: Configuration & Root Detection
+description: Deep dive into project root resolution, multi-tier config loading, and monorepo primitives.
+---
+
+# Configuration & Root Detection
+
+Building CLI tools in a monorepo introduces unique challenges: developers execute commands from subpackages, monorepo roots, or nested subdirectories. `@turboforge/cli-kit` provides battle-tested primitives to resolve project context consistently.
+
+---
+
+## 1. Finding the Project Root
+
+Traditional CLIs often assume `process.cwd()` is the project root. In a monorepo, a developer might run a CLI from `packages/ui` or `apps/web`.
+
+`findProjectRoot` searches upward from the current working directory for monorepo markers (`pnpm-workspace.yaml`, `.git`, or `turbo.json`):
+
+```typescript
+import { findProjectRoot } from "@turboforge/cli-kit";
+
+// Finds root asynchronously with upward directory traversal
+const root = await findProjectRoot();
+console.log(`Repository root is located at: ${root}`);
+```
+
+---
+
+## 2. Multi-Tier Configuration Resolution
+
+`resolveConfig` provides a hierarchical configuration loader. It inspects configuration sources in descending order of precedence:
+
+1. **Explicit CLI flags** (e.g. `--config custom.config.json` or `--port 3000`)
+2. **Dedicated config files** in the project root:
+   - `<name>.config.json`
+   - `<name>.config.js` / `<name>.config.mjs`
+   - `<name>.config.ts`
+3. **`package.json` section** under the tool's namespace key (e.g. `"my-tool": { ... }`)
+4. **Programmatic defaults** supplied in code
+
+```typescript
+import { resolveConfig } from "@turboforge/cli-kit";
+
+interface ToolConfig {
+  outputDir: string;
+  verbose: boolean;
+  port: number;
+}
+
+const DEFAULT_CONFIG: ToolConfig = {
+  outputDir: "dist",
+  verbose: false,
+  port: 8080,
+};
+
+export const run = async (cliArgs: Partial<ToolConfig>) => {
+  const config = await resolveConfig<ToolConfig>({
+    name: "my-tool",
+    defaults: DEFAULT_CONFIG,
+    cliArgs,
+  });
+
+  console.log(`Running with resolved output: ${config.outputDir}`);
+};
+```
+
+---
+
+## 3. Execution Environment (`isCLI`)
+
+When authoring dual-purpose modules that can be imported programmatically or run directly as an executable, use `isCLI`:
+
+```typescript
+import { isCLI } from "@turboforge/cli-kit";
+
+export const main = async () => {
+  // Logic
+};
+
+// Only execute automatically when invoked directly from the terminal
+if (isCLI()) {
+  main().catch(console.error);
+}
+```
+
+---
+
+## 4. Concurrency Limiter & Safe Filesystem Operations
+
+`@turboforge/cli-kit` includes utilities for heavy parallel workloads:
+
+```typescript
+import { createLimiter, atomicWrite, readJson } from "@turboforge/cli-kit";
+
+// Limit concurrent API or disk operations to 4
+const limit = createLimiter(4);
+
+await Promise.all(
+  items.map((item) =>
+    limit(async () => {
+      // Guaranteed safe atomic file update via temp-file + rename
+      await atomicWrite(`output/${item.id}.json`, JSON.stringify(item));
+    }),
+  ),
+);
+```

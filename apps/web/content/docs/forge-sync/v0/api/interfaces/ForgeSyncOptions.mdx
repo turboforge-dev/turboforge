@@ -1,12 +1,12 @@
-[**@turboforge/sync**](../index.md)
+[**@turboforge/sync**](../index.mdx)
 
 ***
 
-[@turboforge/sync](../index.md) / ForgeSyncOptions
+[@turboforge/sync](../index.mdx) / ForgeSyncOptions
 
 # Interface: ForgeSyncOptions
 
-Defined in: [forge-sync.ts:18](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L18)
+Defined in: [forge-sync.ts:19](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L19)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [forge-sync.ts:18](https://github.com/turboforge-dev/turboforge/blob
 
 > `optional` **backupDir?**: `string`
 
-Defined in: [forge-sync.ts:33](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L33)
+Defined in: [forge-sync.ts:36](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L36)
 
 Custom backup directory
 
@@ -24,7 +24,7 @@ Custom backup directory
 
 > **baseRef**: `string`
 
-Defined in: [forge-sync.ts:41](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L41)
+Defined in: [forge-sync.ts:44](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L44)
 
 Base commit hash, tag, or branch
 
@@ -40,7 +40,7 @@ Base commit hash, tag, or branch
 
 > `optional` **dryRun?**: `boolean`
 
-Defined in: [forge-sync.ts:21](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L21)
+Defined in: [forge-sync.ts:22](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L22)
 
 Show what would be changed without applying
 
@@ -50,9 +50,25 @@ Show what would be changed without applying
 
 > `optional` **excludePaths?**: `string`[]
 
-Defined in: [forge-sync.ts:25](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L25)
+Defined in: [forge-sync.ts:26](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L26)
 
 Additional paths to exclude from upgrade
+
+***
+
+### excludeTemplatePackages?
+
+> `optional` **excludeTemplatePackages?**: `boolean`
+
+Defined in: [forge-sync.ts:28](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L28)
+
+Exclude template internal packages and their docs from upgrade
+
+#### Default
+
+```ts
+true
+```
 
 ***
 
@@ -60,7 +76,7 @@ Additional paths to exclude from upgrade
 
 > `optional` **logLevel?**: `LogLevel`
 
-Defined in: [forge-sync.ts:19](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L19)
+Defined in: [forge-sync.ts:20](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L20)
 
 ***
 
@@ -68,7 +84,7 @@ Defined in: [forge-sync.ts:19](https://github.com/turboforge-dev/turboforge/blob
 
 > `optional` **maxPatchRetries?**: `number`
 
-Defined in: [forge-sync.ts:31](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L31)
+Defined in: [forge-sync.ts:34](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L34)
 
 Maximum patch recursion attempts
 
@@ -78,7 +94,7 @@ Maximum patch recursion attempts
 
 > `optional` **metaFile?**: `string`
 
-Defined in: [forge-sync.ts:39](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L39)
+Defined in: [forge-sync.ts:42](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L42)
 
 Meta file to store template commit hash, etc.
 
@@ -88,7 +104,7 @@ Meta file to store template commit hash, etc.
 
 > `optional` **postSync?**: `string`[]
 
-Defined in: [forge-sync.ts:27](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L27)
+Defined in: [forge-sync.ts:30](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L30)
 
 Commands to run after upgrade
 
@@ -98,7 +114,7 @@ Commands to run after upgrade
 
 > `optional` **remoteName?**: `string`
 
-Defined in: [forge-sync.ts:29](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L29)
+Defined in: [forge-sync.ts:32](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L32)
 
 Remote name for template
 
@@ -114,7 +130,7 @@ Remote name for template
 
 > `optional` **skipCleanCheck?**: `boolean`
 
-Defined in: [forge-sync.ts:35](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L35)
+Defined in: [forge-sync.ts:38](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L38)
 
 Skip git tree clean check
 
@@ -124,7 +140,7 @@ Skip git tree clean check
 
 > `optional` **targetRef?**: `string`
 
-Defined in: [forge-sync.ts:37](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L37)
+Defined in: [forge-sync.ts:40](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L40)
 
 Specific commit hash, tag, or branch
 
@@ -140,6 +156,6 @@ Specific commit hash, tag, or branch
 
 > `optional` **templateUrl?**: `string`
 
-Defined in: [forge-sync.ts:23](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L23)
+Defined in: [forge-sync.ts:24](https://github.com/turboforge-dev/turboforge/blob/main/packages/forge-sync/src/forge-sync.ts#L24)
 
 Custom template repository URL

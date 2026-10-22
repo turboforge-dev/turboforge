@@ -1,14 +1,14 @@
-[**@turboforge/cli-kit**](../index.md)
+[**@turboforge/cli-kit**](../index.mdx)
 
 ***
 
-[@turboforge/cli-kit](../index.md) / execAsync
+[@turboforge/cli-kit](../index.mdx) / execAsync
 
 # Variable: execAsync
 
 > `const` **execAsync**: \{(`command`): `PromiseWithChild`\<\{ `stderr`: `string`; `stdout`: `string`; \}\>; (`command`, `options`): `PromiseWithChild`\<\{ `stderr`: `NonSharedBuffer`; `stdout`: `NonSharedBuffer`; \}\>; (`command`, `options`): `PromiseWithChild`\<\{ `stderr`: `string`; `stdout`: `string`; \}\>; (`command`, `options`): `PromiseWithChild`\<\{ `stderr`: `string` \| `NonSharedBuffer`; `stdout`: `string` \| `NonSharedBuffer`; \}\>; \}
 
-Defined in: [packages/cli-kit/src/utils.ts:16](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/utils.ts#L16)
+Defined in: [packages/cli-kit/src/utils.ts:18](https://github.com/turboforge-dev/turboforge/blob/main/packages/cli-kit/src/utils.ts#L18)
 
 Promisified version of `child_process.exec`.
 Executes a command in a shell and buffers the output.
@@ -82,6 +82,8 @@ Executes a command in a shell and buffers the output.
 `PromiseWithChild`\<\{ `stderr`: `string` \| `NonSharedBuffer`; `stdout`: `string` \| `NonSharedBuffer`; \}\>
 
 ## Param
+
+**command**
 
 The shell command to execute.
 

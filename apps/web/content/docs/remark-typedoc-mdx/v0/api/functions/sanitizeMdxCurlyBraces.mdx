@@ -1,0 +1,32 @@
+[**@turboforge/remark-typedoc-mdx**](../index.mdx)
+
+***
+
+[@turboforge/remark-typedoc-mdx](../index.mdx) / sanitizeMdxCurlyBraces
+
+# Function: sanitizeMdxCurlyBraces()
+
+> **sanitizeMdxCurlyBraces**(`content`): `string`
+
+Defined in: [sanitize.ts:13](https://github.com/turboforge-dev/turboforge/blob/main/packages/remark-typedoc-mdx/src/sanitize.ts#L13)
+
+Sanitizes unquoted and unfenced curly braces in Markdown/MDX content.
+
+In MDX, unquoted curly braces (e.g. `{alt || "fallback"}` from TypeDoc JSDoc comments)
+are treated as live JavaScript expressions by the MDX compiler. When undeclared variables
+are encountered during Next.js SSG prerendering, it throws ReferenceError and halts the build.
+
+This function escapes unescaped `{` and `}` in plain text while strictly preserving:
+1. Fenced code blocks (``` ... ``` and ~~~ ... ~~~)
+2. Inline code spans (` ... ` and `` ... ``)
+3. Pre-existing escaped curly braces (\{ and \})
+
+## Parameters
+
+### content
+
+`string`
+
+## Returns
+
+`string`

@@ -1,0 +1,73 @@
+---
+title: MDX Sanitization & AST Transformation
+description: Transforming TypeDoc markdown into Next.js SSG-safe MDX with syntax tree restructuring and brace escaping.
+---
+
+# MDX Sanitization & AST Transformation
+
+TypeDoc generates standard markdown documentation from TypeScript source code. However, rendering raw TypeDoc markdown inside modern React documentation frameworks (like Fumadocs or Next.js MDX) frequently leads to compiler crashes.
+
+`@turboforge/remark-typedoc-mdx` bridges this gap with AST-level AST transformations and runtime sanitization.
+
+---
+
+## 1. The Curly Brace Syntax Problem
+
+In JSDoc comments, developers frequently write unescaped curly braces for object types, templates, or descriptions:
+
+```typescript
+/**
+ * Renders an image with fallback alt text.
+ * Example: [Image: {alt || "default"}]
+ * Returns { status: 200, data: { count: number } }
+ */
+export function renderImage() { ... }
+```
+
+When TypeDoc converts this to Markdown, it leaves `{...}` outside of code blocks. During Next.js Static Site Generation (SSG), the MDX compiler interprets unquoted/unfenced curly braces as **live JavaScript expressions**, immediately crashing with:
+
+```text
+ReferenceError: alt is not defined
+ReferenceError: status is not defined
+```
+
+---
+
+## 2. Robust Curly Brace Sanitization
+
+`sanitizeMdxCurlyBraces` parses text and escapes unquoted curly braces outside of code blocks, while strictly preserving:
+- Fenced code blocks (```` ```ts ... ``` ````)
+- Inline backtick code snippets (`` `{foo}` ``)
+- Mathematical expressions and LaTeX ($...$)
+- Escaped JSX components
+
+```typescript
+import { sanitizeMdxCurlyBraces } from "@turboforge/remark-typedoc-mdx";
+
+const rawMarkdown = "Returns { count: 10 } for `process({ id })`";
+const safeMdx = sanitizeMdxCurlyBraces(rawMarkdown);
+// Output: "Returns &#123; count: 10 &#125; for `process({ id })`"
+```
+
+---
+
+## 3. Remark Plugin Integration
+
+You can plug `@turboforge/remark-typedoc-mdx` directly into your unified/remark pipeline:
+
+```typescript
+import { remarkTypeDocMdx } from "@turboforge/remark-typedoc-mdx";
+import remarkParse from "remark-parse";
+import remarkStringify from "remark-stringify";
+import { unified } from "unified";
+
+const processor = unified()
+  .use(remarkParse)
+  .use(remarkTypeDocMdx, {
+    sanitizeCurlyBraces: true,
+    stripFrontmatter: true,
+  })
+  .use(remarkStringify);
+
+const result = await processor.process(markdownInput);
+```

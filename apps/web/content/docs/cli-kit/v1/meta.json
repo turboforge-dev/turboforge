@@ -1,4 +1,9 @@
 {
-  "title": "Version 1.0.0",
-  "description": "Low-level utilities and configuration resolution for building high-performance CLI tools in monorepos."
+  "title": "Version 1.0.2",
+  "description": "Low-level utilities and configuration resolution for building high-performance CLI tools in monorepos.",
+  "pages": [
+    "overview",
+    "configuration-and-root",
+    "api"
+  ]
 }

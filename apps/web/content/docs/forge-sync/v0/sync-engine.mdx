@@ -1,0 +1,71 @@
+---
+title: The Sync Engine Architecture
+description: How Turboforge synchronizes upstream template enhancements into heavily customized repositories without destructive overwrites.
+---
+
+# The Sync Engine Architecture
+
+The biggest failure mode in starter templates is **template abandonment**: two months after starting a project, the original template releases critical toolchain improvements, security patches, or new generators, but your repository has diverged so significantly that merging upstream is impossible.
+
+`@turboforge/sync` solves this with an intelligent, AST-aware three-way synchronization engine.
+
+---
+
+## 1. Upstream Template Tracking
+
+Turboforge projects track their upstream origin using `.forge-meta.json`:
+
+```json
+{
+  "upstream": "turboforge-dev/turboforge",
+  "version": "1.0.0",
+  "lastSync": "2026-10-21T12:00:00Z"
+}
+```
+
+When you run:
+```bash
+pnpm sync
+```
+The sync engine:
+1. Fetches the latest template release from the configured upstream repository.
+2. Identifies common ancestor commits and computes differential patches.
+3. Classifies files into three categories:
+   - **Infrastructure**: Tooling scripts, Plop generators, root configurations.
+   - **Shared Libraries**: Core utilities in `packages/`.
+   - **Local Customizations**: Application code and rebranded assets.
+
+---
+
+## 2. Three-Way Merge & Conflict Resolution
+
+Unlike naive git subtree merges that generate conflicts across your entire codebase, `@turboforge/sync` uses structural three-way merging:
+
+```
+[Upstream Base] ───> [Upstream Latest]
+       │                      │
+       ▼                      ▼
+[Your Rebranded Repo] ───> [Merged Output]
+```
+
+- **JSON Merging**: Merges `package.json` scripts and dependencies intelligently without clobbering your custom project dependencies or version overrides.
+- **Protected Paths**: Rebranded metadata files (`apps/web/src/meta.json`, `.changeset/config.json`) and user package directories are protected from destructive overwriting.
+- **Rollback Safety**: Backups of changed files are staged before applying changes, allowing seamless rollback if a sync fails.
+
+---
+
+## 3. Customizing Sync Rules
+
+You can configure ignore patterns and sync behaviors in `forge.config.json`:
+
+```json
+{
+  "sync": {
+    "ignore": [
+      "packages/my-custom-package/**",
+      "apps/web/src/app/(marketing)/**"
+    ],
+    "preserveVersions": true
+  }
+}
+```
