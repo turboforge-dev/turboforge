@@ -1,5 +1,13 @@
 # @turboforge/sync
 
+## 0.1.1
+
+### Patch Changes
+
+- [`a4537e4`](https://github.com/turboforge-dev/turboforge/commit/a4537e422ec47d3055ffd823bb30c12431433802) Thanks [@mayank1513](https://github.com/mayank1513)! - Automatically resolve `pnpm-workspace.yaml`, `turbo.json`, `tsconfig.json`, and `tsconfig.build.json` conflicts using `git-json-resolver` to preserve consumer-specific packages, tasks, and path mappings while merging upstream configurations.
+
+- [`76fedbe`](https://github.com/turboforge-dev/turboforge/commit/76fedbe7092d59fab4ea2c68d2762ecd3b9740b9) Thanks [@mayank1513](https://github.com/mayank1513)! - Exclude `apps/web/src/app/(home)/**` by default in sync diffs to protect consumer landing page content from being clobbered by template marketing copy.
+
 ## 0.1.0
 
 ### Minor Changes
