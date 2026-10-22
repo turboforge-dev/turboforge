@@ -9,6 +9,7 @@ import {
 import {
   cleanCheck,
   createAndApplyPatch,
+  findConflictedFiles,
   resolvePackageJSONConflicts,
   sanitizeGitRef,
   sanitizeLogInput,
@@ -217,6 +218,26 @@ export const forgeSync = async (options: ForgeSyncOptions) => {
     );
 
     await resolvePackageJSONConflicts(logLevel === "debug");
+
+    const conflictedFiles = await findConflictedFiles();
+    if (conflictedFiles.length > 0) {
+      logger.warn(
+        `⚠️ Detected unmerged conflicts in ${conflictedFiles.length} file(s):`,
+      );
+      for (const file of conflictedFiles) {
+        logger.warn(`  - ${file}`);
+      }
+
+      const criticalConflicts = conflictedFiles.filter((f) =>
+        /(^|\/)(package\.json|pnpm-workspace\.yaml|pnpm-lock\.yaml)$/.test(f),
+      );
+      if (criticalConflicts.length > 0) {
+        logger.error(
+          `❌ Critical package manifests contain conflict markers (${criticalConflicts.join(", ")}). Skipping postSync commands to prevent installation failure.`,
+        );
+        return;
+      }
+    }
 
     console.log("✅ Upgrade applied successfully.");
 

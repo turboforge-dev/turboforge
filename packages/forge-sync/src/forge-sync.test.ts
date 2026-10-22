@@ -25,6 +25,7 @@ vi.mock("@turboforge/cli-kit", () => ({
 vi.mock("./utils", () => ({
   cleanCheck: vi.fn(),
   createAndApplyPatch: vi.fn(),
+  findConflictedFiles: vi.fn(() => Promise.resolve([])),
   resolvePackageJSONConflicts: vi.fn(),
   sanitizeGitRef: vi.fn((s) => s),
   sanitizeRemoteName: vi.fn((s) => s),
@@ -254,5 +255,35 @@ describe("forgeSync", () => {
         exclusions: expect.not.arrayContaining([":!packages/**"]),
       }),
     );
+  });
+
+  it("should warn on unmerged conflicts and skip postSync on critical manifest conflict", async () => {
+    vi.mocked(cliKit.deepMerge).mockReturnValue({
+      ...DEFAULT_CONFIG,
+      baseRef: "main",
+      targetRef: "main",
+      postSync: ["pnpm install"],
+    } as unknown as Required<ForgeSyncOptions>);
+
+    vi.mocked(cliKit.execFileAsync).mockResolvedValue({
+      stdout: "mock-hash",
+    } as unknown as { stdout: string; stderr: string });
+
+    vi.mocked(utils.findConflictedFiles).mockResolvedValue([
+      "package.json",
+      "apps/web/page.tsx",
+    ]);
+
+    await forgeSync({ baseRef: "main" });
+
+    expect(loggerMock.warn).toHaveBeenCalledWith(
+      expect.stringContaining("Detected unmerged conflicts in 2 file(s)"),
+    );
+    expect(loggerMock.error).toHaveBeenCalledWith(
+      expect.stringContaining(
+        "Critical package manifests contain conflict markers",
+      ),
+    );
+    expect(cliKit.execAsync).not.toHaveBeenCalledWith("pnpm install");
   });
 });

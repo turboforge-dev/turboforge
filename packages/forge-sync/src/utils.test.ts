@@ -5,6 +5,7 @@ import {
   checkFileExists,
   cleanCheck,
   createAndApplyPatch,
+  findConflictedFiles,
   getBaseCommit,
   sanitizeGitRef,
   sanitizeLogInput,
@@ -71,6 +72,25 @@ describe("utils", () => {
 
     it("should sanitize log input", () => {
       expect(sanitizeLogInput("foo\nbar")).toBe("foobar");
+    });
+  });
+
+  describe("findConflictedFiles", () => {
+    it("should parse files containing conflict markers", async () => {
+      vi.mocked(cliKit.execAsync).mockResolvedValueOnce({
+        stdout: "file1.ts\nfile2.json\n",
+      } as unknown as { stdout: string; stderr: string });
+
+      const files = await findConflictedFiles();
+      expect(files).toEqual(["file1.ts", "file2.json"]);
+    });
+
+    it("should return empty array on git failure", async () => {
+      vi.mocked(cliKit.execAsync).mockRejectedValueOnce(
+        new Error("no matches"),
+      );
+      const files = await findConflictedFiles();
+      expect(files).toEqual([]);
     });
   });
 

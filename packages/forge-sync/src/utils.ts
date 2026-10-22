@@ -153,6 +153,35 @@ export const resolvePackageJSONConflicts = async (debug: boolean) => {
     includeNonConflicted: true,
     debug,
   });
+
+  // Automatically preserve consumer repository slug in .changeset/config.json
+  try {
+    await resolveConflicts({
+      include: [".changeset/config.json"],
+      defaultStrategy: ["merge", "theirs"],
+      rules: {
+        "changelog.*.repo": ["ours"],
+        "changelog.1.repo": ["ours"],
+        repo: ["ours"],
+      },
+      debug,
+    });
+  } catch {
+    // Ignore if .changeset/config.json is absent or has no conflicts
+  }
+};
+
+export const findConflictedFiles = async (): Promise<string[]> => {
+  try {
+    const { stdout } = await execAsync('git grep -l "^<<<<<<< "');
+    return stdout
+      .trim()
+      .split("\n")
+      .map((f) => f.trim())
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
 };
 /* v8 ignore stop */
 
