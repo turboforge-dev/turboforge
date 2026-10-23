@@ -33,7 +33,7 @@
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.3",
     "@tool/tsconfig": "workspace:*",
-    "@turboforge/sync": "workspace:*",
+    "@turboforge/sync": "latest",
     "@types/envinfo": "^7.8.4",
     "@types/node": "^26.6.4",
     "@types/sharp": "^0.32.0",

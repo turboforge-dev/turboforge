@@ -190,8 +190,8 @@ importers:
         specifier: workspace:*
         version: link:tooling/tsconfig
       '@turboforge/sync':
-        specifier: workspace:*
-        version: link:packages/forge-sync
+        specifier: latest
+        version: 0.0.2(micromatch@4.0.8)(picomatch@4.0.7)(yaml@2.9.1)
       '@types/envinfo':
         specifier: ^7.8.4
         version: 7.8.4
@@ -2374,6 +2374,10 @@ packages:
     resolution: {integrity: sha512-88Xv2f7SLGVJ68lRRx8o375dKmnZYNdDtvlKcPA0kZpcF93eAQd8l96BKQ0/AMHG0bMJA0Z5QqoqtetxzNsC+g==}
     cpu: [arm64]
     os: [win32]
+
+  '@turboforge/sync@0.0.2':
+    resolution: {integrity: sha512-Mf5KUlSWcPksiVDklk+2mZrK9Eo08zOoAiD9MKuk7tt1aYJpqssNJw9iL7QNRaROEpeO7WWLkVlUkWVG3IzTQA==}
+    hasBin: true
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -6587,6 +6591,18 @@ snapshots:
 
   '@turbo/windows-arm64@2.11.7':
     optional: true
+
+  '@turboforge/sync@0.0.2(micromatch@4.0.8)(picomatch@4.0.7)(yaml@2.9.1)':
+    dependencies:
+      git-json-resolver: 1.3.7(micromatch@4.0.8)(picomatch@4.0.7)(yaml@2.9.1)
+      git-json-resolver-semver: 1.0.0(git-json-resolver@1.3.7(micromatch@4.0.8)(picomatch@4.0.7)(yaml@2.9.1))
+    transitivePeerDependencies:
+      - fast-xml-parser
+      - json5
+      - micromatch
+      - picomatch
+      - smol-toml
+      - yaml
 
   '@types/chai@5.2.3':
     dependencies:
