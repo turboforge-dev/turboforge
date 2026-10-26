@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { CACHE_DIR } from "./forge.const.ts";
 import {
   atomicWrite,
+  execFileAsync,
   existsAsync,
   getWorkspacePackages,
   readJson,
@@ -138,9 +139,12 @@ const main = async () => {
 
     const scopes = packages.map((p) => p.name);
 
-    await updateVSCodeScopes(scopes);
-    await updateCommitlint(scopes);
-    await updateTsPaths(libPackages);
+    await Promise.all([
+      updateVSCodeScopes(scopes),
+      updateCommitlint(scopes),
+      updateTsPaths(libPackages),
+      execFileAsync("pnpm", ["biome", "migrate", "--write"]),
+    ]);
 
     console.info("✅ Workspace sync complete");
   } catch (error) {

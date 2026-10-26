@@ -5,7 +5,7 @@
     "build": {
       "dependsOn": ["^build"],
       "env": ["VERCEL", "NO_DTS"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "test": {
       "outputs": ["coverage/**"]
