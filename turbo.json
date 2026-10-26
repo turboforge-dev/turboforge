@@ -4,6 +4,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "env": ["VERCEL", "NO_DTS"],
       "outputs": ["dist/**"]
     },
     "test": {

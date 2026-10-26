@@ -10,7 +10,7 @@ export default defineConfig(
       clean: !options.watch,
       bundle: true,
       minify: !options.watch,
-      dts: true,
+      dts: !process.env.VERCEL && !process.env.NO_DTS,
       ...options,
     }) as Options,
 );

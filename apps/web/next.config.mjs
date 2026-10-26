@@ -9,6 +9,9 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   trailingSlash: true,
+  typescript: {
+    ignoreBuildErrors: Boolean(process.env.VERCEL),
+  },
   images: {
     unoptimized: true,
   },

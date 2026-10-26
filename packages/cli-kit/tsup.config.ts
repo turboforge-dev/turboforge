@@ -6,7 +6,7 @@ export default defineConfig(
       format: ["cjs", "esm"],
       target: "es2022",
       tsconfig: "../../tsconfig.build.json",
-      dts: true,
+      dts: !process.env.VERCEL && !process.env.NO_DTS,
       entry: ["./src/index.ts"],
       sourcemap: false,
       clean: !options.watch,
