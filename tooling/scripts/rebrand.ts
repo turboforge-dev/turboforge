@@ -119,7 +119,7 @@ const rebrand = async (): Promise<void> => {
   let detectedSlug = "";
   try {
     const { stdout } = await execAsync("git remote get-url --push origin");
-    detectedSlug = parseRepoSlug(stdout.toString());
+    detectedSlug = parseRepoSlug(stdout.toString().trim());
   } catch {
     // remote origin might not exist yet
   }
