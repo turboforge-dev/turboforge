@@ -61,7 +61,7 @@ const handleWorkspaceDeps = async (): Promise<void> => {
         }>(pkgJsonPath);
 
         if (!pkgJson) {
-          throw new Error(`Failed to read package.json at ${pkgJsonPath}`);
+          return;
         }
 
         for (const depType of ["dependencies", "devDependencies"] as const) {
@@ -78,7 +78,7 @@ const handleWorkspaceDeps = async (): Promise<void> => {
           }
         }
 
-        await atomicWrite(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
+        await atomicWrite(pkgJsonPath, `${JSON.stringify(pkgJson, null, 2)}\n`);
       }),
     ),
   );
@@ -279,18 +279,17 @@ const cleanUp = async (): Promise<void> => {
     }
   }
 
-  const tasks: Promise<unknown>[] = [
+  const removalTasks: Promise<unknown>[] = [
     rm("apps/web/content/docs", { recursive: true, force: true }),
     rm("examples", { recursive: true, force: true }),
-    updateHusky(),
-    handleWorkspaceDeps(),
   ];
 
   if (deletePackages) {
-    tasks.push(rm("packages", { recursive: true, force: true }));
+    removalTasks.push(rm("packages", { recursive: true, force: true }));
   }
 
-  await Promise.all(tasks);
+  await Promise.all(removalTasks);
+  await Promise.all([updateHusky(), handleWorkspaceDeps()]);
 };
 
 /**
