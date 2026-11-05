@@ -217,6 +217,38 @@ const rebrand = async (): Promise<void> => {
     await atomicWrite(webMetaPath, `${JSON.stringify(webMeta, null, 2)}\n`);
     console.log("Synchronized apps/web/src/meta.json");
   }
+
+  // 5. Update root package.json name
+  const rootPkgPath = resolve("package.json");
+  const rootPkg = await readJson<{ name?: string; [key: string]: unknown }>(
+    rootPkgPath,
+  );
+  if (rootPkg && rootPkg.name === "turboforge") {
+    rootPkg.name = repoName;
+    await atomicWrite(rootPkgPath, `${JSON.stringify(rootPkg, null, 2)}\n`);
+    console.log("Updated root package.json name");
+  }
+
+  // 6. Update apps/web/public/CNAME
+  const cnamePath = resolve("apps/web/public/CNAME");
+  if (await existsAsync(cnamePath)) {
+    const canonicalDomain = `${repoName}.js.org`;
+    await atomicWrite(cnamePath, `${canonicalDomain}\n`);
+    console.log(`Updated apps/web/public/CNAME to ${canonicalDomain}`);
+  }
+
+  // 7. Update apps/web/src/app/docs/[[...slug]]/page.tsx GIT_CONFIG
+  const docsPagePath = resolve("apps/web/src/app/docs/[[...slug]]/page.tsx");
+  if (await existsAsync(docsPagePath)) {
+    const raw = await readFile(docsPagePath, "utf-8");
+    const updated = raw
+      .replace(/user:\s*"[^"]*"/, `user: "${owner}"`)
+      .replace(/repo:\s*"[^"]*"/, `repo: "${repoName}"`);
+    await atomicWrite(docsPagePath, updated);
+    console.log(
+      "Updated apps/web/src/app/docs/[[...slug]]/page.tsx GIT_CONFIG",
+    );
+  }
 };
 
 /**
