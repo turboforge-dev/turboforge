@@ -128,9 +128,9 @@ pnpm --filter @app/web dev
 
 4. Start with the package that matches your need:
 
-* repo upgrade workflow: [`packages/forge-sync/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/forge-sync/README.md)
-* internal CLI foundation: [`packages/cli-kit/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/cli-kit/README.md)
-* MDX API docs pipeline: [`packages/remark-typedoc-mdx/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/remark-typedoc-mdx/README.md)
+- repo upgrade workflow: [`packages/forge-sync/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/forge-sync/README.md)
+- internal CLI foundation: [`packages/cli-kit/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/cli-kit/README.md)
+- MDX API docs pipeline: [`packages/remark-typedoc-mdx/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/remark-typedoc-mdx/README.md)
 
 ## Mental Model
 
@@ -148,9 +148,9 @@ How do we keep this monorepo intentional as it grows?
 
 ## What Turboforge Is Not
 
-* Not a Turborepo replacement. Turborepo runs tasks; Turboforge maintains structure.
-* Not just a starter. Templates get you started; Turboforge keeps them relevant.
-* Not a pile of scripts. The pieces are reusable and form a system.
+- Not a Turborepo replacement. Turborepo runs tasks; Turboforge maintains structure.
+- Not just a starter. Templates get you started; Turboforge keeps them relevant.
+- Not a pile of scripts. The pieces are reusable and form a system.
 
 ## Why This Is Different
 
@@ -162,6 +162,6 @@ The hard part of a monorepo is not starting it. It is preventing drift.
 
 ## Read Next
 
-* [`packages/forge-sync/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/forge-sync/README.md)
-* [`packages/cli-kit/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/cli-kit/README.md)
-* [`packages/remark-typedoc-mdx/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/remark-typedoc-mdx/README.md)
+- [`packages/forge-sync/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/forge-sync/README.md)
+- [`packages/cli-kit/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/cli-kit/README.md)
+- [`packages/remark-typedoc-mdx/README.md`](/c:/Users/G/web/open-source/turbo-forge/packages/remark-typedoc-mdx/README.md)

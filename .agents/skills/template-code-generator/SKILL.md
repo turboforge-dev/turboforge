@@ -1,4 +1,5 @@
 ---
+
 name: template-code-generator
 description: Scaffold monorepo packages, UI components, React hooks, documentation, and example apps using Turboforge Plop generators and Handlebars templates. Use when adding new packages, components, hooks, docs, or example apps.
 ---
@@ -11,27 +12,31 @@ Turboforge uses [Plop.js](https://plopjs.com/) and [Handlebars](https://handleba
 
 ## 1. Available Generators
 
-| Generator | Command | Target Path | Description |
-| :--- | :--- | :--- | :--- |
-| **`pkg`** | `pnpm gen pkg` | `packages/<name>` | Scaffold a new package: Pure utilities (`lib`), UI (`ui`), or CLI tool (`cli`) |
-| **`docs`** | `pnpm gen docs` | `packages/<pkg>/docs/` | Scaffold documentation directory, `meta.json`, and optional guides |
-| **`rc`** | `pnpm gen rc` | `packages/<pkg>/src/...` | Scaffold React component with client/server directive, styles, and test |
-| **`hook`** | `pnpm gen hook` | `packages/<pkg>/src/hooks/` | Scaffold custom React hook with test stub |
-| **`exp`** | `pnpm gen exp` | `examples/<name>` | Scaffold example application (Vite or Next.js) linked to internal packages |
+| Generator  | Command         | Target Path                 | Description                                                                    |
+| :--------- | :-------------- | :-------------------------- | :----------------------------------------------------------------------------- |
+| **`pkg`**  | `pnpm gen pkg`  | `packages/<name>`           | Scaffold a new package: Pure utilities (`lib`), UI (`ui`), or CLI tool (`cli`) |
+| **`docs`** | `pnpm gen docs` | `packages/<pkg>/docs/`      | Scaffold documentation directory, `meta.json`, and optional guides             |
+| **`rc`**   | `pnpm gen rc`   | `packages/<pkg>/src/...`    | Scaffold React component with client/server directive, styles, and test        |
+| **`hook`** | `pnpm gen hook` | `packages/<pkg>/src/hooks/` | Scaffold custom React hook with test stub                                      |
+| **`exp`**  | `pnpm gen exp`  | `examples/<name>`           | Scaffold example application (Vite or Next.js) linked to internal packages     |
 
 ---
 
 ## 2. Invocation & Execution
 
 ### Interactive Mode
+
 Run the prompt menu to choose from all available generators:
+
 ```bash
 pnpm gen
 ```
-*(On Windows PowerShell where script execution policy is restricted, use `pnpm.cmd gen` or run directly with Node: `node --experimental-strip-types ./node_modules/plop/bin/plop.js --plopfile tooling/generators/src/index.ts`)*.
+_(On Windows PowerShell where script execution policy is restricted, use `pnpm.cmd gen` or run directly with Node: `node --experimental-strip-types ./node_modules/plop/bin/plop.js --plopfile tooling/generators/src/index.ts`)_.
 
 ### Direct Generator Invocation
+
 Bypass the top-level menu by specifying the generator name:
+
 ```bash
 pnpm gen pkg
 pnpm gen docs
@@ -45,6 +50,7 @@ pnpm gen exp
 ## 3. Architecture & Conventions
 
 ### A. Package Generator (`pkg`)
+
 - **Package Types**:
   - `lib`: Node.js utilities, algorithmic libraries, and pure logic.
   - `ui`: React UI components configured with Happy-DOM testing.
@@ -57,11 +63,13 @@ pnpm gen exp
   - Test and build configs use ESM extensions: `vitest.config.mts.hbs` and `tsup.config.ts.hbs`.
 
 ### B. Documentation Generator (`docs`)
+
 - **Fumadocs `meta.json` Standard**:
   - `meta.json` defines page navigation order in `packages/<pkg>/docs/meta.json`.
   - **`overview` is always first** (derived automatically from package `README.md`).
   - **`api` is always last** (generated automatically by TypeDoc).
   - In-between comment guides developers where to place custom guide pages:
+
     ```json
     {
       "pages": [
@@ -75,11 +83,13 @@ pnpm gen exp
   - Scoped Biome override in `biome.json` allows comments in `**/docs/meta.json` without relaxing JSON rules globally.
 
 ### C. Component & Hook Generators (`rc`, `hook`)
+
 - Support `"use client"` banner placement via `getBanner(isClient)`.
 - Automatically manage barrel exports by updating or creating parent `index.ts` files in nested directories.
 - Optional SCSS module (`.module.scss`) and Vitest test stubs (`.test.tsx`).
 
 ### D. Example App Generator (`exp`)
+
 - Automatically registers generated example packages under `@example/*` in `.changeset/config.json` `ignore` array to prevent unversioned example apps from triggering releases.
 
 ---
@@ -87,8 +97,10 @@ pnpm gen exp
 ## 4. Authoring New Templates & Generators
 
 ### Step 1: Create Handlebars Templates
+
 Add template files under `tooling/generators/templates/<generator-name>/`.
 Available Plop helpers:
+
 - `{{kebabCase name}}`: `foo-bar`
 - `{{camelCase name}}`: `fooBar`
 - `{{pascalCase name}}`: `FooBar`
@@ -99,7 +111,9 @@ Available Plop helpers:
 > When creating config templates for Vite or Vitest, always name them with the `.mts.hbs` extension (e.g. `vitest.config.mts.hbs`) to ensure ESM compatibility.
 
 ### Step 2: Implement the Generator Config
+
 Create `tooling/generators/src/<name>.ts`:
+
 ```typescript
 import path from "node:path";
 import type { ActionType, PlopGeneratorConfig } from "plop";
@@ -130,7 +144,9 @@ export const myGenerator: PlopGeneratorConfig = {
 ```
 
 ### Step 3: Register in Generator Index
+
 Add the generator to `tooling/generators/src/index.ts`:
+
 ```typescript
 import { myGenerator } from "./my-generator.ts";
 
@@ -145,17 +161,21 @@ export default async (plop: NodePlopAPI) => {
 ## 5. Post-Generation Verification Workflow
 
 After generating any package or code artifact:
+
 1. **Sync Dependencies & Metadata**:
+
    ```bash
    pnpm install
    pnpm sync
    ```
 2. **Typecheck & Lint**:
+
    ```bash
    pnpm typecheck
    pnpm lint
    ```
 3. **Run Unit Tests**:
+
    ```bash
    pnpm test
    ```

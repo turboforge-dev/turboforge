@@ -49,10 +49,10 @@
     "dev": "tsup --watch"
   },
   "devDependencies": {
-    "@types/node": "^26.6.4",
+    "@types/node": "^26.6.6",
     "defu": "^6.1.7",
     "jiti": "^2.7.0",
-    "tsup": "^8.5.1",
+    "tsup": "^9.0.0",
     "typescript": "^7.0.2"
   },
   "funding": [
